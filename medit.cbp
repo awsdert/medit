@@ -7,8 +7,8 @@
 		<Option compiler="msvc2013-x86" />
 		<Build>
 			<Target title="msw-x86-d-vc">
-				<Option output="bin/medit-x86-d-vc" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/msw-x86-d-vc/" />
+				<Option output="$(BIN)/medit/x86/medit-d-vc" prefix_auto="1" extension_auto="1" />
+				<Option object_output="$(TEMP)/obj/msw-x86-d-vc/" />
 				<Option type="0" />
 				<Option compiler="msvc2013-x86" />
 				<Compiler>
@@ -38,8 +38,8 @@
 				</Linker>
 			</Target>
 			<Target title="msw-x86-vc">
-				<Option output="bin/medit-x86-vc" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/msw-x86-vc/" />
+				<Option output="$(BIN)/medit/x86/medit-vc" prefix_auto="1" extension_auto="1" />
+				<Option object_output="$(TEMP)/obj/msw-x86-vc/" />
 				<Option type="0" />
 				<Option compiler="msvc2013-x86" />
 				<Compiler>
