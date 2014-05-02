@@ -479,3 +479,219 @@
 1398776311 source:c:\u\lee\prjs\medit\search_fpn.c
 	"search.h"
 
+1398773344 source:c:\users\lee\documents\github\medit\lang.c
+	"lang.h"
+
+1398965178 c:\users\lee\documents\github\medit\lang.h
+	<stdio.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<windows.h>
+	<iup.h>
+
+1398965177 source:c:\users\lee\documents\github\medit\search.c
+	"search.h"
+
+1398965178 c:\users\lee\documents\github\medit\search.h
+	"pipe.h"
+
+1398965851 c:\users\lee\documents\github\medit\pipe.h
+	"lang.h"
+
+1398965177 source:c:\users\lee\documents\github\medit\search_fpn.c
+	"search.h"
+
+1398965177 source:c:\users\lee\documents\github\medit\search_int.c
+	"search.h"
+
+1399018675 source:c:\users\lee\documents\github\medit\main.c
+	"pipe.h"
+
+1398981817 source:c:\users\lee\documents\github\medit\pipe.c
+	"pipe.h"
+	<shlobj.h>
+
+1271706272 c:\sdk\mswin7.1\include\shlobj.h
+	<ole2.h>
+	<prsht.h>
+	<commctrl.h>
+	<shlguid.h>
+	<shtypes.h>
+	<shobjidl.h>
+	<pshpack1.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<poppack.h>
+
+1271706244 c:\sdk\mswin7.1\include\commctrl.h
+	<prsht.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	"commctrl.inl"
+
+1271706244 c:\sdk\mswin7.1\include\commctrl.inl
+
+1271706272 c:\sdk\mswin7.1\include\shlguid.h
+	<isguids.h>
+	<exdisp.h>
+	<shldisp.h>
+	<knownfolders.h>
+
+1271706258 c:\sdk\mswin7.1\include\isguids.h
+
+1271706254 c:\sdk\mswin7.1\include\exdisp.h
+	"rpc.h"
+	"rpcndr.h"
+	"ocidl.h"
+	"docobj.h"
+
+1271706266 c:\sdk\mswin7.1\include\ocidl.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"oleidl.h"
+	"oaidl.h"
+	"servprov.h"
+	"urlmon.h"
+
+1271706250 c:\sdk\mswin7.1\include\docobj.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"ocidl.h"
+
+1271706272 c:\sdk\mswin7.1\include\shldisp.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"ocidl.h"
+
+1271706258 c:\sdk\mswin7.1\include\knownfolders.h
+
+1271706272 c:\sdk\mswin7.1\include\shtypes.h
+	"rpc.h"
+	"rpcndr.h"
+	"wtypes.h"
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+
+1271706272 c:\sdk\mswin7.1\include\shobjidl.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"objidl.h"
+	"oleidl.h"
+	"oaidl.h"
+	"docobj.h"
+	"shtypes.h"
+	"comcat.h"
+	"propidl.h"
+	"prsht.h"
+	"propsys.h"
+	"ObjectArray.h"
+	<sherrors.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<prsht.h>
+	<pshpack8.h>
+	<poppack.h>
+	<commctrl.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+
+1271706244 c:\sdk\mswin7.1\include\comcat.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"unknwn.h"
+
+1271706268 c:\sdk\mswin7.1\include\propsys.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"objidl.h"
+	"oleidl.h"
+	"ocidl.h"
+	"shtypes.h"
+	"StructuredQueryCondition.h"
+	<propkeydef.h>
+
+1271706274 c:\sdk\mswin7.1\include\structuredquerycondition.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"oaidl.h"
+	"ocidl.h"
+	"propidl.h"
+
+1271706268 c:\sdk\mswin7.1\include\propkeydef.h
+
+1271706266 c:\sdk\mswin7.1\include\objectarray.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"oaidl.h"
+	"ocidl.h"
+
+1271706272 c:\sdk\mswin7.1\include\sherrors.h
+	<winerror.h>
+

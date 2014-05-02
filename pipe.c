@@ -1,8 +1,22 @@
 #include "pipe.h"
-
-Ipipe IupMkFile( char const *path, uln unixPerm, ucn sharePerm, ucn action, Ipipe templateFile )
+#include <shlobj.h>
+void IupGetLDataDir( char *path )
 {
-  uin perm = 0, flags = 0;
+  SHGetFolderPathA( NULL, CSIDL_APPDATA, NULL, 0, path  );
+}
+Ipipe IupMkFile( char const *path, ulv unixPerm, ucv sharePerm, ucv action, Ipipe templateFile )
+{
+  uiv perm = 0, flags = 0;
+  char rpath[ FILENAME_MAX ] = {0};
+#ifdef _WIN32
+  if ( path[1] != ':' )
+#else
+  if ( path[0]) != '/' )
+#endif
+  {
+    IupGetLDataDirFromName( rpath, FILENAME_MAX );
+  }
+  strcat_s( rpath, FILENAME_MAX, path );
   if ( unixPerm & 00444 )
     perm |= READ_CONTROL |
             FILE_READ_DATA  | FILE_READ_EA  | FILE_READ_ATTRIBUTES;
@@ -11,12 +25,21 @@ Ipipe IupMkFile( char const *path, uln unixPerm, ucn sharePerm, ucn action, Ipip
             FILE_WRITE_DATA | FILE_WRITE_EA | FILE_WRITE_ATTRIBUTES;
   if ( unixPerm & 00111 )
     perm |= FILE_EXECUTE | FILE_CREATE_PIPE_INSTANCE;
-  return CreateFile( path, perm, sharePerm, NULL, action, flags,templateFile );
+  return CreateFileA( rpath, perm, sharePerm, NULL, action, flags,templateFile );
 }
 
-Ipipe IupMkDir( char const *path, uln unixPerm, ucn sharePerm, ucn action )
+Ipipe IupMkDir( char const *path, ulv unixPerm, ucv sharePerm, ucv action )
 {
-  uin perm = 0, flags = 0;
+  uiv perm = 0, flags = 0;
+  char rpath[ FILENAME_MAX ] = {0};
+#ifdef _WIN32
+  if ( path[1] != ':' )
+#else
+  if ( path[0]) != '/' )
+#endif
+  {
+    IupGetLDataDirFromName( rpath, FILENAME_MAX );
+  }
   if ( unixPerm & 00444 )
     perm |= READ_CONTROL |
             FILE_READ_DATA  | FILE_READ_EA  | FILE_READ_ATTRIBUTES |
@@ -27,15 +50,17 @@ Ipipe IupMkDir( char const *path, uln unixPerm, ucn sharePerm, ucn action )
             FILE_ADD_SUBDIRECTORY | FILE_ADD_FILE | FILE_DELETE_CHILD;
   if ( unixPerm & 00111 )
     perm |= FILE_EXECUTE | FILE_CREATE_PIPE_INSTANCE;
-  return CreateFile( path, perm, sharePerm, NULL, action, flags, NULL );
+  strcat_s( rpath, FILENAME_MAX, path );
+  CreateDirectory( rpath, NULL );
+  return CreateFileA( rpath, perm, sharePerm, NULL, action, flags, NULL );
 }
 
-Ipipe IupOpenFile( char const *path, uln unixPerm, ucn sharePerm )
+Ipipe IupOpenFile( char const *path, ulv unixPerm, ucv sharePerm )
 {
   return IupMkFile( path, unixPerm, sharePerm, ACTION_EXISTING, NULL );
 }
 
-Ipipe IupOpenProcess( DWORD perm, ucn setAsChild, DWORD pid )
+Ipipe IupOpenProcess( DWORD perm, ucv setAsChild, DWORD pid )
 {
   return OpenProcess( perm, setAsChild, pid );
 }
@@ -54,7 +79,7 @@ DWORD IupRdPipe( Ipipe pipe, void *buff, DWORD size )
     return done;
   return 0;
 }
-ucn    IupShutPipe( Ipipe pipe )
+ucv    IupShutPipe( Ipipe pipe )
 {
   return CloseHandle( pipe ) & 0x1;
 }

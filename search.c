@@ -38,7 +38,7 @@ int meSeaMenu_OnClick( Ihandle *ih )
 {
   char *text = IupGetAttribute( ih, "TEXT" );
   /* Default to dump */
-  ucn   used = 0;
+  ucv   used = 0;
   if ( strcmp( text, "==" ) == 0 )
     used = 1;
   else if ( strcmp( text, "!=" ) == 0 )

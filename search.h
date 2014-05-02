@@ -19,14 +19,14 @@
 
 typedef struct _mePIPE
 {
-  ucn  *buff;
+  ucv  *buff;
   Ipipe pipe;
 } mePIPE;
 
 typedef struct _meCOMP
 {
-  ucn *buff;
-  ucn *used;
+  ucv *buff;
+  ucv *used;
 } meCOMP;
 
 #endif // _MESEARCH_H

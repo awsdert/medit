@@ -14,19 +14,19 @@
 typedef HUGE huge;
 #endif
 
-typedef unsigned  HUGE uhn;
-typedef   signed  HUGE shn;
-typedef unsigned  long uln;
-typedef   signed  long sln;
-typedef unsigned   int uin;
-typedef   signed   int sin;
-typedef unsigned short usn;
-typedef   signed short ssn;
-typedef unsigned  char ucn;
-typedef   signed  char scn;
-typedef          float fpn;
-typedef         double dpn;
-typedef    long double lpn;
+typedef unsigned  HUGE uhv;
+typedef   signed  HUGE shv;
+typedef unsigned  long ulv;
+typedef   signed  long slv;
+typedef unsigned   int uiv;
+typedef   signed   int siv;
+typedef unsigned short usv;
+typedef   signed short ssv;
+typedef unsigned  char ucv;
+typedef   signed  char scv;
+typedef          float fpv;
+typedef         double dpv;
+typedef    long double lpv;
 
 
 typedef struct _MELANG_MAINLIST
@@ -54,5 +54,7 @@ typedef struct _MELANG
 } MELANG;
 
 MELANG* meGetLang( void );
+char const* IupGetCwd( void );
+char const* IupGetAppName( void );
 
 #endif // _MELANG_H

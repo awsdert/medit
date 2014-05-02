@@ -1,16 +1,22 @@
-#include "lang.h"
+#include "pipe.h"
 static char  szCwd[ FILENAME_MAX ] = {0};
+static char  szAppName[ FILENAME_MAX ] = {0};
 static FILE *hLang = NULL;
 FILE* IupFOpen( char const *szPathFromCwd, char const *szMode );
-
+typedef struct _MECFG
+{
+  char lang[7];
+} MECFG;
 int main( int argc, char *argv[] )
 {
+  MECFG cfg = {0};
   int ret = 0;
   Ihandle *hMain, *hArea, *hProc;
   FILE *hMedit = NULL;
   MELANG *lang = meGetLang();
+  Ipipe   pipe = NULL;
   char // Open in "rb,ccs=UTF-16LE"
-    szLang[ FILENAME_MAX ] = {0}, szSep[] = "\\/",
+    szSep[] = "\\/",
     szLine[ FILENAME_MAX ] = {0},
     *szTok = NULL, *szPrv = NULL, *szNow = NULL, *szTmp = NULL;
   if ( IupOpen(&argc, &argv) == IUP_ERROR )
@@ -29,28 +35,36 @@ int main( int argc, char *argv[] )
     strcat_s( szCwd, FILENAME_MAX, "\\"  );
   }
   while ( szNow );
-  hMedit = IupFOpen( "medit.ini", "rb" );
-  fgets( szLine, FILENAME_MAX, hMedit );
-  memset( szLang, 0, FILENAME_MAX );
-  szTok = NULL;
-  szPrv = strtok_s( szLine, "=", &szTok );
-  szNow = strtok_s( NULL,   "=", &szTok );
-  if ( _strcmpi( szPrv, "lang" ) >= 0 && szNow && szNow[0] )
-    strcat_s( szLang, FILENAME_MAX, szNow );
-    /*
-      We'll finish with current file before opening another,
-      this just puts the string to one side and lets us know
-      later on if we have a file to work with
-    */
-  fclose( hMedit );
-  hMedit = NULL;
-  if ( szLang[0] && _strcmpi( szLang, "en" ) < 0 )
+  szTmp = strtok_s( szPrv, ".", &szTok );
+  strcat_s( szAppName, FILENAME_MAX, szTmp );
+  pipe = IupMkDir( "", 0666, SHARE_READ | SHARE_WRITE, ACTION_OPEN_NEW );
+  IupShutPipe( pipe );
+  pipe = IupMkDir( "lang", 0666, SHARE_READ | SHARE_WRITE, ACTION_OPEN_NEW );
+  IupShutPipe( pipe );
+  pipe = IupMkFile("medit.mecfg", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
+  if ( !pipe )
+    goto mkGui;
+  IupRdPipe( pipe, &cfg, sizeof(MECFG) );
+  cfg.lang[6] = 0; // Just force a NULL character
+  IupShutPipe( pipe );
+  if ( cfg.lang[0] && _strcmpi( cfg.lang, "en" ) >= 0 )
   {
-    hLang = IupFOpen( szLang, "rb" );
-    fread( lang, sizeof( MELANG ), 1, hLang );
-    fclose( hLang );
-    hLang = NULL;
+    memset(   szLine, 0, FILENAME_MAX );
+    strcat_s( szLine,    FILENAME_MAX, "lang"   );
+    strcat_s( szLine,    FILENAME_MAX, DIR_SEP  );
+    strcat_s( szLine,    FILENAME_MAX, cfg.lang );
+    strcat_s( szLine,    FILENAME_MAX, ".melng" );
+    pipe = IupMkFile( szLine, 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
+    IupRdPipe( pipe, lang, sizeof(MELANG) );
+    IupShutPipe( pipe );
   }
+  else
+  {
+    memset( cfg.lang, 0, 7 );
+    cfg.lang[0] = 'e';
+    cfg.lang[1] = 'n';
+  }
+mkGui:
   hProc = IupFrame(NULL);
   hArea = IupList(NULL);
   IupSetAttribute( hArea, "DROPDOWN", "YES" );
@@ -68,18 +82,32 @@ int main( int argc, char *argv[] )
   IupSetAttribute( hMain, "SIZE",  "320x320"  );
   IupShow( hMain );
   ret = IupMainLoop();
+  pipe = IupMkFile("medit.mecfg", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
+  IupWrPipe( pipe, &cfg, sizeof( MECFG ) );
+  IupShutPipe( pipe );
   IupClose();
   return ret;
 }
-char const* IupCwd( void )
+char const* IupGetCwd( void )
 {
   return szCwd;
+}
+char const* IupGetAppName( void )
+{
+  return szAppName;
+}
+void IupGetLDataDirFromName( char *path, DWORD size )
+{
+  IupGetLDataDir( path );
+  strcat_s( path, size, DIR_SEP );
+  strcat_s( path, size, IupGetAppName() );
+  strcat_s( path, size, DIR_SEP );
 }
 FILE* IupFOpen( char const *szPathFromCwd, char const *szMode )
 {
   FILE *file = NULL;
   char szPath[ FILENAME_MAX ] = {0};
-  strcat_s( szPath, FILENAME_MAX, szCwd );
+  IupGetLDataDirFromName( szPath, FILENAME_MAX );
   strcat_s( szPath, FILENAME_MAX, szPathFromCwd );
   if ( fopen_s( &file, szPath, szMode ) == 0 )
     return file;

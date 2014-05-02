@@ -3,6 +3,14 @@
 #define _Ipipe_H
 #include "lang.h"
 
+#ifndef DIR_SEP
+#ifdef _WIN32
+#define DIR_SEP "\\"
+#else
+#define DIR_SEP "/"
+#endif
+#endif
+
 typedef void* Ipipe;
 #define SHARE_DELETE 0x4
 #define SHARE_WRITE  0x2
@@ -15,24 +23,26 @@ typedef void* Ipipe;
 #define ACTION_TRUNCATE  0x5
 
 Ipipe IupMkFile(   char const *path,
-                   uln   unixPerm,
-                   ucn   sharePerm,
-                   ucn   action,
+                   ulv   unixPerm,
+                   ucv   sharePerm,
+                   ucv   action,
                    Ipipe templateFile );
 Ipipe IupMkDir(    char const *path,
-                   uln  unixPerm,
-                   ucn  sharePerm,
-                   ucn  action );
+                   ulv  unixPerm,
+                   ucv  sharePerm,
+                   ucv  action );
 Ipipe IupOpenFile( char const *path,
-                   uln  unixPerm,
-                   ucn  sharePerm );
-Ipipe IupOpenProcess( uln perm, ucn setAsChild, uln pid );
-uln   IupWrPipe(   Ipipe pipe,
+                   ulv  unixPerm,
+                   ucv  sharePerm );
+Ipipe IupOpenProcess( ulv perm, ucv setAsChild, ulv pid );
+void IupGetLDataDir( char *path );
+void IupGetLDataDirFromName( char *path, DWORD size );
+ulv   IupWrPipe(   Ipipe pipe,
                    void *buff,
-                   uln   size );
-uln   IupRdPipe(   Ipipe pipe,
+                   ulv   size );
+ulv   IupRdPipe(   Ipipe pipe,
                    void *buff,
-                   uln   size );
-ucn   IupShutPipe( Ipipe pipe );
+                   ulv   size );
+ucv   IupShutPipe( Ipipe pipe );
 
 #endif // _Ipipe_H

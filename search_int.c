@@ -1,8 +1,8 @@
 #include "search.h"
 
 void qSI(
-        ucn    dump,
-        ucn    used,
+        ucv    dump,
+        ucv    used,
         mePIPE tar,
         mePIPE dmp,
         mePIPE res,
@@ -10,8 +10,8 @@ void qSI(
         DWORD  size,
         meCOMP mComp,
         meCOMP nComp,
-        ucn    bytes,
-        ucn    isFloat )
+        ucv    bytes,
+        ucv    isFloat )
 {
   DWORD
     c  = 0,
@@ -21,9 +21,9 @@ void qSI(
     rNo   = 0,
     addr  = 0,
     addrc = -1;
-  ucn
+  ucv
     rBl   = 0;
-  shn
+  shv
     tNum = 0,
     dNum = 0,
     aNum = 0,
@@ -58,21 +58,21 @@ void qSI(
       #ifdef _HUGE_DEFINED
       if ( bytes == sizeof( huge ) )
       {
-        CAST_DMP( shn );
+        CAST_DMP( shv );
       }
       #endif
       else
       if ( bytes == sizeof( long ) )
       {
-        CAST_DMP( sln );
+        CAST_DMP( slv );
       }
       else if ( bytes == sizeof( short ) )
       {
-        CAST_DMP( ssn );
+        CAST_DMP( ssv );
       }
       else
       {
-        CAST_DMP( scn );
+        CAST_DMP( scv );
       }
       // Ready to start comparisons
       c = 0;
@@ -93,21 +93,21 @@ void qSI(
         #ifdef _HUGE_DEFINED
         if ( bytes == sizeof( huge ) )
         {
-          CAST_CMP( shn );
+          CAST_CMP( shv );
         }
         #endif
         else
         if ( bytes == sizeof( long ) )
         {
-          CAST_CMP( sln );
+          CAST_CMP( slv );
         }
         else if ( bytes == sizeof( short ) )
         {
-          CAST_CMP( ssn );
+          CAST_CMP( ssv );
         }
         else
         {
-          CAST_CMP( scn );
+          CAST_CMP( scv );
         }
         switch ( c )
         {

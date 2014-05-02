@@ -1,8 +1,8 @@
 #include "search.h"
 
 void qFP(
-        ucn    dump,
-        ucn    used,
+        ucv    dump,
+        ucv    used,
         mePIPE tar,
         mePIPE dmp,
         mePIPE res,
@@ -10,8 +10,8 @@ void qFP(
         DWORD  size,
         meCOMP mComp,
         meCOMP nComp,
-        ucn    bytes,
-        ucn    isFloat )
+        ucv    bytes,
+        ucv    isFloat )
 {
   DWORD
     c  = 0,
@@ -21,9 +21,9 @@ void qFP(
     rNo   = 0,
     addr  = 0,
     addrc = -1;
-  ucn
+  ucv
     rBl   = 0;
-  lpn
+  lpv
     tNum = 0,
     dNum = 0,
     aNum = 0,
@@ -55,17 +55,17 @@ void qFP(
       if ( !rBl )
         goto iterate;
       // Set tNum & dNum ready for comparisons
-      if ( bytes == sizeof(lpn ) )
+      if ( bytes == sizeof(lpv ) )
       {
-        CAST_DMP( lpn );
+        CAST_DMP( lpv );
       }
       else if ( bytes == sizeof( double ) )
       {
-        CAST_DMP( dpn );
+        CAST_DMP( dpv );
       }
       else
       {
-        CAST_DMP( fpn );
+        CAST_DMP( fpv );
       }
       // Ready to start comparisons
       c = 0;
@@ -82,17 +82,17 @@ void qFP(
       do
       {
         // Set aNum, mNum, nNum
-        if ( bytes == sizeof(lpn ) )
+        if ( bytes == sizeof(lpv ) )
         {
-          CAST_CMP( lpn );
+          CAST_CMP( lpv );
         }
         else if ( bytes == sizeof( double ) )
         {
-          CAST_CMP( dpn );
+          CAST_CMP( dpv );
         }
         else
         {
-          CAST_CMP( fpn );
+          CAST_CMP( fpv );
         }
         switch ( c )
         {
