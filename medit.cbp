@@ -73,6 +73,7 @@
 		<Compiler>
 			<Add option="/W3" />
 		</Compiler>
+		<Unit filename="_main.h" />
 		<Unit filename="lang.c">
 			<Option compilerVar="CC" />
 		</Unit>

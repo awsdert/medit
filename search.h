@@ -2,6 +2,7 @@
 #ifndef _MESEARCH_H
 #define _MESEARCH_H
 
+#include "_main.h"
 #include "pipe.h"
 
 #define CAST_DMP( T ) \
@@ -28,5 +29,8 @@ typedef struct _meCOMP
   ucv *buff;
   ucv *used;
 } meCOMP;
+
+int meSea_OnShow( Ihandle *ih );
+int meSeaMenu_OnClick( Ihandle *ih );
 
 #endif // _MESEARCH_H

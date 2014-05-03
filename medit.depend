@@ -490,10 +490,11 @@
 	<windows.h>
 	<iup.h>
 
-1398965177 source:c:\users\lee\documents\github\medit\search.c
+1399137537 source:c:\users\lee\documents\github\medit\search.c
 	"search.h"
 
-1398965178 c:\users\lee\documents\github\medit\search.h
+1399136185 c:\users\lee\documents\github\medit\search.h
+	"_main.h"
 	"pipe.h"
 
 1398965851 c:\users\lee\documents\github\medit\pipe.h
@@ -505,8 +506,8 @@
 1398965177 source:c:\users\lee\documents\github\medit\search_int.c
 	"search.h"
 
-1399018675 source:c:\users\lee\documents\github\medit\main.c
-	"pipe.h"
+1399100351 source:c:\users\lee\documents\github\medit\main.c
+	"search.h"
 
 1398981817 source:c:\users\lee\documents\github\medit\pipe.c
 	"pipe.h"
@@ -694,4 +695,7 @@
 
 1271706272 c:\sdk\mswin7.1\include\sherrors.h
 	<winerror.h>
+
+1399137945 c:\users\lee\documents\github\medit\_main.h
+	<iup.h>
 
