@@ -15,13 +15,14 @@
 					<Add option="/MD" />
 					<Add option="/Zi" />
 					<Add option="/D_DEBUG" />
-					<Add option="/D_USING_V110_SDK71_" />
+					<Add directory="$(WIN8)/include/shared" />
+					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(IUP)/include" />
-					<Add directory="$(WIN7)/include" />
 				</Compiler>
 				<ResourceCompiler>
+					<Add directory="$(WIN8)/include/shared" />
+					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(IUP)/include" />
-					<Add directory="$(WIN7)/include" />
 				</ResourceCompiler>
 				<Linker>
 					<Add option="/DEBUG" />
@@ -34,8 +35,8 @@
 					<Add library="oleaut32" />
 					<Add library="ole32" />
 					<Add library="shell32" />
+					<Add directory="$(WIN8)/Lib/winv6.3/um/x86" />
 					<Add directory="$(IUP)" />
-					<Add directory="$(WIN7)/lib" />
 				</Linker>
 			</Target>
 			<Target title="msw-x86-vc">
@@ -47,13 +48,14 @@
 					<Add option="/MD" />
 					<Add option="/Ox" />
 					<Add option="/DNDEBUG" />
-					<Add option="/D_USING_V110_SDK71_" />
+					<Add directory="$(WIN8)/include/shared" />
+					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(IUP)/include" />
-					<Add directory="$(WIN7)/include" />
 				</Compiler>
 				<ResourceCompiler>
+					<Add directory="$(WIN8)/include/shared" />
+					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(IUP)/include" />
-					<Add directory="$(WIN7)/include" />
 				</ResourceCompiler>
 				<Linker>
 					<Add library="iup" />
@@ -65,14 +67,17 @@
 					<Add library="oleaut32" />
 					<Add library="ole32" />
 					<Add library="shell32" />
+					<Add directory="$(WIN8)/Lib/winv6.3/um/x86" />
 					<Add directory="$(IUP)" />
-					<Add directory="$(WIN7)/lib" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="/W3" />
 		</Compiler>
+		<Unit filename="_main.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="_main.h" />
 		<Unit filename="lang.c">
 			<Option compilerVar="CC" />
@@ -92,7 +97,13 @@
 		<Unit filename="search_fpn.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="search_gui.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="search_int.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="search_uint.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

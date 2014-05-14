@@ -1,137 +1,80 @@
 #include "search.h"
 
-void qSI(
-        ucv    dump,
-        ucv    used,
-        mePIPE tar,
-        mePIPE dmp,
-        mePIPE res,
-        Ipipe  previous,
-        DWORD  size,
-        meCOMP mComp,
-        meCOMP nComp,
-        ucv    bytes,
-        ucv    isFloat )
+#define _QCAST( NUM, T, BUFF ) \
+  NUM = *((T*)&(BUFF[i]))
+#define QCAST( T ) \
+  if ( bytes == T##Sz ) \
+  { \
+    _QCAST( iNum, T, mepI->buff ); \
+    _QCAST( pNum, T, mepP->buff ); \
+  }
+#define QCMP1( CMP_T ) res = ( iNum CMP_T pNum );
+#define QCMP2( CMP_T ) res = (( iNum CMP_T pNum ) != pNum);
+void siQry( ucv used, MEPIPE *mepI, MEPIPE *mepO, MEPIPE *mepP, Ipipe prev, scv bytes, ME_SHV *mecM, ME_SHV *mecN )
 {
-  DWORD
-    c  = 0,
-    cc = 6,
-    i  = 0;
-  ptrdiff_t
-    rNo   = 0,
-    addr  = 0,
-    addrc = -1;
-  ucv
-    rBl   = 0;
+  DWORD cbRead = 0,
+    shvSz = sizeof(shv),
+    slvSz = sizeof(slv),
+    sivSz = sizeof(siv),
+    ssvSz = sizeof(ssv),
+    scvSz = sizeof(scv);
   shv
-    tNum = 0,
-    dNum = 0,
-    aNum = 0,
-    mNum = 0,
-    nNum = 0;
-  memset( res.buff, 1, size );
+    iNum = 0,
+    pNum = 0;
+  DWORD i = 0, c = BUFSIZ - bytes;
+  ucv res = 0;
+  scv offset = -( bytes - 1 );
+  cbRead = IupRdPipe( mepI->pipe, mepI->buff, BUFSIZ );
+  if ( !prev )
+    memset( mepO->buff, UCHAR_MAX, BUFSIZ );
   do
   {
-    IupRdPipe( tar.pipe, tar.buff, size );
-    if ( dump )
-      goto write;
-    else
+    if ( !prev )
+      goto iterate;
+    if ( i )
     {
-      i = 0;
-      do
-      {
-        dmp.buff[i] = 0;
-        res.buff[i] = 0;
-        ++i;
-      }
-      while ( i < size );
-      IupRdPipe( previous, res.buff, size );
-      IupRdPipe( dmp.pipe, dmp.buff, size );
+      IupSkPipe( mepI->pipe, offset, FPOS_CUR );
+      IupSkPipe( mepP->pipe, offset, FPOS_CUR );
     }
+    IupRdPipe( prev, mepO->buff, BUFSIZ );
+    if ( !mecM )
+      goto old;
+old:
     i = 0;
     do
     {
-      rBl = res.buff[i];
-      if ( !rBl )
-        goto iterate;
-      // Set tNum & dNum ready for comparisons
-      #ifdef _HUGE_DEFINED
-      if ( bytes == sizeof( huge ) )
-      {
-        CAST_DMP( shv );
-      }
-      #endif
-      else
-      if ( bytes == sizeof( long ) )
-      {
-        CAST_DMP( slv );
-      }
-      else if ( bytes == sizeof( short ) )
-      {
-        CAST_DMP( ssv );
-      }
-      else
-      {
-        CAST_DMP( scv );
-      }
-      // Ready to start comparisons
-      c = 0;
+      res = mepO->buff[i];
+      if ( !res )
+        goto next;
+      QCAST( shv )
+      else QCAST( slv )
+      else QCAST( siv )
+      else QCAST( ssv )
+      else QCAST( scv )
+        c = 0;
       switch ( used )
       {
-        case 0: COMP( == ); break;
-        case 1: COMP( != ); break;
-        case 2: COMP( >  ); break;
-        case 3: COMP( >= ); break;
-        case 4: COMP( <  ); break;
-        case 5: COMP( <= ); break;
-        case 6: rBl = (( tNum & dNum ) == dNum );
-        default: rBl = 0;
+        case T_EQ: QCMP1( == ); break;
+        case T_NE: QCMP1( != ); break;
+        case T_MT: QCMP1( >  ); break;
+        case T_ME: QCMP1( >= ); break;
+        case T_LT: QCMP1( <  ); break;
+        case T_LE: QCMP1( <= ); break;
+        case T_IA: QCMP2( && ); break;
+        default: res = 0;
       }
-      do
+      if ( !res )
       {
-        // Set aNum, mNum, nNum
-        #ifdef _HUGE_DEFINED
-        if ( bytes == sizeof( huge ) )
-        {
-          CAST_CMP( shv );
-        }
-        #endif
-        else
-        if ( bytes == sizeof( long ) )
-        {
-          CAST_CMP( slv );
-        }
-        else if ( bytes == sizeof( short ) )
-        {
-          CAST_CMP( ssv );
-        }
-        else
-        {
-          CAST_CMP( scv );
-        }
-        switch ( c )
-        {
-        case 0: COMPARE( == ); break;
-        case 1: COMPARE( != ); break;
-        case 2: COMPARE( >  ); break;
-        case 3: COMPARE( >= ); break;
-        case 4: COMPARE( <  ); break;
-        case 5: COMPARE( <= ); break;
-        default: rBl = 0;
-        }
+        if ( mepO->buff[i] > bytes )
+          mepO->buff[i] = bytes;
       }
-      while ( rBl && c < cc );
-      // Record result
-      res.buff[i] = rBl;
-      if ( rBl )
-        ++rNo;
-iterate:
+next:
       ++i;
     }
-    while ( i < size );
-write:
-    IupWrPipe( dmp.pipe, tar.buff, size );
-    IupWrPipe( res.pipe, res.buff, size );
+    while ( i < c );
+iterate:
+    cbRead = IupRdPipe( mepI->pipe, mepI->buff, BUFSIZ );
+    IupWrPipe( mepO->pipe, mepO->buff, BUFSIZ );
   }
-  while ( addr < addrc );
+  while ( cbRead );
 }

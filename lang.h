@@ -8,9 +8,12 @@
 #include <windows.h>
 #include <iup.h>
 
-#ifndef _HUGE_DEFINED
-#define _HUGE_DEFINED
+#ifndef HUGE
+#ifdef _MSC_VER
+#define HUGE __int64
+#else
 #define HUGE long long
+#endif
 typedef HUGE huge;
 #endif
 
@@ -24,6 +27,12 @@ typedef unsigned short usv;
 typedef   signed short ssv;
 typedef unsigned  char ucv;
 typedef   signed  char scv;
+
+typedef        SSIZE_T szv;
+typedef         SIZE_T uzv;
+typedef        INT_PTR spv;
+typedef       UINT_PTR upv;
+
 typedef          float fpv;
 typedef         double dpv;
 typedef    long double lpv;

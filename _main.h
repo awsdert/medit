@@ -1,7 +1,9 @@
 #pragma once
 #ifndef __MAIN_H
 #define __MAIN_H
-#include <iup.h>
+
+//#include <varargs.h>
+#include "lang.h"
 
 typedef struct _MEGUI_MAIN
 {
@@ -21,10 +23,15 @@ typedef struct _MEGUI_SEARCH
 
 typedef struct _MEGUI
 {
+  char font[20];
+  char fontSize[5];
   MEGUI_MAIN   main;
   MEGUI_SEARCH sea;
 } MEGUI;
 
 MEGUI* meGetGui( void );
+
+Ihandle* meMkList( Icallback func, ... );
+int     meListCB( Ihandle    *ih );
 
 #endif

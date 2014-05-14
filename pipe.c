@@ -65,6 +65,44 @@ Ipipe IupOpenProcess( DWORD perm, ucv setAsChild, DWORD pid )
   return OpenProcess( perm, setAsChild, pid );
 }
 
+ucv IupSkPipe( Ipipe pipe, int offset, int pos )
+{
+  LARGE_INTEGER li = {0};
+  li.QuadPart = offset;
+  if ( SetFilePointerEx( pipe, li, NULL, pos ) )
+    return 1;
+  return 0;
+}
+#ifdef HUGE
+ucv IupSkHPipe( Ipipe pipe, huge offset, int pos )
+{
+  int add = (offset < 0) ? -INT_MAX : INT_MAX;
+  ucv stop = 0;
+  LARGE_INTEGER li = {0};
+  SetFilePointerEx( pipe, li, NULL, pos );
+  li.QuadPart = add;
+  do
+  {
+    stop = (add < 0) ? (offset >= add) : (offset <= add);
+    if ( stop )
+    {
+      li.QuadPart = offset & add;
+      if ( SetFilePointerEx( pipe, li, NULL, FPOS_CUR ) )
+        return 1;
+      return 0;
+    }
+    if ( !SetFilePointerEx( pipe, li, NULL, FPOS_CUR ) )
+      return 0;
+    if ( add < 0 )
+      offset += INT_MAX;
+    else
+      offset -= INT_MAX;
+  }
+  while ( offset );
+  return 0;
+}
+#endif
+
 DWORD IupWrPipe( Ipipe pipe, void *buff, DWORD size )
 {
   DWORD done = 0;
