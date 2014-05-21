@@ -7,6 +7,7 @@ typedef struct _MECFG
 {
   char lang[7];
 } MECFG;
+void IupInitCwd( char *argv[] );
 int main( int argc, char *argv[] )
 {
   MECFG cfg = {0};
@@ -23,20 +24,7 @@ int main( int argc, char *argv[] )
     fprintf( stderr, "Error Opening IUP." );
     return -1;
   }
-  /* Capture CWD and APPNAME */
-  szPrv = strtok_s( argv[0], szSep, &szTok );
-  szNow = strtok_s( NULL,   szSep, &szTok );
-  do
-  {
-    szTmp = szPrv;
-    szPrv = szNow;
-    szNow = strtok_s( NULL, szSep, &szTok );
-    strcat_s( szCwd, FILENAME_MAX, szTmp );
-    strcat_s( szCwd, FILENAME_MAX, "\\"  );
-  }
-  while ( szNow );
-  szTmp = strtok_s( szPrv, ".", &szTok );
-  strcat_s( szAppName, FILENAME_MAX, szTmp );
+  IupInitCwd( argv );
   /* Capture default font */
   szTok = NULL;
   memset( szLine, 0, FILENAME_MAX );
@@ -84,27 +72,12 @@ mkGui:
             lang->mainList.edi,
             lang->mainList.hac,
             lang->mainList.abo );
-  IupSetAttribute( gui.main.main_dd, "EXPAND", "HORIZONTAL" );
-  IupSetAttribute( gui.main.main_dd, "SIZE", "300x20" );
-  /*
-  IupSetAttribute( gui.main.main_dd, "DROPDOWN", "YES" );
-  IupSetAttribute( gui.main.main_dd, "1", lang->mainList.tar );
-  IupSetAttribute( gui.main.main_dd, "2", lang->mainList.pro );
-  IupSetAttribute( gui.main.main_dd, "3", lang->mainList.sea );
-  IupSetAttribute( gui.main.main_dd, "4", lang->mainList.res );
-  IupSetAttribute( gui.main.main_dd, "5", lang->mainList.edi );
-  IupSetAttribute( gui.main.main_dd, "6", lang->mainList.hac );
-  IupSetAttribute( gui.main.main_dd, "7", lang->mainList.abo );
-  //*/
   gui.main.main_vb  = IupVbox(   gui.main.main_dd );
   gui.main.main_dlg = IupDialog( gui.main.main_vb );
-  IupSetAttribute( gui.main.main_dlg, "TITLE", "Medit" );
-  IupSetAttribute( gui.main.main_dlg, "SIZE",  "320x320"  );
-  IupSetCallback(  gui.main.main_dlg, "SHOW_CB", meSea_OnShow );
-
+  IupSetAttribute( gui.main.main_dlg, IUP_TITLE,   "Medit" );
+  IupSetAttribute( gui.main.main_dlg, IUP_SIZE,    "320x320"  );
+  IupSetCallback(  gui.main.main_dlg, IUP_SHOW_CB, meSea_OnShow );
   IupShow( gui.main.main_dlg );
-  //IupRedraw( gui.main.main_dlg, 1 );
-  //IupFlush();
   ret = IupMainLoop();
   pipe = IupMkFile("medit.mecfg", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
   IupWrPipe( pipe, &cfg, sizeof( MECFG ) );
@@ -115,6 +88,29 @@ mkGui:
 char const* IupGetCwd( void )
 {
   return szCwd;
+}
+void        IupInitCwd( char *argv[] )
+{
+  char
+    szSep[] = "\\/",
+   *szTok = NULL,
+   *szTmp = NULL,
+   *szPrv = NULL,
+   *szNxt = NULL;
+  /* Capture CWD and APPNAME */
+  szPrv = strtok_s( argv[0], szSep, &szTok );
+  szNxt = strtok_s( NULL,   szSep, &szTok );
+  do
+  {
+    szTmp = szPrv;
+    szPrv = szNxt;
+    szNxt = strtok_s( NULL, szSep, &szTok );
+    strcat_s( szCwd, FILENAME_MAX, szTmp );
+    strcat_s( szCwd, FILENAME_MAX, DIR_SEP  );
+  }
+  while ( szNxt );
+  szTmp = strtok_s( szPrv, ".", &szTok );
+  strcat_s( szAppName, FILENAME_MAX, szTmp );
 }
 char const* IupGetAppName( void )
 {

@@ -11,8 +11,10 @@
 #ifndef HUGE
 #ifdef _MSC_VER
 #define HUGE __int64
+#define H( NUM ) NUM##I64
 #else
 #define HUGE long long
+#define H( NUM ) NUM##LL
 #endif
 typedef HUGE huge;
 #endif
