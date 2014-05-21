@@ -83,7 +83,7 @@ typedef struct _ME_SHV
 
 
 int meSea_OnShow( Ihandle *ih );
-int meSeaMenu_OnClick( Ihandle *ih );
+int meSeaMenu_OnClick( Ihandle *ih, int button, int pressed, int x, int y, char* status );
 
 void fpQry( ucv   used, MEPIPE *mepI,  MEPIPE  *mepO, MEPIPE  *mepP,
             Ipipe prev, scv    bytes, ME_LPV *mecM, ME_LPV *mecN );

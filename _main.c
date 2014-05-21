@@ -9,7 +9,7 @@ Ihandle* meMkList( Icallback func, ... )
   char *title = NULL;
   va_start( args, func );
   if ( !func )
-    func = meListCB;
+    func = (Icallback)meListCB;
   do
   {
     title = va_arg( args, char* );
@@ -33,20 +33,41 @@ Ihandle* meMkList( Icallback func, ... )
   return sbox;
 }
 
-int meListCB( Ihandle *ih )
+int meListCB( Ihandle *ih, int button, int pressed, int x, int y, char* status )
 {
+  char *attr = NULL, tmp[_CVTBUFSIZE] = {0};
   Ihandle *ph = IupGetParent(ih),
     *box   = IupGetParent(ph),
     *frame = NULL;
   int i = 0, c = IupGetChildCount( box );
-  for ( ; i < c; ++i )
+  double dx = 0.1f, px = 0.0f;
+  if (!pressed)
   {
-    frame = IupGetChild( box, i );
-    IupSetAttribute( frame, "SUNKEN", IUP_NO );
-    IupRedraw( frame, 0 );
+    for ( ; i < c; ++i )
+    {
+      frame = IupGetChild( box, i );
+      IupSetAttribute( frame, "SUNKEN", IUP_NO );
+      IupRedraw( frame, 0 );
+    }
+    IupSetAttribute( ph, "SUNKEN", IUP_YES );
+    IupRedraw( ph, 0 );
+    IupFlush();
   }
-  IupSetAttribute( ph, "SUNKEN", IUP_YES );
-  IupRedraw( ph, 0 );
-  IupFlush();
+  else
+  {
+    ph = IupGetParent( ph );
+    attr = IupGetAttribute( ph, IUP_POSX );
+    if ( attr && attr[0] )
+      px = atof( attr );
+    attr = IupGetAttribute( ph, IUP_DX );
+    if ( attr && attr[0] )
+      dx = atof( attr );
+    px += (x * dx);
+    _fcvt_s( tmp, _CVTBUFSIZE, px, 0, &c, &i );
+    //IupMessage( attr, tmp );
+    IupSetAttribute( ph, IUP_POSX, tmp );
+    IupRedraw( ph, 1 );
+    IupFlush();
+  }
   return IUP_DEFAULT;
 }

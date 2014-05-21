@@ -32,6 +32,6 @@ typedef struct _MEGUI
 MEGUI* meGetGui( void );
 
 Ihandle* meMkList( Icallback func, ... );
-int     meListCB( Ihandle    *ih );
+int     meListCB( Ihandle    *ih, int button, int pressed, int x, int y, char* status );
 
 #endif

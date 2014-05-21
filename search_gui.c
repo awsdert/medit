@@ -18,7 +18,7 @@ int meSea_OnShow( Ihandle *ih )
   Ihandle *child, *kid;
   if ( hGui->sea.stype_hbox )
     return IUP_DEFAULT;
-  hGui->sea.stype_sbox = meMkList( meSeaMenu_OnClick,
+  hGui->sea.stype_sbox = meMkList( (Icallback)meSeaMenu_OnClick,
     lang->seaMenu.dump,
     "==", "!=", ">",  ">=", "<",  "<=",
     "&&", "!&&", "|",  "!|", "^",  "!^", "~",  "!~",
@@ -44,7 +44,7 @@ int meSea_OnShow( Ihandle *ih )
   IupRefresh( hGui->main.main_vb );
   return IUP_DEFAULT;
 }
-int meSeaMenu_OnClick( Ihandle *ih )
+int meSeaMenu_OnClick( Ihandle *ih, int button, int pressed, int x, int y, char* status )
 {
   MEGUI  *hGui = meGetGui();
   MELANG *hLng = meGetLang();
@@ -52,7 +52,7 @@ int meSeaMenu_OnClick( Ihandle *ih )
   int i = 0, c = 0;
   Ihandle *ph = IupGetParent(ih);
   char  used = T_DUMP;
-  meListCB( ih );
+  meListCB( ih, button, pressed, x, y, status );
   text = IupGetAttribute( ih, IUP_VALUE );
   used = text[0];
   return IUP_DEFAULT;
