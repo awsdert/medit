@@ -1,6 +1,8 @@
 #ifndef _MELANG_H
 #define _MELANG_H
 
+#include <limits.h>
+#include <float.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>

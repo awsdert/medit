@@ -482,7 +482,9 @@
 1398773344 source:c:\users\lee\documents\github\medit\lang.c
 	"lang.h"
 
-1400421349 c:\users\lee\documents\github\medit\lang.h
+1400844001 c:\users\lee\documents\github\medit\lang.h
+	<limits.h>
+	<float.h>
 	<stdio.h>
 	<stddef.h>
 	<stdlib.h>
@@ -696,7 +698,7 @@
 1271706272 c:\sdk\mswin7.1\include\sherrors.h
 	<winerror.h>
 
-1400678599 c:\users\lee\documents\github\medit\_main.h
+1400845295 c:\users\lee\documents\github\medit\_main.h
 	"lang.h"
 
 1399986582 source:c:\users\lee\documents\github\medit\search_uint.c
@@ -1726,6 +1728,10 @@
 	<winapifamily.h>
 	<winerror.h>
 
-1400680635 source:c:\users\lee\documents\github\medit\_main.c
+1400844456 source:c:\users\lee\documents\github\medit\_main.c
+	"_main.h"
+	<float.h>
+
+1400845458 source:c:\users\lee\documents\github\medit\ftoa.c
 	"_main.h"
 

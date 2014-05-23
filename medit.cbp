@@ -79,6 +79,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="_main.h" />
+		<Unit filename="ftoa.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="lang.c">
 			<Option compilerVar="CC" />
 		</Unit>
