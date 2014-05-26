@@ -2,14 +2,14 @@
 
 Ihandle* meMkList( Icallback func, ... )
 {
-  Ihandle *box = IupHbox( NULL ),
-    *sbox = IupScrollBox( box ),
+  Ihandle *hbox = IupHbox( NULL ),
+    *sbox = IupScrollBox( hbox ),
     *frame = NULL, *ih = NULL;
   va_list args;
   char *title = NULL;
   va_start( args, func );
   if ( !func )
-    func = (Icallback)meListCB;
+    func = (Icallback)meList_ButtonCB;
   do
   {
     title = va_arg( args, char* );
@@ -19,33 +19,32 @@ Ihandle* meMkList( Icallback func, ... )
     IupSetAttribute( ih, IUP_EXPAND, IUP_YES );
     IupSetAttribute( ih, IUP_ALIGNMENT, "ACENTER:ACENTER" );
     frame = IupFrame( ih );
-    IupSetAttribute( frame, IUP_SIZE, "40x20" );
-    IupAppend( box, frame );
+    IupSetAttribute( frame, IUP_SIZE, "40x" );
+    IupAppend( hbox, frame );
     IupSetCallback( ih, IUP_BUTTON_CB, func );
   }
   while ( 1 );
   va_end(   args );
-  IupSetAttribute( box, IUP_SIZE, "100x30" );
-  IupSetAttribute( sbox, IUP_SIZE, "100x30" );
-  IupSetAttribute( box, IUP_GAP, "10" );
-  IupSetAttribute( box, IUP_EXPAND, IUP_YES );
+  //IupSetCallback( sbox, IUP_BUTTON_CB, (Icallback)meListSbox_ButtonCB );
+  //IupSetCallback( sbox, IUP_MOTION_CB, (Icallback)meList_MotionCB );
+  IupSetAttribute( sbox, IUP_SIZE, "100x25" );
+  IupSetAttribute( hbox, IUP_GAP, "10" );
+  IupSetAttribute( hbox, IUP_EXPAND, IUP_YES );
   IupSetAttribute( sbox, IUP_EXPAND, IUP_HORIZONTAL );
   return sbox;
 }
 
-int meListCB( Ihandle *ih, int button, int pressed, int x, int y, char* status )
+int meList_ButtonCB( Ihandle *ih, int button, int pressed, int x, int y, char* status )
 {
   char *attr = NULL, tmp[_CVTBUFSIZE] = {0}, fpn[ _CVTBUFSIZE ] = {0};
   Ihandle *ph = IupGetParent(ih),
     *box   = IupGetParent( ph ),
     *sbox  = IupGetParent( box ),
     *frame = NULL;
-  int i = 0, c = IupGetChildCount( box ), dec, sign;
-  double dx = 0.1f, px = 0.0f, nx = 0.0f, lx = 0.01f, xmax = 1.0f, xmin = 0.0f;
-  static int prvx = 0, drag = 0;
+  int i = 0, c = IupGetChildCount( box ), sx, sy, px, py, dx, dy;
   if ( !pressed )
   {
-    if ( !drag )
+    if ( button != IUP_BUTTON1 )
     {
       for ( ; i < c; ++i )
       {
@@ -57,45 +56,66 @@ int meListCB( Ihandle *ih, int button, int pressed, int x, int y, char* status )
       IupRedraw( ph, 0 );
       IupFlush();
     }
+    //*
     else
-    {
-      attr = IupGetAttribute( sbox, IUP_POSX );
-      if ( attr && attr[0] )
-        px = atof( attr );
-      attr = IupGetAttribute( sbox, IUP_DX );
-      if ( attr && attr[0] )
-        dx = atof( attr );
-      attr = IupGetAttribute( sbox, "LINEX" );
-      if ( attr && attr[0] )
-        lx = atof( attr );
-      attr = IupGetAttribute( sbox, IUP_XMAX );
-      if ( attr && attr[0] )
-        xmax = atof( attr );
-      attr = IupGetAttribute( sbox, IUP_XMIN );
-      if ( attr && attr[0] )
-        xmin = atof( attr );
-      x = ( prvx < x ) ? (x - prvx) : -(prvx - x);
-      nx = x;
-      nx = px + ( nx * lx );
-      xmax -= dx;
-      if ( nx > xmax )
-        nx = xmax;
-      else if ( nx < xmin )
-        nx = xmin;
-      px = nx - px;
-      ftoa( nx, fpn, DBL_DIG );
-      attr = fpn;
-      IupSetAttribute( sbox, IUP_POSX, fpn );
-      IupRefresh( sbox );
-      IupRedraw( sbox, 1 );
-      IupFlush();
-    }
-    drag = 0;
+      IupSetAttribute(sbox, "_IUP_DRAG_SB", NULL);
+    //*/
   }
-  else if ( !drag )
+  //*
+  else if ( button == IUP_BUTTON1 )
   {
-    prvx = x;
-    drag = 1;
+    IupSetInt(sbox, "_IUP_START_X", x);
+    //IupSetInt(sbox, "_IUP_START_Y", y);
+    IupSetInt(sbox, "_IUP_START_POSX", IupGetInt(sbox, "POSX"));
+    //IupSetInt(sbox, "_IUP_START_POSY", IupGetInt(sbox, "POSY"));
+    IupSetAttribute(sbox, "_IUP_DRAG_SB", "1");
+  }
+  //*/
+  return IUP_DEFAULT;
+}
+int meListSbox_ButtonCB( Ihandle *sbox, int button, int pressed, int x, int y, char* status )
+{
+  if ( button == IUP_BUTTON1 )
+  {
+    if ( !pressed )
+      IupSetAttribute(sbox, "_IUP_DRAG_SB", NULL);
+    else if ( !IupGetAttribute( sbox, "_IUP_DRAG_SB" ) )
+    {
+      IupSetInt(sbox, "_IUP_START_X", x);
+      IupSetInt(sbox, "_IUP_START_Y", y);
+      IupSetFloat(sbox, "_IUP_START_POSX", IupGetFloat(sbox, "POSX"));
+      IupSetFloat(sbox, "_IUP_START_POSY", IupGetFloat(sbox, "POSY"));
+      IupSetAttribute(sbox, "_IUP_DRAG_SB", "1");
+    }
+  }
+  return IUP_DEFAULT;
+}
+int meList_ScrollCB( Ihandle *ih, int what, float posx, float posy )
+{
+  IupSetFloat( ih, "_POSX", posx );
+  IupSetFloat( ih, "_POSY", posy );
+  return IUP_DEFAULT;
+}
+
+int meList_MotionCB( Ihandle *sbox, int x, int y, char* status )
+{
+  /*
+  Ihandle *ph = IupGetParent( ih ),
+    *hbox = IupGetParent( ph ),
+    *sbox = IupGetParent( hbox );
+  //*/
+  if (iup_isbutton1(status) &&
+      IupGetAttribute(sbox, "_IUP_DRAG_SB"))
+  {
+    int start_x = IupGetInt(sbox, "_IUP_START_X");
+    int start_y = IupGetInt(sbox, "_IUP_START_Y");
+    int dx = x - start_x;
+    int dy = y - start_y;
+    int posx = IupGetInt(sbox, "_IUP_START_POSX");
+    int posy = IupGetInt(sbox, "_IUP_START_POSY");
+    IupSetInt(sbox, "POSX", posx-dx);  /* drag direction is opposite to scrollbar */
+    IupSetInt(sbox, "POSY", posy-dy);
+    meList_ScrollCB(sbox, 0, IupGetFloat(sbox, "POSX"), IupGetFloat(sbox, "POSY"));
   }
   return IUP_DEFAULT;
 }

@@ -52,7 +52,7 @@ int meSeaMenu_OnClick( Ihandle *ih, int button, int pressed, int x, int y, char*
   int i = 0, c = 0;
   Ihandle *ph = IupGetParent(ih);
   char  used = T_DUMP;
-  meListCB( ih, button, pressed, x, y, status );
+  meList_ButtonCB( ih, button, pressed, x, y, status );
   text = IupGetAttribute( ih, IUP_VALUE );
   used = text[0];
   return IUP_DEFAULT;

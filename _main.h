@@ -32,10 +32,13 @@ typedef struct _MEGUI
 MEGUI* meGetGui( void );
 
 Ihandle* meMkList( Icallback func, ... );
-int     meListCB( Ihandle    *ih, int button, int pressed, int x, int y, char* status );
+int meList_ButtonCB( Ihandle    *ih, int button, int pressed, int x, int y, char* status );
+int meListSbox_ButtonCB( Ihandle    *ih, int button, int pressed, int x, int y, char* status );
+int meList_MotionCB(Ihandle *ih, int x, int y, char* status);
 /* Unsafe - Assumes there will be enough char elements, will NULL terminate */
 void ftoa( double value, char* dst, int sigDigits );
 /* Safer version */
 void ftoa_s( double value, char *dst, uzv length, int sigDigits );
+
 
 #endif
