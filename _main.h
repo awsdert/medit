@@ -33,8 +33,7 @@ MEGUI* meGetGui( void );
 
 Ihandle* meMkList( Icallback func, ... );
 int meList_ButtonCB( Ihandle    *ih, int button, int pressed, int x, int y, char* status );
-int meListSbox_ButtonCB( Ihandle    *ih, int button, int pressed, int x, int y, char* status );
-int meList_MotionCB(Ihandle *ih, int x, int y, char* status);
+int meListSbox_MotionCB( Ihandle    *ih, int x, int y, char* status );
 /* Unsafe - Assumes there will be enough char elements, will NULL terminate */
 void ftoa( double value, char* dst, int sigDigits );
 /* Safer version */
