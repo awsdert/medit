@@ -46,7 +46,7 @@ int meListP_ButtonCB( Ihandle *sbox, int button, int pressed, int x, int y, char
   Ihandle *hbox = IupGetChild( sbox, 0 ), *zero = IupGetChild( hbox, 0 ),
     *ih = NULL, *frame = NULL, *lbl;
   char attr[20] = {0}, *tok = NULL, *tmp = NULL;
-  int w = 0, h = 0, cx = IupGetInt( hbox, IUP_X ), child = 0;
+  int w = 0, h = 0, px = IupGetInt( sbox, IUP_POSX ), child = 0;
   Icallback func = NULL;
   int i = 0, c = IupGetChildCount( hbox );
   typedef int (*motionCB)( Ihandle*, int, int, int, int, char* );
@@ -66,8 +66,8 @@ int meListP_ButtonCB( Ihandle *sbox, int button, int pressed, int x, int y, char
     w = atoi( tmp ) + IupGetInt( hbox, IUP_GAP );
     tmp = strtok_s( NULL, "x", &tok );
     h = atoi( tmp );
-    cx = -cx + x;
-    child = ( cx > w ) ? cx / w : 0;
+    px += x;
+    child = ( px > w ) ? px / w : 0;
     ih = IupGetChild( hbox, child );
     func = IupGetCallback( ih, "ME_BUTTON_CB" );
     IupSetAttribute(sbox, "_IUP_DRAG_SB", NULL);
@@ -87,29 +87,6 @@ int meListP_ButtonCB( Ihandle *sbox, int button, int pressed, int x, int y, char
   }
   return IUP_DEFAULT;
 }
-/*
-int meListC_MotionCB( Ihandle *ph, int x, int y, char* status )
-{
-  Ihandle
-    *hbox   = IupGetParent( ph ),
-    *sbox  = IupGetParent( hbox ),
-    *frame = NULL;
-  int
-    dx = IupGetInt( ph, IUP_DX ),
-    dy = IupGetInt( ph, IUP_DY ),
-    cx = IupGetInt( ph, IUP_X ),
-    cy = IupGetInt( ph, IUP_Y ),
-    wx = cx + dx,
-    wy = cx + dy,
-    lx = (IupGetInt( sbox, "LINEX") || 1),
-    ly = (IupGetInt( sbox, "LINEY") || 1),
-    px = (IupGetInt( ph, IUP_POSX ) || 1),
-    py = (IupGetInt( ph, IUP_POSY ) || 1);
-  if ( iup_isbutton1(status) )
-    return meListP_MotionCB( sbox, x + cx, y + cy, status );
-  return IUP_DEFAULT;
-}
-*/
 int meListP_MotionCB( Ihandle *sbox, int x, int y, char* status )
 {
   Ihandle *hbox = IupGetChild( sbox, 0 );
