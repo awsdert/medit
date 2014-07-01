@@ -54,13 +54,13 @@ old:
         c = 0;
       switch ( used )
       {
-        case T_EQ: QCMP1( == ); break;
-        case T_NE: QCMP1( != ); break;
-        case T_MT: QCMP1( >  ); break;
-        case T_ME: QCMP1( >= ); break;
-        case T_LT: QCMP1( <  ); break;
-        case T_LE: QCMP1( <= ); break;
-        case T_IA: QCMP2( && ); break;
+        case CMP_EQ: QCMP1( == ); break;
+        case CMP_NE: QCMP1( != ); break;
+        case CMP_MT: QCMP1( >  ); break;
+        case CMP_ME: QCMP1( >= ); break;
+        case CMP_LT: QCMP1( <  ); break;
+        case CMP_LE: QCMP1( <= ); break;
+        case CMP_IA: QCMP2( && ); break;
         default: res = 0;
       }
       if ( !res )

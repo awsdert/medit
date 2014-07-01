@@ -2,18 +2,17 @@
 static char  szCwd[ FILENAME_MAX ] = {0};
 static char  szAppName[ FILENAME_MAX ] = {0};
 static FILE *hLang = NULL;
-static MEGUI gui = {0};
-typedef struct _MECFG
-{
-  char lang[7];
-} MECFG;
+static MEGUI _gui = {0};
+
+
 void IupInitCwd( char *argv[] );
 int main( int argc, char *argv[] )
 {
-  MECFG cfg = {0};
-  int   ret = 0;
-  MELANG *lang = meGetLang();
-  Ipipe   pipe = NULL;
+  MECFG  cfg = {0};
+  MEGUI *gui = &_gui;
+  int    ret = 0;
+  LANG *lang = meGetLang();
+  Ipipe pipe = NULL;
   char
     szSep[] = "\\/",
     szLine[ FILENAME_MAX ] = {0},
@@ -31,9 +30,9 @@ int main( int argc, char *argv[] )
   szTmp = IupGetAttribute( NULL, "DEFAULTFONT" );
   strcpy_s( szLine, FILENAME_MAX, szTmp );
   szTmp = strtok_s( szLine, ", ", &szTok );
-  strcat_s( gui.font, 20, szTmp );
+  strcat_s( gui->font, 20, szTmp );
   szTmp = strtok_s( NULL, ", ", &szTok );
-  strcat_s( gui.fontSize, 5, szTmp );
+  strcat_s( gui->fontSize, 5, szTmp );
   /* Open Configuration/Language Files */
   pipe = IupMkDir( "", 0666, SHARE_READ | SHARE_WRITE, ACTION_OPEN_NEW );
   IupShutPipe( pipe );
@@ -53,7 +52,7 @@ int main( int argc, char *argv[] )
     strcat_s( szLine,    FILENAME_MAX, cfg.lang );
     strcat_s( szLine,    FILENAME_MAX, ".melng" );
     pipe = IupMkFile( szLine, 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
-    IupRdPipe( pipe, lang, sizeof(MELANG) );
+    IupRdPipe( pipe, lang, sizeof(LANG) );
     IupShutPipe( pipe );
   }
   else
@@ -63,21 +62,45 @@ int main( int argc, char *argv[] )
     cfg.lang[1] = 'n';
   }
 mkGui:
-  gui.main.main_dd = //IupList(NULL);
-    meMkList( NULL,
-            lang->mainList.tar,
-            lang->mainList.pro,
-            lang->mainList.sea,
-            lang->mainList.res,
-            lang->mainList.edi,
-            lang->mainList.hac,
-            lang->mainList.abo );
-  gui.main.main_vb  = IupVbox(   gui.main.main_dd );
-  gui.main.main_dlg = IupDialog( gui.main.main_vb );
-  IupSetAttribute( gui.main.main_dlg, IUP_TITLE,   "Medit" );
-  IupSetAttribute( gui.main.main_dlg, IUP_SIZE,    "320x320"  );
-  IupSetCallback(  gui.main.main_dlg, IUP_SHOW_CB, meSea_OnShow );
-  IupShow( gui.main.main_dlg );
+  gui->main.main_dd =
+    meMkList( (Icallback)meMenu_ButtonCB,
+            lang->x[ LANG_TARGET ],
+            lang->x[ LANG_PROFILE ],
+            lang->x[ LANG_SEARCH ],
+            lang->x[ LANG_RESULTS ],
+            lang->x[ LANG_EDITOR ],
+            lang->x[ LANG_HACKS ],
+            lang->x[ LANG_ABOUT ], NULL );
+  /* Comparison Fieldset */
+  gui->cmp.main_vbox = IupVbox( NULL );
+  gui->cmp.main_fset = IupFrame( gui->cmp.main_vbox );
+  IupSetAttribute( gui->cmp.main_fset, IUP_TITLE, lang->x[ LANG_COMPARISON ] );
+  IupSetAttribute( gui->cmp.main_fset, IUP_SIZE, "100x30" );
+  IupSetAttribute( gui->cmp.main_fset, IUP_EXPAND, IUP_HORIZONTAL );
+  meCmp_OnInit( gui->cmp.main_fset );
+  /* Value Fieldset */
+  gui->val.main_vbox = IupVbox( NULL );
+  gui->val.main_fset = IupFrame( gui->val.main_vbox );
+  IupSetAttribute( gui->val.main_fset, IUP_TITLE, lang->x[ LANG_VALUE ] );
+  IupSetAttribute( gui->val.main_fset, IUP_SIZE, "100x30" );
+  IupSetAttribute( gui->val.main_fset, IUP_EXPAND, IUP_HORIZONTAL );
+  meVal_OnInit( gui->val.main_fset );
+  /* Search List */
+  gui->sea.main_vbox = IupVbox( NULL );
+  gui->sea.main_fset = IupFrame( gui->sea.main_vbox );
+  IupSetAttribute( gui->sea.main_fset, IUP_TITLE, lang->x[ LANG_SEARCH ] );
+  IupSetAttribute( gui->sea.main_fset, IUP_SIZE, "100x30" );
+  IupSetAttribute( gui->sea.main_fset, IUP_EXPAND, IUP_HORIZONTAL );
+  meSea_OnInit( gui->sea.main_fset );
+  /* Main List */
+  gui->main.main_vbox =
+    IupVbox( gui->main.main_dd,
+      gui->sea.main_fset, gui->cmp.main_fset, gui->val.main_fset );
+  gui->main.main_dlg = IupDialog( gui->main.main_vbox );
+  IupSetAttribute( gui->main.main_dlg, IUP_TITLE,   "Medit" );
+  IupSetAttribute( gui->main.main_dlg, IUP_SIZE,    "320x320"  );
+  /* Show all */
+  IupShow( gui->main.main_dlg );
   ret = IupMainLoop();
   pipe = IupMkFile("medit.mecfg", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
   IupWrPipe( pipe, &cfg, sizeof( MECFG ) );
@@ -118,7 +141,7 @@ char const* IupGetAppName( void )
 }
 MEGUI* meGetGui( void )
 {
-  return &gui;
+  return &_gui;
 }
 void IupGetLDataDirFromName( char *path, DWORD size )
 {

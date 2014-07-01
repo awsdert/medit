@@ -17,28 +17,7 @@
   if ( mecM->used[c] ) rBl = ( rBl &&  (tNum CMP_T mNum)); \
   if ( mecN->used[c] ) rBl = ( rBl && !(tNum CMP_T nNum))
 
-typedef enum   _METEST
-{
-  /* ==, != */
-  T_EQ =
-  '\0',  T_NE,
-  /* >, >= */
-  T_MT, T_ME,
-  /* <, <= */
-  T_LT, T_LE,
-  /* &, !& */
-  T_IA, T_NA,
-  /* |, !| */
-  T_IO, T_NO,
-  /* ^, !^ */
-  T_IX, T_NX,
-  /* ~, !~ */
-  T_IR, T_NR,
-  T_COUNT,
-  T_DUMP,
-  T_UNDO,
-  T_REDO
-} METEST;
+
 
 typedef struct _MEPIPE
 {
@@ -64,25 +43,22 @@ typedef union _LPV
 
 typedef struct _ME_LPV
 {
-  LPV  buff[T_COUNT];
-  ucv  used[T_COUNT];
+  LPV  buff[CMP_COUNT];
+  ucv  used[CMP_COUNT];
 } ME_LPV;
 
 typedef struct _ME_UHV
 {
-  uhv  buff[T_COUNT];
-  ucv  used[T_COUNT];
+  uhv  buff[CMP_COUNT];
+  ucv  used[CMP_COUNT];
 } ME_UHV;
 
 typedef struct _ME_SHV
 {
-  shv  buff[T_COUNT];
-  ucv  used[T_COUNT];
+  shv  buff[CMP_COUNT];
+  ucv  used[CMP_COUNT];
 } ME_SHV;
 
-
-
-int meSea_OnShow( Ihandle *ih );
 int meSeaMenu_OnClick( Ihandle *ih, int button, int pressed, int x, int y, char* status );
 
 void fpQry( ucv   used, MEPIPE *mepI,  MEPIPE  *mepO, MEPIPE  *mepP,

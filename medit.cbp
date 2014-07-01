@@ -75,10 +75,14 @@
 		<Compiler>
 			<Add option="/W3" />
 		</Compiler>
+		<Unit filename="OnInit.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="_main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="_main.h" />
+		<Unit filename="data.h" />
 		<Unit filename="ftoa.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -109,6 +113,7 @@
 		<Unit filename="search_uint.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="types.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

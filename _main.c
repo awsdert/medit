@@ -8,11 +8,9 @@ Ihandle* meMkList( Icallback func, ... )
   va_list args;
   char *title = NULL;
   va_start( args, func );
+  title = va_arg( args, char* );
   do
   {
-    title = va_arg( args, char* );
-    if ( !title )
-      break;
     ih = IupLabel( title );
     IupSetAttribute( ih, IUP_EXPAND, IUP_YES );
     IupSetAttribute( ih, IUP_ALIGNMENT, "ACENTER:ACENTER" );
@@ -28,9 +26,10 @@ Ihandle* meMkList( Icallback func, ... )
     IupSetAttribute( frame, IUP_SIZE, "40x" );
     IupAppend( hbox, frame );
     IupSetCallback( frame, IUP_BUTTON_CB, NULL );
-    IupSetCallback( frame, "ME_BUTTON_CB", func );
+    IupSetCallback( frame, "_ME_BUTTON_CB", func );
+    title = va_arg( args, char* );
   }
-  while ( 1 );
+  while ( title );
   va_end(   args );
   IupSetCallback( sbox, IUP_BUTTON_CB, (Icallback)meListP_ButtonCB );
   IupSetCallback( sbox, IUP_MOTION_CB, (Icallback)meListP_MotionCB );
@@ -46,9 +45,10 @@ int meListP_ButtonCB( Ihandle *sbox, int button, int pressed, int x, int y, char
   Ihandle *hbox = IupGetChild( sbox, 0 ), *zero = IupGetChild( hbox, 0 ),
     *ih = NULL, *frame = NULL, *lbl;
   char attr[20] = {0}, *tok = NULL, *tmp = NULL;
-  int w = 0, h = 0, px = IupGetInt( sbox, IUP_POSX ), child = 0;
+  int w = 0, h = 0, px = IupGetInt( sbox, IUP_POSX ), gap = 0, kid = 0;
   Icallback func = NULL;
   int i = 0, c = IupGetChildCount( hbox );
+  div_t res = {0};
   typedef int (*motionCB)( Ihandle*, int, int, int, int, char* );
   if ( pressed )
   {
@@ -61,29 +61,46 @@ int meListP_ButtonCB( Ihandle *sbox, int button, int pressed, int x, int y, char
   }
   else if ( iup_isbutton1( status ) )
   {
-    strcpy_s( attr, 20, IupGetAttribute( zero, IUP_RASTERSIZE ) );
-    tmp = strtok_s( attr, "x", &tok );
-    w = atoi( tmp ) + IupGetInt( hbox, IUP_GAP );
-    tmp = strtok_s( NULL, "x", &tok );
-    h = atoi( tmp );
     px += x;
-    child = ( px > w ) ? px / w : 0;
-    ih = IupGetChild( hbox, child );
-    func = IupGetCallback( ih, "ME_BUTTON_CB" );
-    IupSetAttribute(sbox, "_IUP_DRAG_SB", NULL);
-    for ( ; i < c; ++i )
+    gap = IupGetInt( hbox, IUP_GAP );
+    do
     {
-      frame = IupGetChild( hbox, i );
-      lbl   = IupGetChild( frame, 0 );
-      IupSetAttribute( frame, "SUNKEN", IUP_NO );
-      IupRedraw( frame, 0 );
+      ih = IupGetChild( hbox, i );
+      strcpy_s( attr, 20, IupGetAttribute( ih, IUP_RASTERSIZE ) );
+      tmp = strtok_s( attr, "x", &tok );
+      w += atoi( tmp );
+      tmp = strtok_s( NULL, "x", &tok );
+      h += atoi( tmp );
+      if ( px < w )
+        break;
+      tok = NULL;
+      w += gap;
+      if ( px < w )
+      {
+        ih = NULL;
+        break;
+      }
+      ++i;
     }
-    lbl   = IupGetChild( ih, 0 );
-    IupSetAttribute( ih, "SUNKEN", IUP_YES );
-    if ( func )
-      ((motionCB)func)( ih, button, pressed, x, y, status );
-    IupRedraw( ih, 0 );
-    IupFlush();
+    while ( i < c );
+    if ( ih )
+    {
+      func = IupGetCallback( ih, "_ME_BUTTON_CB" );
+      IupSetAttribute(sbox, "_IUP_DRAG_SB", NULL);
+      for ( i = 0; i < c; ++i )
+      {
+        frame = IupGetChild( hbox, i );
+        lbl   = IupGetChild( frame, 0 );
+        IupSetAttribute( frame, "SUNKEN", IUP_NO );
+        IupRedraw( frame, 0 );
+      }
+      lbl   = IupGetChild( ih, 0 );
+      IupSetAttribute( ih, "SUNKEN", IUP_YES );
+      if ( func )
+        ((motionCB)func)( ih, button, pressed, x, y, status );
+      IupRedraw( ih, 0 );
+      IupFlush();
+    }
   }
   return IUP_DEFAULT;
 }
@@ -106,6 +123,24 @@ int meListP_MotionCB( Ihandle *sbox, int x, int y, char* status )
     IupSetInt( hbox, IUP_Y, -py );
   }
   IupRefresh( sbox );
+  IupFlush();
+  return IUP_DEFAULT;
+}
+int meMenu_ButtonCB( Ihandle *ih, int button, int pressed, int x, int y, char* status )
+{
+  Ihandle *hLbl = IupGetChild( ih, 0 );
+  char   *title = IupGetAttribute( hLbl, IUP_TITLE );
+  MEGUI   *gui = meGetGui();
+  int i = 1, c = IupGetChildCount( gui->main.main_vbox );
+  for ( ; i < c; ++i )
+    IupHide( IupGetChild( gui->main.main_vbox, i ) );
+  if ( strcmp( meGetText( LANG_SEARCH ), title ) == 0 )
+  {
+    IupShow( gui->sea.main_fset );
+    IupShow( gui->cmp.main_fset );
+    IupShow( gui->val.main_fset );
+  }
+  IupRedraw( gui->main.main_vbox, 1 );
   IupFlush();
   return IUP_DEFAULT;
 }
