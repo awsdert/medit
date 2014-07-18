@@ -1,15 +1,15 @@
 #include "search.h"
 #define SEARCH( T, C ) \
-  IupSkPipe( mepI.pipe, 0, FPOS_SOF ); \
+  IupSkPipe( &mepI.pipe, 0, FPOS_SOF ); \
   strcpy_s( szPath, 10, szNow ); \
   strcat_s( szPath, 10, T##Ex ); \
   mepO.pipe = IupMkFile( szPath, 0666, 0, ACTION_OPEN_NEW, NULL ); \
   if ( qNo ) \
   { \
-    if ( prev ) \
+    if ( prev.pipe ) \
     { \
-      IupShutPipe( prev ); \
-      IupShutPipe( mepP.pipe ); \
+      IupShutPipe( &prev ); \
+      IupShutPipe( &mepP.pipe ); \
     } \
     strcpy_s( szPath, 10, szOld ); \
     strcat_s( szPath, 10, T##Ex ); \
@@ -22,12 +22,13 @@
     ++i; \
   } \
   while ( i < C ); \
-  IupShutPipe( mepO.pipe );
+  IupShutPipe( &mepO.pipe );
+
 void search( usv used )
 {
-  Ipipe prev = NULL;
+  Ipipe prev = {0};
   MEPIPE
-    mepI = {{0}, IupOpenFile( "test.xps", 0666, SHARE_READ ) },
+    mepI = { IupOpenFile( "test.xps", 0666, SHARE_READ ), {0} },
     mepO = {{0}}, mepP = {{0}};
   ME_LPV
     fpMecM = {0}, fpMecN = {0};
@@ -68,24 +69,24 @@ void search( usv used )
   strcpy_s( szPath, 10, szNow );
   strcat_s( szPath, 10, ".dmp" );
   mepO.pipe = IupMkFile( szPath, 0666, 0, ACTION_OPEN_NEW, NULL );
-  isEof = IupRdPipe( mepI.pipe, mepI.buff, BUFSIZ );
+  isEof = IupRdPipe( &mepI.pipe, mepI.buff, BUFSIZ );
   do
   {
-    IupWrPipe( mepO.pipe, mepO.buff, BUFSIZ );
-    isEof = IupRdPipe( mepI.pipe, mepI.buff, BUFSIZ );
+    IupWrPipe( &mepO.pipe, mepO.buff, BUFSIZ );
+    isEof = IupRdPipe( &mepI.pipe, mepI.buff, BUFSIZ );
   }
   while ( isEof );
-  IupShutPipe( mepI.pipe );
-  IupShutPipe( mepO.pipe );
+  IupShutPipe( &mepI.pipe );
+  IupShutPipe( &mepO.pipe );
   mepI.pipe = IupOpenFile( szPath, 0666, 0 );
   SEARCH( fp, 3 );
   SEARCH( si, 5 );
   SEARCH( ui, 5 );
   /* Close Down Pipes */
-  if ( prev )
+  if ( prev.pipe )
   {
-    IupShutPipe( prev );
-    IupShutPipe( mepP.pipe );
+    IupShutPipe( &prev );
+    IupShutPipe( &mepP.pipe );
   }
-  IupShutPipe( mepI.pipe );
+  IupShutPipe( &mepI.pipe );
 }

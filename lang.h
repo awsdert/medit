@@ -3,7 +3,6 @@
 #define _MELANG_H
 
 #include "types.h"
-#include <iup.h>
 
 typedef enum _LANG_T
 {
@@ -37,7 +36,5 @@ typedef struct _LANG
 } LANG;
 LANG*       meGetLang();
 char const* meGetText( LANG_T text );
-char const* IupGetCwd( void );
-char const* IupGetAppName( void );
 
 #endif // _MELANG_H

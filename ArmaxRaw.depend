@@ -1,22 +1,12 @@
 # depslib dependency file v1.0
-1405189041 source:c:\users\lee\documents\github\medit\_main.c
-	"_main.h"
+1405674430 source:c:\users\lee\documents\github\medit\armaxraw.c
+	"ArmaxRawMain.h"
 
-1405188902 c:\users\lee\documents\github\medit\_main.h
-	<iup.h>
-	"lang.h"
-	"data.h"
+1405674486 c:\users\lee\documents\github\medit\armaxrawmain.h
+	"_hack.h"
 
-1389928102 c:\u\lee\prjs\iup3.10.1\include\iup.h
-	"iupkey.h"
-	"iupdef.h"
-
-1376149151 c:\u\lee\prjs\iup3.10.1\include\iupkey.h
-
-1283463822 c:\u\lee\prjs\iup3.10.1\include\iupdef.h
-
-1405182756 c:\users\lee\documents\github\medit\lang.h
-	"types.h"
+1405672465 c:\users\lee\documents\github\medit\_hack.h
+	"pipe.h"
 
 1405151177 c:\users\lee\documents\github\medit\types.h
 	<limits.h>
@@ -849,34 +839,15 @@
 
 1371533318 c:\program files (x86)\windows kits\8.1\include\um\ime_cmodes.h
 
-1405239194 c:\users\lee\documents\github\medit\data.h
-	"_hack.h"
+1405183578 source:c:\users\lee\documents\github\medit\armaxrawmain.c
+	"ArmaxRawMain.h"
 
-1405672465 c:\users\lee\documents\github\medit\_hack.h
+1405673419 source:c:\users\lee\documents\github\medit\pipe.c
 	"pipe.h"
-
-1400845458 source:c:\users\lee\documents\github\medit\ftoa.c
-	"_main.h"
-
-1403515245 source:c:\users\lee\documents\github\medit\lang.c
-	"lang.h"
-
-1405673289 source:c:\users\lee\documents\github\medit\main.c
-	"search.h"
-
-1405675414 c:\users\lee\documents\github\medit\search.h
-	"_main.h"
-	"pipe.h"
+	<shlobj.h>
 
 1405673151 c:\users\lee\documents\github\medit\pipe.h
 	"types.h"
-
-1404214554 source:c:\users\lee\documents\github\medit\oninit.c
-	"_main.h"
-
-1405675248 source:c:\users\lee\documents\github\medit\pipe.c
-	"pipe.h"
-	<shlobj.h>
 
 1377103524 c:\program files (x86)\windows kits\8.1\include\um\shlobj.h
 	<winapifamily.h>
@@ -1076,19 +1047,4 @@
 1392835160 c:\program files (x86)\windows kits\8.1\include\um\sherrors.h
 	<winapifamily.h>
 	<winerror.h>
-
-1399842965 source:c:\users\lee\documents\github\medit\search.c
-	"search.h"
-
-1399986559 source:c:\users\lee\documents\github\medit\search_fpn.c
-	"search.h"
-
-1404214590 source:c:\users\lee\documents\github\medit\search_gui.c
-	"search.h"
-
-1403181219 source:c:\users\lee\documents\github\medit\search_int.c
-	"search.h"
-
-1399986582 source:c:\users\lee\documents\github\medit\search_uint.c
-	"search.h"
 

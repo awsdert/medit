@@ -8,7 +8,7 @@
 		<Build>
 			<Target title="msw-x86-d-vc">
 				<Option output="$(BIN)/medit/x86/medit-d-vc" prefix_auto="1" extension_auto="1" />
-				<Option object_output="$(TEMP)/obj/msw-x86-d-vc/" />
+				<Option object_output="$(TEMP)/obj/medit/msw-x86-d-vc/" />
 				<Option type="0" />
 				<Option compiler="msvc2013-x86" />
 				<Compiler>
@@ -41,7 +41,7 @@
 			</Target>
 			<Target title="msw-x86-vc">
 				<Option output="$(BIN)/medit/x86/medit-vc" prefix_auto="1" extension_auto="1" />
-				<Option object_output="$(TEMP)/obj/msw-x86-vc/" />
+				<Option object_output="$(TEMP)/obj/medit/msw-x86-vc/" />
 				<Option type="0" />
 				<Option compiler="msvc2013-x86" />
 				<Compiler>
@@ -78,6 +78,7 @@
 		<Unit filename="OnInit.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="_hack.h" />
 		<Unit filename="_main.c">
 			<Option compilerVar="CC" />
 		</Unit>

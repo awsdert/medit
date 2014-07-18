@@ -1,9 +1,6 @@
 #include "search.h"
-static char  szCwd[ FILENAME_MAX ] = {0};
-static char  szAppName[ FILENAME_MAX ] = {0};
 static FILE *hLang = NULL;
 static MEGUI _gui = {0};
-
 
 void IupInitCwd( char *argv[] );
 int main( int argc, char *argv[] )
@@ -11,12 +8,17 @@ int main( int argc, char *argv[] )
   MECFG  cfg = {0};
   MEGUI *gui = &_gui;
   int    ret = 0;
+  long   i = 0, p = 0, j = 0, k = 0;
   LANG *lang = meGetLang();
-  Ipipe pipe = NULL;
+  Ipipe pipe = {0};
   char
     szSep[] = "\\/",
     szLine[ FILENAME_MAX ] = {0},
     *szTok = NULL, *szPrv = NULL, *szNow = NULL, *szTmp = NULL;
+  HMODULE lib = NULL;
+  HACK_FUNC* hfunc = NULL;
+  CODE_FUNC* cfunc = NULL;
+  HACKS hacks = {0};
   /* Initialise IUP */
   if ( IupOpen(&argc, &argv) == IUP_ERROR )
   {
@@ -35,15 +37,15 @@ int main( int argc, char *argv[] )
   strcat_s( gui->fontSize, 5, szTmp );
   /* Open Configuration/Language Files */
   pipe = IupMkDir( "", 0666, SHARE_READ | SHARE_WRITE, ACTION_OPEN_NEW );
-  IupShutPipe( pipe );
+  IupShutPipe( &pipe );
   pipe = IupMkDir( "lang", 0666, SHARE_READ | SHARE_WRITE, ACTION_OPEN_NEW );
-  IupShutPipe( pipe );
+  IupShutPipe( &pipe );
   pipe = IupMkFile("medit.mecfg", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
-  if ( !pipe )
+  if ( !pipe.pipe )
     goto mkGui;
-  IupRdPipe( pipe, &cfg, sizeof(MECFG) );
+  IupRdPipe( &pipe, &cfg, sizeof(MECFG) );
   cfg.lang[6] = 0; // Just force a NULL character
-  IupShutPipe( pipe );
+  IupShutPipe( &pipe );
   if ( cfg.lang[0] && _strcmpi( cfg.lang, "en" ) >= 0 )
   {
     memset(   szLine, 0, FILENAME_MAX );
@@ -52,8 +54,8 @@ int main( int argc, char *argv[] )
     strcat_s( szLine,    FILENAME_MAX, cfg.lang );
     strcat_s( szLine,    FILENAME_MAX, ".melng" );
     pipe = IupMkFile( szLine, 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
-    IupRdPipe( pipe, lang, sizeof(LANG) );
-    IupShutPipe( pipe );
+    IupRdPipe( &pipe, lang, sizeof(LANG) );
+    IupShutPipe( &pipe );
   }
   else
   {
@@ -62,6 +64,50 @@ int main( int argc, char *argv[] )
     cfg.lang[1] = 'n';
   }
 mkGui:
+  lib = meLoadLib( "ArmaxRaw", &hfunc, &cfunc );
+  if ( lib )
+  {
+    memset( szLine, 0, FILENAME_MAX );
+    hacks.size = BUFSIZ;
+    hacks.buff = malloc( BUFSIZ * sizeof(HACK) );
+    memset( hacks.buff, 0, BUFSIZ * sizeof(HACK) );
+    pipe = IupOpenFile( "C:\\p\\Omniconvert\\ArmaxRaw\\ff12.txt", 0666, SHARE_READ | SHARE_WRITE );
+    for
+    (
+      IupRdLine( &pipe, szLine, 80 ); !IupEof( &pipe );
+      memset( szLine, 0, 80 ), IupRdLine( &pipe, szLine, 80 )
+    )
+    {
+      if ( szLine[0] == '\n' || szLine[0] == '\r' )
+        continue;
+      p = hfunc->txt2raw( &hacks.buff[i], &pipe );
+      if ( p < 0 )
+        break;
+      j = 0;
+      k = (szLine[0] == '"') ? 1 : 0;
+      do
+      {
+        switch ( szLine[0] )
+        {
+        case '"':
+        case '\n':
+        case '\r':
+          szLine[k] = 0;
+          break;
+        default:
+          hacks.buff[i].name[j] = szLine[k];
+          ++j; ++k;
+        }
+      }
+      while ( szLine[k] );
+      hacks.buff[i].name[ NAME_LAST ] = 0;
+      IupMessage( "Hack Load", hacks.buff[i].name );
+      ++i;
+    }
+    IupShutPipe( &pipe );
+    memset( &pipe, 0, sizeof( Ipipe ) );
+  }
+  /* Get on with GUI */
   gui->main.main_dd =
     meMkList( (Icallback)meMenu_ButtonCB,
             lang->x[ LANG_TARGET ],
@@ -103,18 +149,21 @@ mkGui:
   IupShow( gui->main.main_dlg );
   ret = IupMainLoop();
   pipe = IupMkFile("medit.mecfg", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
-  IupWrPipe( pipe, &cfg, sizeof( MECFG ) );
-  IupShutPipe( pipe );
+  IupWrPipe( &pipe, &cfg, sizeof( MECFG ) );
+  IupShutPipe( &pipe );
+  lib = meFreeLib( lib );
   IupClose();
   return ret;
 }
-char const* IupGetCwd( void )
-{
-  return szCwd;
-}
+
+char szAppCwd[ FILENAME_MAX ] = {0};
+char szAppExe[ 16 ] = {0};
+char szAppVer[ 16 ] = {0};
+
 void        IupInitCwd( char *argv[] )
 {
   char
+    szCwd[FILENAME_MAX] = {0},
     szSep[] = "\\/",
    *szTok = NULL,
    *szTmp = NULL,
@@ -128,25 +177,20 @@ void        IupInitCwd( char *argv[] )
     szTmp = szPrv;
     szPrv = szNxt;
     szNxt = strtok_s( NULL, szSep, &szTok );
-    strcat_s( szCwd, FILENAME_MAX, szTmp );
-    strcat_s( szCwd, FILENAME_MAX, DIR_SEP  );
+    strcat_s( szAppCwd, FILENAME_MAX, szTmp );
+    strcat_s( szAppCwd, FILENAME_MAX, DIR_SEP  );
   }
   while ( szNxt );
   szTmp = strtok_s( szPrv, ".", &szTok );
-  strcat_s( szAppName, FILENAME_MAX, szTmp );
-}
-char const* IupGetAppName( void )
-{
-  return szAppName;
+  strcpy_s( szAppExe, 16, szTmp );
+  szNxt = strtok_s( szTmp, "-", &szTok );
+  szNxt = strtok_s( NULL,  DIR_SEP, &szTok );
+  strcpy_s( szAppVer, 16, szNxt );
+  IupSetGlobal( "APP_CWD", szAppCwd );
+  IupSetGlobal( "APP_EXE", szAppExe );
+  IupSetGlobal( "APP_VER", szAppVer );
 }
 MEGUI* meGetGui( void )
 {
   return &_gui;
-}
-void IupGetLDataDirFromName( char *path, DWORD size )
-{
-  IupGetLDataDir( path );
-  strcat_s( path, size, DIR_SEP );
-  strcat_s( path, size, IupGetAppName() );
-  strcat_s( path, size, DIR_SEP );
 }

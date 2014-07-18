@@ -1,17 +1,21 @@
 #pragma once
 #ifndef _Ipipe_H
 #define _Ipipe_H
-#include "lang.h"
+#include "types.h"
 
 #ifndef DIR_SEP
-#ifdef _WIN32
+#if defined( _WIN32 ) || defined( _WIN64 ) || defined( _WINDOWS_ )
 #define DIR_SEP "\\"
 #else
 #define DIR_SEP "/"
 #endif
 #endif
 
-typedef void* Ipipe;
+typedef struct _Ipipe
+{
+  void* pipe;
+  ucv   eof;
+} Ipipe;
 #define SHARE_DELETE 0x4
 #define SHARE_WRITE  0x2
 #define SHARE_READ   0x1
@@ -27,10 +31,10 @@ typedef void* Ipipe;
 #define ACTION_TRUNCATE  0x5
 
 Ipipe IupMkFile(   char const *path,
-                   ulv   unixPerm,
-                   ucv   sharePerm,
-                   ucv   action,
-                   Ipipe templateFile );
+                   ulv         unixPerm,
+                   ucv         sharePerm,
+                   ucv         action,
+                   Ipipe      *templateFile );
 Ipipe IupMkDir(    char const *path,
                    ulv  unixPerm,
                    ucv  sharePerm,
@@ -38,18 +42,26 @@ Ipipe IupMkDir(    char const *path,
 Ipipe IupOpenFile( char const *path,
                    ulv  unixPerm,
                    ucv  sharePerm );
+ucv   IupEof( Ipipe *pipe );
 Ipipe IupOpenProcess( ulv perm, ucv setAsChild, ulv pid );
 void  IupGetLDataDir( char *path );
 void  IupGetLDataDirFromName( char *path, DWORD size );
-ucv   IupSkPipe(   Ipipe pipe,
+ucv   IupSkPipe(   Ipipe *pipe,
                    int   offset,
                    int   pos );
-DWORD IupWrPipe(   Ipipe pipe,
+DWORD IupWrPipe(   Ipipe *pipe,
                    void *buff,
                    DWORD size );
-DWORD IupRdPipe(   Ipipe pipe,
+DWORD IupWrLine(   Ipipe *pipe,
+                   char *buff,
+                   DWORD size,
+                   char const *nl );
+DWORD IupRdPipe(   Ipipe *pipe,
                    void *buff,
                    DWORD size );
-ucv   IupShutPipe( Ipipe pipe );
+DWORD IupRdLine(   Ipipe *pipe,
+                   char *buff,
+                   DWORD size );
+ucv   IupShutPipe( Ipipe *pipe );
 
 #endif // _Ipipe_H

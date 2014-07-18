@@ -21,8 +21,8 @@
 
 typedef struct _MEPIPE
 {
-  ucv   buff[BUFSIZ];
   Ipipe pipe;
+  ucv   buff[BUFSIZ];
 } MEPIPE;
 
 typedef union _FPV
@@ -43,20 +43,20 @@ typedef union _LPV
 
 typedef struct _ME_LPV
 {
-  LPV  buff[CMP_COUNT];
   ucv  used[CMP_COUNT];
+  LPV  buff[CMP_COUNT];
 } ME_LPV;
 
 typedef struct _ME_UHV
 {
-  uhv  buff[CMP_COUNT];
   ucv  used[CMP_COUNT];
+  uhv  buff[CMP_COUNT];
 } ME_UHV;
 
 typedef struct _ME_SHV
 {
-  shv  buff[CMP_COUNT];
   ucv  used[CMP_COUNT];
+  shv  buff[CMP_COUNT];
 } ME_SHV;
 
 int meSeaMenu_OnClick( Ihandle *ih, int button, int pressed, int x, int y, char* status );
