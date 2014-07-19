@@ -3,5 +3,6 @@
 	<Workspace title="medit">
 		<Project filename="medit.cbp" />
 		<Project filename="ArmaxRaw.cbp" />
+		<Project filename="../Ipipe/Ipipe.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

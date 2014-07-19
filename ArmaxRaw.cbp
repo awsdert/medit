@@ -7,8 +7,8 @@
 		<Option compiler="msvc2013-x86" />
 		<Build>
 			<Target title="msw-x86-d-vc">
-				<Option output="$(BIN)/medit/x86/ArmaxRaw-d-vc" prefix_auto="1" extension_auto="1" />
-				<Option object_output="$(TEMP)/obj/medit/ArmaxRaw/msw-x86-d-vc/" />
+				<Option output="$(BIN)/medit/x86/ArmaxRaw-$(TARGET_NAME)" prefix_auto="1" extension_auto="1" />
+				<Option object_output="$(TEMP)/obj/medit/ArmaxRaw/$(TARGET_NAME)" />
 				<Option type="3" />
 				<Option compiler="msvc2013-x86" />
 				<Option createDefFile="1" />
@@ -20,25 +20,29 @@
 					<Add option="/D_DEBUG" />
 					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(WIN8)/include/shared" />
+					<Add directory="$(IPIPE)" />
 				</Compiler>
 				<ResourceCompiler>
 					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(WIN8)/include/shared" />
+					<Add directory="$(IPIPE)" />
 				</ResourceCompiler>
 				<Linker>
 					<Add option="/DEBUG" />
 					<Add option="/INCREMENTAL:NO" />
 					<Add library="user32" />
 					<Add library="shell32" />
+					<Add library="Ipipe-$(TARGET_NAME)" />
 					<Add directory="$(WIN8)/Lib/winv6.3/um/x86" />
+					<Add directory="$(LIB)" />
 				</Linker>
 				<ExtraCommands>
 					<Add after='mt.exe /nologo /manifest &quot;bin\ArmaxRaw.dll.manifest&quot; /outputresource:&quot;bin\ArmaxRaw.dll&quot;;2' />
 				</ExtraCommands>
 			</Target>
 			<Target title="msw-x86-vc">
-				<Option output="$(BIN)/medit/x86/ArmaxRaw-vc" prefix_auto="1" extension_auto="1" />
-				<Option object_output="$(TEMP)/obj/medit/ArmaxRaw/msw-x86-vc/" />
+				<Option output="$(BIN)/medit/x86/ArmaxRaw-$(TARGET_NAME)" prefix_auto="1" extension_auto="1" />
+				<Option object_output="$(TEMP)/obj/medit/ArmaxRaw/$(TARGET_NAME)" />
 				<Option type="3" />
 				<Option compiler="msvc2013-x86" />
 				<Option createDefFile="1" />
@@ -50,16 +54,20 @@
 					<Add option="/DNDEBUG" />
 					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(WIN8)/include/shared" />
+					<Add directory="$(IPIPE)" />
 				</Compiler>
 				<ResourceCompiler>
 					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(WIN8)/include/shared" />
+					<Add directory="$(IPIPE)" />
 				</ResourceCompiler>
 				<Linker>
 					<Add option="/INCREMENTAL:NO" />
 					<Add library="user32" />
 					<Add library="shell32" />
+					<Add library="Ipipe-$(TARGET_NAME)" />
 					<Add directory="$(WIN8)/Lib/winv6.3/um/x86" />
+					<Add directory="$(LIB)" />
 				</Linker>
 				<ExtraCommands>
 					<Add after='mt.exe /nologo /manifest &quot;bin\ArmaxRaw.dll.manifest&quot; /outputresource:&quot;bin\ArmaxRaw.dll&quot;;2' />
@@ -76,10 +84,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="ArmaxRawMain.h" />
-		<Unit filename="pipe.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="pipe.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
