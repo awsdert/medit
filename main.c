@@ -25,6 +25,7 @@ int main( int argc, char *argv[] )
     fprintf( stderr, "Error Opening IUP." );
     return -1;
   }
+  IupInitPiping( PP_TXT( WORKSPACE_NAME ), PP_TXT( TARGET_NAME ) );
   IupInitCwd( argv );
   /* Capture default font */
   szTok = NULL;
@@ -157,8 +158,8 @@ mkGui:
 }
 
 char szAppCwd[ FILENAME_MAX ] = {0};
-char szAppExe[ 16 ] = {0};
-char szAppVer[ 16 ] = {0};
+char szAppExe[ 25 ] = {0};
+char szAppVer[ 25 ] = {0};
 
 void        IupInitCwd( char *argv[] )
 {
@@ -182,10 +183,10 @@ void        IupInitCwd( char *argv[] )
   }
   while ( szNxt );
   szTmp = strtok_s( szPrv, ".", &szTok );
-  strcpy_s( szAppExe, 16, szTmp );
+  strcpy_s( szAppExe, 25, szTmp );
   szNxt = strtok_s( szTmp, "-", &szTok );
   szNxt = strtok_s( NULL,  DIR_SEP, &szTok );
-  strcpy_s( szAppVer, 16, szNxt );
+  strcpy_s( szAppVer, 25, szNxt );
   IupSetGlobal( "APP_CWD", szAppCwd );
   IupSetGlobal( "APP_EXE", szAppExe );
   IupSetGlobal( "APP_VER", szAppVer );

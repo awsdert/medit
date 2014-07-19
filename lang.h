@@ -2,7 +2,7 @@
 #ifndef _MELANG_H
 #define _MELANG_H
 
-#include "types.h"
+#include <IpipeTypes.h>
 
 typedef enum _LANG_T
 {

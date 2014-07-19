@@ -3,7 +3,7 @@
 #define _MESEARCH_H
 
 #include "_main.h"
-#include "pipe.h"
+#include <Ipipe.h>
 
 #define CAST_DMP( T ) \
   tNum = *((T*)&tar.buff[i]); \

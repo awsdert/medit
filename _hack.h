@@ -1,7 +1,7 @@
 #pragma once
 #ifndef __HACK_H
 #define __HACK_H
-#include "pipe.h"
+#include <Ipipe.h>
 C_OPEN
 
 typedef enum _END_T

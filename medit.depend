@@ -15,8 +15,8 @@
 
 1283463822 c:\u\lee\prjs\iup3.10.1\include\iupdef.h
 
-1405182756 c:\users\lee\documents\github\medit\lang.h
-	"types.h"
+1405763724 c:\users\lee\documents\github\medit\lang.h
+	<IpipeTypes.h>
 
 1405151177 c:\users\lee\documents\github\medit\types.h
 	<limits.h>
@@ -852,8 +852,8 @@
 1405239194 c:\users\lee\documents\github\medit\data.h
 	"_hack.h"
 
-1405672465 c:\users\lee\documents\github\medit\_hack.h
-	"pipe.h"
+1405763315 c:\users\lee\documents\github\medit\_hack.h
+	<Ipipe.h>
 
 1400845458 source:c:\users\lee\documents\github\medit\ftoa.c
 	"_main.h"
@@ -861,12 +861,12 @@
 1403515245 source:c:\users\lee\documents\github\medit\lang.c
 	"lang.h"
 
-1405673289 source:c:\users\lee\documents\github\medit\main.c
+1405768272 source:c:\users\lee\documents\github\medit\main.c
 	"search.h"
 
-1405675414 c:\users\lee\documents\github\medit\search.h
+1405763735 c:\users\lee\documents\github\medit\search.h
 	"_main.h"
-	"pipe.h"
+	<Ipipe.h>
 
 1405673151 c:\users\lee\documents\github\medit\pipe.h
 	"types.h"
@@ -1077,7 +1077,7 @@
 	<winapifamily.h>
 	<winerror.h>
 
-1399842965 source:c:\users\lee\documents\github\medit\search.c
+1405762096 source:c:\users\lee\documents\github\medit\search.c
 	"search.h"
 
 1399986559 source:c:\users\lee\documents\github\medit\search_fpn.c
@@ -1086,9 +1086,21 @@
 1404214590 source:c:\users\lee\documents\github\medit\search_gui.c
 	"search.h"
 
-1403181219 source:c:\users\lee\documents\github\medit\search_int.c
+1405762201 source:c:\users\lee\documents\github\medit\search_int.c
 	"search.h"
 
 1399986582 source:c:\users\lee\documents\github\medit\search_uint.c
 	"search.h"
+
+1405767861 c:\users\lee\documents\github\ipipe\ipipe.h
+	"IpipeTypes.h"
+
+1405766771 c:\users\lee\documents\github\ipipe\ipipetypes.h
+	<limits.h>
+	<float.h>
+	<stdio.h>
+	<stddef.h>
+	<stdlib.h>
+	<string.h>
+	<windows.h>
 

@@ -27,16 +27,11 @@
 void search( usv used )
 {
   Ipipe prev = {0};
-  MEPIPE
-    mepI = { IupOpenFile( "test.xps", 0666, SHARE_READ ), {0} },
-    mepO = {{0}}, mepP = {{0}};
-  ME_LPV
-    fpMecM = {0}, fpMecN = {0};
-  ME_SHV
-    siMecM = {0}, siMecN = {0};
-  ME_UHV
-    uiMecM = {0}, uiMecN = {0};
-  DWORD isEof = 0;
+  MEPIPE mepI = {{0}}, mepO = {{0}}, mepP = {{0}};
+  ME_LPV fpMecM = {0}, fpMecN = {0};
+  ME_SHV siMecM = {0}, siMecN = {0};
+  ME_UHV uiMecM = {0}, uiMecN = {0};
+  DWORD  isEof = 0;
   scv siSz[] =
     {
       sizeof(huge),
@@ -57,6 +52,7 @@ void search( usv used )
     fpEx[] = ".mef",
     siEx[] = ".mes",
     uiEx[] = ".meu";
+  mepI.pipe = IupOpenFile( "test.xps", 0666, SHARE_READ );
   _itoa_s( qNo, szDmp, 4, 10 );
   strcat_s( szNow, 10, DIR_SEP );
   strcpy_s( szOld, 10, szNow );
