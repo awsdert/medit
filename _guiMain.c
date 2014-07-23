@@ -1,4 +1,4 @@
-#include "_main.h"
+#include "_guiMain.h"
 HMODULE meLoadLib( char* name, HACK_FUNC **hfunc, CODE_FUNC **cfunc )
 {
   HMODULE lib = NULL;

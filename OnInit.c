@@ -1,4 +1,4 @@
-#include "_main.h"
+#include "_guiMain.h"
 int meCmp_OnInit( Ihandle *ih )
 {
   MEGUI *gui = meGetGui();

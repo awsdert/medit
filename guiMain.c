@@ -1,4 +1,4 @@
-#include "search.h"
+#include "guiMain.h"
 static FILE *hLang = NULL;
 static MEGUI _gui = {0};
 
@@ -8,17 +8,20 @@ int main( int argc, char *argv[] )
   MECFG  cfg = {0};
   MEGUI *gui = &_gui;
   int    ret = 0;
-  long   i = 0, p = 0, j = 0, k = 0;
+  long   i = 0, p = 0, j = 0, k = 0, c = 0, l = 0, lines = 100;
   LANG *lang = meGetLang();
   Ipipe pipe = {0};
   char
+    text[100][20] = {{0}},
     szSep[] = "\\/",
     szLine[ FILENAME_MAX ] = {0},
     *szTok = NULL, *szPrv = NULL, *szNow = NULL, *szTmp = NULL;
   HMODULE lib = NULL;
   HACK_FUNC* hfunc = NULL;
   CODE_FUNC* cfunc = NULL;
+  DWORD size = 0;
   HACKS hacks = {0};
+  CODES codes = {0};
   /* Initialise IUP */
   if ( IupOpen(&argc, &argv) == IUP_ERROR )
   {
@@ -69,42 +72,10 @@ mkGui:
   if ( lib )
   {
     memset( szLine, 0, FILENAME_MAX );
-    hacks.size = BUFSIZ;
-    hacks.buff = malloc( BUFSIZ * sizeof(HACK) );
+    hacks.size = HACKS_COUNT;
     memset( hacks.buff, 0, BUFSIZ * sizeof(HACK) );
     pipe = IupOpenFile( "C:\\p\\Omniconvert\\ArmaxRaw\\ff12.txt", 0666, SHARE_READ | SHARE_WRITE );
-    for
-    (
-      IupRdLine( &pipe, szLine, 80 ); !IupEof( &pipe );
-      memset( szLine, 0, 80 ), IupRdLine( &pipe, szLine, 80 )
-    )
-    {
-      if ( szLine[0] == '\n' || szLine[0] == '\r' )
-        continue;
-      p = hfunc->txt2raw( &hacks.buff[i], &pipe );
-      if ( p < 0 )
-        break;
-      j = 0;
-      k = (szLine[0] == '"') ? 1 : 0;
-      do
-      {
-        switch ( szLine[0] )
-        {
-        case '"':
-        case '\n':
-        case '\r':
-          szLine[k] = 0;
-          break;
-        default:
-          hacks.buff[i].name[j] = szLine[k];
-          ++j; ++k;
-        }
-      }
-      while ( szLine[k] );
-      hacks.buff[i].name[ NAME_LAST ] = 0;
-      IupMessage( "Hack Load", hacks.buff[i].name );
-      ++i;
-    }
+    RdTxtHacks( hfunc, &hacks, cfunc, &codes, &pipe );
     IupShutPipe( &pipe );
     memset( &pipe, 0, sizeof( Ipipe ) );
   }

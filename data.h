@@ -14,7 +14,7 @@ typedef struct _MEFILE
 typedef struct _MEMORY
 {
   char name[NAME_LEN];
-  TMEM tmem;
+  BLOCK tmem;
 } MEMORY;
 
 typedef struct _TARGET

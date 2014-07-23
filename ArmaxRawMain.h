@@ -24,7 +24,7 @@ ARMAX_RAW_EXP HACK_FUNC* GetHackFuncs( void );
 ARMAX_RAW_EXP CODE_FUNC* GetCodeFuncs( void );
 long txt2rawHackArmaxRaw( HACK *raw, Ipipe *pipe );
 void raw2txtHackArmaxRaw( HACK *raw, Ipipe *pipe, long gid );
-void txt2rawCodeArmaxRaw( CODE *raw, Ipipe *pipe );
+ucv  txt2rawCodeArmaxRaw( CODE *raw, CODELIST *cl, ucv line );
 void raw2txtCodeArmaxRaw( CODE *raw, Ipipe *pipe );
 
 C_SHUT

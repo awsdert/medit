@@ -57,18 +57,22 @@ typedef enum _CODE_T
   CODE_MASTER,
   CODE_COUNT
 } CODE_T;
-
 /** \brief Object holding info about target memory
   \param addr [1] is 32bit address, [0] extends it to 64bit
   \param size [1] is 32bit size, [0] extends it to 64bit
   \param endian Byte Order of memory
 **/
-typedef struct _TMEM
+typedef struct _BLOCK
 {
   ulv   addr[2];
   ulv   size[2];
   END_T endian;
-} TMEM;
+} BLOCK;
+#define BLOCKS_COUNT 16
+typedef struct _BLOCKS
+{
+  BLOCK buff[ BLOCKS_COUNT ];
+} BLOCKS;
 
 typedef struct _CODE CODE;
 /** \brief Object holding usable information about codes read
@@ -98,6 +102,15 @@ struct _CODE
   ucv    size;
   void  *buff;
 };
+/** \brief Maximum no of codes allowed in codelist buffer
+  Used for fast file load/save of buffer
+**/
+#define CODES_COUNT 20
+typedef struct _CODES
+{
+  ucv  size;
+  CODE buff[CODES_COUNT];
+} CODES;
 
 #define NAME_LEN  12
 #define NAME_LAST 11
@@ -123,28 +136,39 @@ struct _HACK
   ucv   info;
   char  name[ NAME_LEN ];
   ucv   size;
-  CODE *buff;
 };
 
+/** \brief Maximum no of codes allowed in codelist buffer
+  Used for fast file load/save of buffer
+**/
+#define HACKS_COUNT 256
 /** \brief Object holding buffer for hacklist
   \param size Number of hacks
   \param buff Buffer/Array for hacklist
 **/
 typedef struct _HACKS
 {
-  usv   size;
-  HACK *buff;
+  usv  size;
+  HACK buff[HACKS_COUNT];
 } HACKS;
 
 /** \brief Object through which DLL and EXE can communicate with each other
   \param txt2raw pointer DLL must fill when it is attached
   \param raw2txt pointer DLL must fill when it is attached
 **/
+
 typedef struct _HACK_FUNC
 {
   long (*txt2raw)( HACK *raw, Ipipe *pipe );
   void (*raw2txt)( HACK *raw, Ipipe *pipe, long gid );
 } HACK_FUNC;
+
+typedef struct _CODELIST
+{
+  ucv rows;
+  ucv cols;
+  char x[30][50];
+} CODELIST;
 
 /** \brief Object through which DLL and EXE can communicate with each other
   \param getRamNo pointer EXE must fill after acquiring object pointer
@@ -154,7 +178,7 @@ typedef struct _HACK_FUNC
 typedef struct _CODE_FUNC
 {
   ucv  (*getRamNo)( char* id );
-  void (*txt2raw)( CODE *raw, Ipipe *pipe );
+  ucv  (*txt2raw)( CODE *raw, CODELIST *cl, ucv line );
   void (*raw2txt)( CODE *raw, Ipipe *pipe );
 } CODE_FUNC;
 

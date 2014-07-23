@@ -2,7 +2,7 @@
 #ifndef _MESEARCH_H
 #define _MESEARCH_H
 
-#include "_main.h"
+#include "_guiMain.h"
 #include <Ipipe.h>
 
 #define CAST_DMP( T ) \

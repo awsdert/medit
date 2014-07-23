@@ -1,4 +1,4 @@
-#include "_main.h"
+#include "_guiMain.h"
 
 void ftoa( double value, char* dst, int sigDigits )
 {

@@ -99,32 +99,31 @@ void raw2txtHackArmaxRaw( HACK *raw, Ipipe *pipe, long gid )
   /* Append/Insert Text */
   IupWrLine( pipe, text, 20, "\r\n" );
 }
-ucv  txt2rawCodeArmaxRawRead( ulv *cp1, ulv *cp2, Ipipe *pipe )
+ucv  txt2rawCodeArmaxRawRead( ulv *cp1, ulv *cp2, CODELIST *cl, ucv *line )
 {
-  char text[ 20 ] = {0};
+  char *text = NULL;
   char temp[ 10 ] = {0};
   char i = 0, j = 0;
-  if ( IupRdLine( pipe, text, 20 ) == 0 )
+  if ( *line == cl->rows )
     return 0;
+  text = cl->x[*line];
   do { temp[i] = text[i]; ++i; } while ( i < 8 );
   *cp1 = strtoul( temp, NULL, 16 );
   ++i;
   do { temp[j] = text[i]; ++i; ++j; } while ( j < 8 );
   *cp2 = strtoul( temp, NULL, 16 );
+  ++(*line);
   return 1;
 }
-void txt2rawCodeArmaxRaw( CODE *raw, Ipipe *pipe )
+ucv txt2rawCodeArmaxRaw( CODE *raw, CODELIST* cl, ucv line )
 {
   long i = 0, j = 0;
   ulv  cp1 = 0, cp2 = 0;
   ulv tmp = 0;
   ucv nxt = 0, type = 0;
-  if ( !_codeFuncArmaxRaw.getRamNo || txt2rawCodeArmaxRawRead( &cp1, &cp2, pipe ) )
-  {
-    /* Force fail list as we cannot acquire necessary info */
-    IupSkPipe( pipe, 0, SEEK_END );
-    return;
-  }
+  if ( !_codeFuncArmaxRaw.getRamNo || !txt2rawCodeArmaxRawRead( &cp1, &cp2, cl, &line ) )
+    /* Codelist unusable, move on to next hack */
+    return line;
   type = cp1 >> 28;
   tmp = ( cp1 & 0xF000000 ) >> 24;
   nxt =  ( tmp >= 8 && tmp <= 0xD );
@@ -230,6 +229,7 @@ void txt2rawCodeArmaxRaw( CODE *raw, Ipipe *pipe )
   case 9: case 0xB: case 0xD:
     raw->addr[1] |= 0x1000000;
   }
+  return line;
 }
 void raw2txtCodeArmaxRaw( CODE *raw, Ipipe *pipe )
 {

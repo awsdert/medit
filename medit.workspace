@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
 	<Workspace title="medit">
-		<Project filename="medit.cbp" />
+		<Project filename="meditGui.cbp" />
 		<Project filename="ArmaxRaw.cbp" />
 		<Project filename="../Ipipe/Ipipe.cbp" />
+		<Project filename="medit.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>
