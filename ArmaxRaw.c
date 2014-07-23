@@ -99,7 +99,7 @@ void raw2txtHackArmaxRaw( HACK *raw, Ipipe *pipe, long gid )
   /* Append/Insert Text */
   IupWrLine( pipe, text, 20, "\r\n" );
 }
-ucv  txt2rawCodeArmaxRawRead( ulv *cp1, ulv *cp2, CODELIST *cl, ucv *line )
+ssv  txt2rawCodeArmaxRawRead( ulv *cp1, ulv *cp2, CODELIST *cl, ssv *line )
 {
   char *text = NULL;
   char temp[ 10 ] = {0};
@@ -115,7 +115,7 @@ ucv  txt2rawCodeArmaxRawRead( ulv *cp1, ulv *cp2, CODELIST *cl, ucv *line )
   ++(*line);
   return 1;
 }
-ucv txt2rawCodeArmaxRaw( CODE *raw, CODELIST* cl, ucv line )
+usv txt2rawCodeArmaxRaw( CODE *raw, CODELIST* cl, usv line )
 {
   long i = 0, j = 0;
   ulv  cp1 = 0, cp2 = 0;
@@ -123,7 +123,7 @@ ucv txt2rawCodeArmaxRaw( CODE *raw, CODELIST* cl, ucv line )
   ucv nxt = 0, type = 0;
   if ( !_codeFuncArmaxRaw.getRamNo || !txt2rawCodeArmaxRawRead( &cp1, &cp2, cl, &line ) )
     /* Codelist unusable, move on to next hack */
-    return line;
+    return cl->rows;
   type = cp1 >> 28;
   tmp = ( cp1 & 0xF000000 ) >> 24;
   nxt =  ( tmp >= 8 && tmp <= 0xD );

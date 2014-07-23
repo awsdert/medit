@@ -165,8 +165,8 @@ typedef struct _HACK_FUNC
 
 typedef struct _CODELIST
 {
-  ucv rows;
-  ucv cols;
+  usv rows;
+  usv cols;
   char x[30][50];
 } CODELIST;
 
@@ -178,7 +178,7 @@ typedef struct _CODELIST
 typedef struct _CODE_FUNC
 {
   ucv  (*getRamNo)( char* id );
-  ucv  (*txt2raw)( CODE *raw, CODELIST *cl, ucv line );
+  usv  (*txt2raw)( CODE *raw, CODELIST *cl, usv line );
   void (*raw2txt)( CODE *raw, Ipipe *pipe );
 } CODE_FUNC;
 

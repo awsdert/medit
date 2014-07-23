@@ -1,4 +1,5 @@
 #include "_guiMain.h"
+ucv getRamNo( char *name ) { return 0; }
 HMODULE meLoadLib( char* name, HACK_FUNC **hfunc, CODE_FUNC **cfunc )
 {
   HMODULE lib = NULL;
@@ -32,7 +33,7 @@ HMODULE meLoadLib( char* name, HACK_FUNC **hfunc, CODE_FUNC **cfunc )
   }
   (*hfunc) = gethacks();
   (*cfunc) = getcodes();
-  (*cfunc)->getRamNo = NULL;
+  (*cfunc)->getRamNo = getRamNo;
   return lib;
 }
 HMODULE meFreeLib( HMODULE lib )

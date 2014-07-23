@@ -3,13 +3,15 @@ long
 _RdTxtHacks( HACK_FUNC *hfunc, HACKS *hacks, CODE_FUNC *cfunc, CODES *codes, Ipipe *file, CODELIST *cl, long hid, long pid, long cdepth, long  mode )
 {
   DWORD len = 0;
-  ucv i = 0;
+  usv i = 0;
   long cid = 0, depth = 0, gid = 0, j = 0, k = 0;
   HACK *hack = &hacks->buff[hid];
+  if ( !mode )
+    len = IupRdLine( file, cl->x[i], cl->cols );
   for
   (
-    len = IupRdLine( file, cl->x[i], cl->cols ); len;
-    memset( cl->x[i], 0, cl->cols ), len = IupRdLine( file, cl->x[i], cl->cols )
+    ; len; memset( cl->x[i], 0, cl->cols ),
+    len = IupRdLine( file, cl->x[i], cl->cols )
   )
   {
     if ( cl->x[i][0] == '"' )
@@ -23,9 +25,38 @@ _RdTxtHacks( HACK_FUNC *hfunc, HACKS *hacks, CODE_FUNC *cfunc, CODES *codes, Ipi
     if ( mode == 2 )
     {
       cl->rows = i;
-      for ( i = 0; i < len;
+      for ( i = 0; i < cl->rows;
         i = cfunc->txt2raw( &codes->buff[cid], cl, i ), ++cid );
       cl->rows = 30;
+      if ( hid == 0 )
+      {
+        _RdTxtHacks( hfunc, hacks, cfunc, codes, file, cl, 1, 0, 0, 2 );
+        break;
+      }
+      else if ( depth == cdepth )
+      {
+        ++hid;
+        hack->pid = pid;
+      }
+      else if ( depth < cdepth )
+      {
+        if ( depth >= 0 )
+          hack->pid = -depth;
+        break;
+      }
+      else
+      {
+        hack->pid = hid - 1;
+        hid = _RdTxtHacks( hfunc, hacks, cfunc, codes, file, cl, hid + 1, hid - 1, depth, 2 );
+      }
+      /* Finish reading hack name/header */
+      hack = &hacks->buff[ hid ];
+      if ( hack->pid < 0 )
+      {
+        if ( -hack->pid != cdepth )
+          break;
+        hack->pid = pid;
+      }
       mode = 0;
     }
     /* Retrieve hack information */
@@ -52,35 +83,6 @@ _RdTxtHacks( HACK_FUNC *hfunc, HACKS *hacks, CODE_FUNC *cfunc, CODES *codes, Ipi
       while ( k < cl->cols && cl->x[i][k] );
       hack->name[ NAME_LAST ] = 0;
       IupMessage( "Hack Load", hacks->buff[i].name );
-      if ( hid == 0 )
-      {
-        _RdTxtHacks( hfunc, hacks, cfunc, codes, file, cl, hid, 0, 0, 1 );
-        break;
-      }
-      else if ( depth == cdepth )
-      {
-        ++hid;
-        hack->pid = pid;
-      }
-      else if ( depth < cdepth )
-      {
-        if ( depth >= 0 )
-          hack->pid = -depth;
-        break;
-      }
-      else
-      {
-        hack->pid = hid - 1;
-        hid = _RdTxtHacks( hfunc, hacks, cfunc, codes, file, cl, hid + 1, hid - 1, depth, 1 );
-      }
-      /* Finish reading hack name/header */
-      hack = &hacks->buff[ hid ];
-      if ( hack->pid < 0 )
-      {
-        if ( -hack->pid != cdepth )
-          break;
-        hack->pid = pid;
-      }
       mode = 1;
       i = 0;
     }

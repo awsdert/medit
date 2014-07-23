@@ -1,6 +1,6 @@
 # depslib dependency file v1.0
-1400845458 source:c:\users\lee\documents\github\medit\ftoa.c
-	"_main.h"
+1406098848 source:c:\users\lee\documents\github\medit\ftoa.c
+	"_guiMain.h"
 
 1403515245 source:c:\users\lee\documents\github\medit\lang.c
 	"lang.h"
@@ -839,8 +839,8 @@
 
 1371533318 c:\program files (x86)\windows kits\8.1\include\um\ime_cmodes.h
 
-1404214554 source:c:\users\lee\documents\github\medit\oninit.c
-	"_main.h"
+1406098859 source:c:\users\lee\documents\github\medit\oninit.c
+	"_guiMain.h"
 
 1405762096 source:c:\users\lee\documents\github\medit\search.c
 	"search.h"
@@ -865,7 +865,7 @@
 1406025616 c:\users\lee\documents\github\medit\data.h
 	"_hack.h"
 
-1406097848 c:\users\lee\documents\github\medit\_hack.h
+1406109115 c:\users\lee\documents\github\medit\_hack.h
 	<Ipipe.h>
 
 1405767861 c:\users\lee\documents\github\ipipe\ipipe.h
@@ -883,7 +883,7 @@
 1399986582 source:c:\users\lee\documents\github\medit\search_uint.c
 	"search.h"
 
-1405882885 source:c:\users\lee\documents\github\medit\_guimain.c
+1406110256 source:c:\users\lee\documents\github\medit\_guimain.c
 	"_guiMain.h"
 
 1406025712 source:c:\users\lee\documents\github\medit\guimain.c
@@ -891,4 +891,7 @@
 
 1406025748 c:\users\lee\documents\github\medit\guimain.h
 	"search.h"
+
+1406109580 source:c:\users\lee\documents\github\medit\rdtxthacks.c
+	"guiMain.h"
 
