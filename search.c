@@ -1,19 +1,19 @@
 #include "search.h"
 #define SEARCH( T, C ) \
-  IupSkPipe( &mepI.pipe, 0, FPOS_SOF ); \
+  ipSkPipe( &mepI.pipe, 0, FPOS_SOF ); \
   strcpy_s( szPath, 10, szNow ); \
   strcat_s( szPath, 10, T##Ex ); \
-  mepO.pipe = IupMkFile( szPath, 0666, 0, ACTION_OPEN_NEW, NULL ); \
+  mepO.pipe = ipMkFile( szPath, 0666, 0, ACTION_OPEN_NEW, NULL ); \
   if ( qNo ) \
   { \
     if ( prev.pipe ) \
     { \
-      IupShutPipe( &prev ); \
-      IupShutPipe( &mepP.pipe ); \
+      ipShutPipe( &prev ); \
+      ipShutPipe( &mepP.pipe ); \
     } \
     strcpy_s( szPath, 10, szOld ); \
     strcat_s( szPath, 10, T##Ex ); \
-    prev = IupOpenFile( szPath, 0666, 0 ); \
+    prev = ipOpenFile( szPath, 0666, 0 ); \
   } \
   i = 0; \
   do \
@@ -22,7 +22,7 @@
     ++i; \
   } \
   while ( i < C ); \
-  IupShutPipe( &mepO.pipe );
+  ipShutPipe( &mepO.pipe );
 
 void search( usv used )
 {
@@ -52,7 +52,7 @@ void search( usv used )
     fpEx[] = ".mef",
     siEx[] = ".mes",
     uiEx[] = ".meu";
-  mepI.pipe = IupOpenFile( "test.xps", 0666, SHARE_READ );
+  mepI.pipe = ipOpenFile( "test.xps", 0666, SHARE_READ );
   _itoa_s( qNo, szDmp, 4, 10 );
   strcat_s( szNow, 10, DIR_SEP );
   strcpy_s( szOld, 10, szNow );
@@ -64,25 +64,25 @@ void search( usv used )
   strcat_s( szOld, 10, szDmp );
   strcpy_s( szPath, 10, szNow );
   strcat_s( szPath, 10, ".dmp" );
-  mepO.pipe = IupMkFile( szPath, 0666, 0, ACTION_OPEN_NEW, NULL );
-  isEof = IupRdPipe( &mepI.pipe, mepI.buff, BUFSIZ );
+  mepO.pipe = ipMkFile( szPath, 0666, 0, ACTION_OPEN_NEW, NULL );
+  isEof = ipRdPipe( &mepI.pipe, mepI.buff, BUFSIZ );
   do
   {
-    IupWrPipe( &mepO.pipe, mepO.buff, BUFSIZ );
-    isEof = IupRdPipe( &mepI.pipe, mepI.buff, BUFSIZ );
+    ipWrPipe( &mepO.pipe, mepO.buff, BUFSIZ );
+    isEof = ipRdPipe( &mepI.pipe, mepI.buff, BUFSIZ );
   }
   while ( isEof );
-  IupShutPipe( &mepI.pipe );
-  IupShutPipe( &mepO.pipe );
-  mepI.pipe = IupOpenFile( szPath, 0666, 0 );
+  ipShutPipe( &mepI.pipe );
+  ipShutPipe( &mepO.pipe );
+  mepI.pipe = ipOpenFile( szPath, 0666, 0 );
   SEARCH( fp, 3 );
   SEARCH( si, 5 );
   SEARCH( ui, 5 );
   /* Close Down Pipes */
   if ( prev.pipe )
   {
-    IupShutPipe( &prev );
-    IupShutPipe( &mepP.pipe );
+    ipShutPipe( &prev );
+    ipShutPipe( &mepP.pipe );
   }
-  IupShutPipe( &mepI.pipe );
+  ipShutPipe( &mepI.pipe );
 }

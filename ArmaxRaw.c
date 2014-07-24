@@ -10,7 +10,7 @@ long txt2rawHackArmaxRaw( HACK *raw, Ipipe *pipe )
   char t = 0;
   int tmp = 0, txt = 0;
   long gid = 0;
-  if ( IupEof( pipe ) || IupRdLine( pipe, text, 20 ) == 0 )
+  if ( ipEof( pipe ) || ipRdLine( pipe, text, 20 ) == 0 )
     return -1;
   /* GameID */
   do
@@ -97,7 +97,7 @@ void raw2txtHackArmaxRaw( HACK *raw, Ipipe *pipe, long gid )
   }
   while ( j < 5 );
   /* Append/Insert Text */
-  IupWrLine( pipe, text, 20, "\r\n" );
+  ipWrLine( pipe, text, 20, "\r\n" );
 }
 ssv  txt2rawCodeArmaxRawRead( ulv *cp1, ulv *cp2, CODELIST *cl, ssv *line )
 {

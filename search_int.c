@@ -24,7 +24,7 @@ void siQry( ucv used, MEPIPE *mepI, MEPIPE *mepO, MEPIPE *mepP, Ipipe prev, scv 
   DWORD i = 0, c = BUFSIZ - bytes;
   ucv res = 0;
   scv offset = -( bytes - 1 );
-  cbRead = IupRdPipe( &mepI->pipe, mepI->buff, BUFSIZ );
+  cbRead = ipRdPipe( &mepI->pipe, mepI->buff, BUFSIZ );
   if ( !prev.pipe )
     memset( mepO->buff, UCHAR_MAX, BUFSIZ );
   do
@@ -33,10 +33,10 @@ void siQry( ucv used, MEPIPE *mepI, MEPIPE *mepO, MEPIPE *mepP, Ipipe prev, scv 
       goto iterate;
     if ( i )
     {
-      IupSkPipe( &mepI->pipe, offset, FPOS_CUR );
-      IupSkPipe( &mepP->pipe, offset, FPOS_CUR );
+      ipSkPipe( &mepI->pipe, offset, FPOS_CUR );
+      ipSkPipe( &mepP->pipe, offset, FPOS_CUR );
     }
-    IupRdPipe( &prev, mepO->buff, BUFSIZ );
+    ipRdPipe( &prev, mepO->buff, BUFSIZ );
     if ( !mecM )
       goto old;
 old:
@@ -73,8 +73,8 @@ next:
     }
     while ( i < c );
 iterate:
-    cbRead = IupRdPipe( &mepI->pipe, mepI->buff, BUFSIZ );
-    IupWrPipe( &mepO->pipe, mepO->buff, BUFSIZ );
+    cbRead = ipRdPipe( &mepI->pipe, mepI->buff, BUFSIZ );
+    ipWrPipe( &mepO->pipe, mepO->buff, BUFSIZ );
   }
   while ( cbRead );
 }

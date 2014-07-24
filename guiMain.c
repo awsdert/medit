@@ -28,7 +28,7 @@ int main( int argc, char *argv[] )
     fprintf( stderr, "Error Opening IUP." );
     return -1;
   }
-  IupInitPiping( PP_TXT( WORKSPACE_NAME ), PP_TXT( TARGET_NAME ) );
+  ipInitPiping( PP_TXT( WORKSPACE_NAME ), PP_TXT( TARGET_NAME ) );
   IupInitCwd( argv );
   /* Capture default font */
   szTok = NULL;
@@ -40,26 +40,26 @@ int main( int argc, char *argv[] )
   szTmp = strtok_s( NULL, ", ", &szTok );
   strcat_s( gui->fontSize, 5, szTmp );
   /* Open Configuration/Language Files */
-  pipe = IupMkDir( "", 0666, SHARE_READ | SHARE_WRITE, ACTION_OPEN_NEW );
-  IupShutPipe( &pipe );
-  pipe = IupMkDir( "lang", 0666, SHARE_READ | SHARE_WRITE, ACTION_OPEN_NEW );
-  IupShutPipe( &pipe );
-  pipe = IupMkFile("medit.mecfg", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
+  pipe = ipMkDir( "", 0666, SHARE_READ | SHARE_WRITE, ACTION_OPEN_NEW );
+  ipShutPipe( &pipe );
+  pipe = ipMkDir( "lang", 0666, SHARE_READ | SHARE_WRITE, ACTION_OPEN_NEW );
+  ipShutPipe( &pipe );
+  pipe = ipMkFile("medit.mecfg", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
   if ( !pipe.pipe )
     goto mkGui;
-  IupRdPipe( &pipe, &cfg, sizeof(MECFG) );
+  ipRdPipe( &pipe, &cfg, sizeof(MECFG) );
   cfg.lang[6] = 0; // Just force a NULL character
-  IupShutPipe( &pipe );
-  if ( cfg.lang[0] && _strcmpi( cfg.lang, "en" ) >= 0 )
+  ipShutPipe( &pipe );
+  if ( cfg.lang[0] && _strcmpi( cfg.lang, "en" )!= 0 )
   {
     memset(   szLine, 0, FILENAME_MAX );
     strcat_s( szLine,    FILENAME_MAX, "lang"   );
     strcat_s( szLine,    FILENAME_MAX, DIR_SEP  );
     strcat_s( szLine,    FILENAME_MAX, cfg.lang );
     strcat_s( szLine,    FILENAME_MAX, ".melng" );
-    pipe = IupMkFile( szLine, 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
-    IupRdPipe( &pipe, lang, sizeof(LANG) );
-    IupShutPipe( &pipe );
+    pipe = ipMkFile( szLine, 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
+    ipRdPipe( &pipe, lang, sizeof(LANG) );
+    ipShutPipe( &pipe );
   }
   else
   {
@@ -74,9 +74,9 @@ mkGui:
     memset( szLine, 0, FILENAME_MAX );
     hacks.size = HACKS_COUNT;
     memset( hacks.buff, 0, BUFSIZ * sizeof(HACK) );
-    pipe = IupOpenFile( "C:\\p\\Omniconvert\\ArmaxRaw\\ff12.txt", 0666, SHARE_READ | SHARE_WRITE );
+    pipe = ipOpenFile( "C:\\p\\Omniconvert\\ArmaxRaw\\ff12.txt", 0666, SHARE_READ | SHARE_WRITE );
     RdTxtHacks( hfunc, &hacks, cfunc, &codes, &pipe );
-    IupShutPipe( &pipe );
+    ipShutPipe( &pipe );
     memset( &pipe, 0, sizeof( Ipipe ) );
   }
   /* Get on with GUI */
@@ -113,16 +113,16 @@ mkGui:
   /* Main List */
   gui->main.main_vbox =
     IupVbox( gui->main.main_dd,
-      gui->sea.main_fset, gui->cmp.main_fset, gui->val.main_fset );
+      gui->sea.main_fset, gui->cmp.main_fset, gui->val.main_fset, NULL );
   gui->main.main_dlg = IupDialog( gui->main.main_vbox );
   IupSetAttribute( gui->main.main_dlg, IUP_TITLE,   "Medit" );
   IupSetAttribute( gui->main.main_dlg, IUP_SIZE,    "320x320"  );
   /* Show all */
   IupShow( gui->main.main_dlg );
   ret = IupMainLoop();
-  pipe = IupMkFile("medit.mecfg", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
-  IupWrPipe( &pipe, &cfg, sizeof( MECFG ) );
-  IupShutPipe( &pipe );
+  pipe = ipMkFile("medit.mecfg", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
+  ipWrPipe( &pipe, &cfg, sizeof( MECFG ) );
+  ipShutPipe( &pipe );
   lib = meFreeLib( lib );
   IupClose();
   return ret;

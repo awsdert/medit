@@ -7,11 +7,11 @@ _RdTxtHacks( HACK_FUNC *hfunc, HACKS *hacks, CODE_FUNC *cfunc, CODES *codes, Ipi
   long cid = 0, depth = 0, gid = 0, j = 0, k = 0;
   HACK *hack = &hacks->buff[hid];
   if ( !mode )
-    len = IupRdLine( file, cl->x[i], cl->cols );
+    len = ipRdLine( file, cl->x[i], cl->cols );
   for
   (
     ; len; memset( cl->x[i], 0, cl->cols ),
-    len = IupRdLine( file, cl->x[i], cl->cols )
+    len = ipRdLine( file, cl->x[i], cl->cols )
   )
   {
     if ( cl->x[i][0] == '"' )
