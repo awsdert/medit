@@ -231,9 +231,76 @@ usv txt2rawCodeArmaxRaw( CODE *raw, CODELIST* cl, usv line )
   }
   return line;
 }
-void raw2txtCodeArmaxRaw( CODE *raw, Ipipe *pipe )
+scv  _raw2txtCodeArmaxRaw( CODE* raw, Ipipe *pipe, ucv *I )
 {
-  /* TODO: Implement Code 2 Armax Raw */
+  ucv lines = 1, size = 4, repeat = 0, size2 = 0;
+  ulv line[3][2] = {0}, val = 0;
+  if ( raw->addr[0] > 0x1FFFFFF || raw->addr[1] > 0xFFFF || raw->loop > 0xFF ||
+      ( raw->type = CODE_W && raw->loop && raw->buff[1] > 0xFF ) ||
+      raw->tmem != _codeFuncArmaxRaw.getRamNo("ee") ) return 0;
+  switch ( raw->size )
+  {
+    case 1:
+      size = 0;
+      val = raw->buff[*I] & 0xFF;
+      raw->buff[*I] >>= 8;
+    break;
+    case 2: case 3:
+      size = 2;
+      val = raw->buff[*I] & 0xFFFF;
+      raw->buff[*I] >>= 16;
+    break;
+    default:
+      size = 4;
+      val = raw->buff[*I] & 0xFFFFFFFF;
+      raw->buff[*I] >>= 32;
+  }
+  raw->size -= size;
+  repeat = ( raw->size > 0 );
+  if ( raw->buff[*I] == 0 )
+    ++(*I);
+  line[0][0] = raw->addr[0];
+  line[0][0] = (size << 24);
+  switch ( raw->type )
+  {
+    case CODE_W:
+      if ( !raw->loop )
+        line[0][1] = val;
+      else
+      {
+        line[0][1] = line[0][0] | 0x80000000;
+        line[0][0] = 0;
+        line[1][0] = val;
+        /* Only list codes use the info parameter so is safe for checking */
+        line[1][1] = raw->info ? 0 : ( ( raw->buff[1] & 0xFF ) << 24 );
+        /* Increment Address, may need looking at */
+        line[1][1] |= raw->addr[1];
+        /* Ensure our next slide write starts at right address */
+        raw->addr[0] += size;
+      }
+    break;
+    /* Unable to convert */
+    default: return 0;
+  }
+  return repeat;
+}
+ucv raw2txtCodeArmaxRaw( CODE *raw, Ipipe *pipe )
+{
+  CODE tmp = *raw;
+  ucv I = 0,
+    /* This just prevents us doing more than we should */
+    C = (raw->type == CODE_CMP) ? 1 : ( raw->info && 0xFF );
+  scv res = 0;
+  if ( C > 20 ) C = 20;
+  do
+  {
+    res = _raw2txtCodeArmaxRaw( &tmp, pipe, &I );
+    if ( res < 0 )
+      /* Unsupported, Hack should be omitted from codelist */
+      return 0;
+  }
+  while ( res == 1 && I < C );
+  return 1;
 }
 
 ARMAX_RAW_EXP HACK_FUNC* GetHackFuncs( void ) { return &_hackFuncArmaxRaw; }

@@ -100,7 +100,7 @@ struct _CODE
   ucv    ptr;
   ulv    addr[2];
   ucv    size;
-  void  *buff;
+  uhv    buff[20];
 };
 /** \brief Maximum no of codes allowed in codelist buffer
   Used for fast file load/save of buffer
@@ -179,7 +179,7 @@ typedef struct _CODE_FUNC
 {
   ucv  (*getRamNo)( char* id );
   usv  (*txt2raw)( CODE *raw, CODELIST *cl, usv line );
-  void (*raw2txt)( CODE *raw, Ipipe *pipe );
+  ucv  (*raw2txt)( CODE *raw, Ipipe *pipe );
 } CODE_FUNC;
 
 typedef HACK_FUNC* (*GETHACKFUNCS)( void );
