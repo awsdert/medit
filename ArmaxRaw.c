@@ -118,10 +118,10 @@ ssv  txt2rawCodeArmaxRawRead( ulv *cp1, ulv *cp2, CODELIST *cl, ssv *line )
 usv txt2rawCodeArmaxRaw( CODE *raw, CODELIST* cl, usv line )
 {
   long i = 0, j = 0;
-  ulv  cp1 = 0, cp2 = 0;
+  ulv  cp1 = 0, cp2 = 0, cp3 = 0, cp4 = 0;
   ulv tmp = 0;
   ucv nxt = 0, type = 0;
-  if ( !_codeFuncArmaxRaw.getRamNo || !txt2rawCodeArmaxRawRead( &cp1, &cp2, cl, &line ) )
+  if ( !_codeFuncArmaxRaw.getRamNo || !txt2rawCodeArmaxRawRead( &cp1, &cp2, cl, &line ) || ( !cp1 && !txt2rawCodeArmaxRawRead( &cp3, &cp4, cl, &line ) ) )
     /* Codelist unusable, move on to next hack */
     return cl->rows;
   type = cp1 >> 28;
@@ -132,6 +132,7 @@ usv txt2rawCodeArmaxRaw( CODE *raw, CODELIST* cl, usv line )
   else
     raw->type = CODE_CMP;
   raw->loop = 1;
+  if ( cp3 )
   switch ( type )
   {
     /* TODO: Add other code types once supported */
@@ -279,8 +280,30 @@ scv  _raw2txtCodeArmaxRaw( CODE* raw, Ipipe *pipe, ucv *I )
         raw->addr[0] += size;
       }
     break;
+    case CODE_INC:
+      if ( raw->loop )
+        return -1;
+      line[0][0] |= 0x10000000;
+      line[0][1] = val;
+    break;
+    case CODE_DEC:
+      if ( raw->loop )
+        return -1;
+      line[0][0] |= 0x20000000;
+      line[0][1] = val;
+    break;
+    case CODE_CMP:
+      line[0][0] |= 0xA0000000;
+    break;
+    case CODE_JOKER:
+      line[0][0] |= 0xB0000000;
+    break;
+    case CODE_MASTER:
+      line[0][0] |= 0xC0000000;
+      line[0][1]  = raw->loop << 16;
+    break;
     /* Unable to convert */
-    default: return 0;
+    default: return -1;
   }
   return repeat;
 }

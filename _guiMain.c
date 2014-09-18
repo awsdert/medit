@@ -185,3 +185,24 @@ int meMenu_ButtonCB( Ihandle *ih, int button, int pressed, int x, int y, char* s
   IupFlush();
   return IUP_DEFAULT;
 }
+void execHacksId( DWORD pid )
+{
+  DWORD buf[3] = {0, 0, pid};
+  STARTUPINFO si = { sizeof(si), 0 };
+  PROCESS_INFORMATION pi = {0};
+  si.lpReserved2 = (BYTE*)buf;
+#ifdef _DEBUG
+#if _WIN == 32
+  CreateProcess( "hackProc-msw-x86-d-vc.exe",
+#else
+  CreateProcess( "hackProc-msw-x64-d-vc.exe",
+#endif
+#else
+#if _WIN == 32
+  CreateProcess( "hackProc-msw-x86-vc.exe",
+#else
+  CreateProcess( "hackProc-msw-x64-vc.exe",
+#endif
+#endif
+    NULL, NULL, NULL, 0, 0, NULL, NULL, &si, &pi );
+}
