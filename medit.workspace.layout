@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_layout_file>
-	<ActiveProject path="meditGui.cbp" />
+	<ActiveProject path="hackProc/hackProc.cbp" />
+	<PreferredTarget name="msw-x86-d-vc" />
 </CodeBlocks_workspace_layout_file>

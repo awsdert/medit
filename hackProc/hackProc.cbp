@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="hackProc" />
+		<Option pch_mode="2" />
+		<Option compiler="msvc2013-x86" />
+		<Build>
+			<Target title="msw-x86-d-vc">
+				<Option output="$(BIN)/medit/hackProc" prefix_auto="1" extension_auto="1" />
+				<Option object_output="$(TMP)/obj/medit/hackProc/$(TARGET_NAME)/" />
+				<Option type="1" />
+				<Option compiler="msvc2013-x86" />
+				<Compiler>
+					<Add option="/Zi" />
+					<Add option="/D_DEBUG" />
+					<Add option="/D_X86_" />
+					<Add directory="$(WIN8)/include/shared" />
+					<Add directory="$(WIN8)/include/um" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="$(WIN8)/include/shared" />
+					<Add directory="$(WIN8)/include/um" />
+				</ResourceCompiler>
+				<Linker>
+					<Add option="/DEBUG" />
+					<Add option="/NODEFAULTLIB" />
+					<Add option="/ENTRY:main" />
+					<Add library="kernel32" />
+					<Add library="shell32" />
+					<Add library="user32" />
+					<Add library="advapi32" />
+					<Add library="Shlwapi" />
+					<Add library="bufferoverflowu" />
+					<Add directory="$(WIN8)/Lib/winv6.3/um/x86" />
+				</Linker>
+			</Target>
+			<Target title="msw-x86-vc">
+				<Option output="$(BIN)/medit/hackProc" prefix_auto="1" extension_auto="1" />
+				<Option object_output="$(TMP)/obj/medit/hackProc/$(TARGET_NAME)/" />
+				<Option type="1" />
+				<Option compiler="msvc2013-x86" />
+				<Compiler>
+					<Add option="/Ox" />
+					<Add option="/DNDEBUG" />
+					<Add option="/D_X86_" />
+					<Add directory="$(WIN8)/include/shared" />
+					<Add directory="$(WIN8)/include/um" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="$(WIN8)/include/shared" />
+					<Add directory="$(WIN8)/include/um" />
+				</ResourceCompiler>
+				<Linker>
+					<Add option="/NODEFAULTLIB" />
+					<Add option="/ENTRY:main" />
+					<Add library="kernel32" />
+					<Add library="shell32" />
+					<Add library="user32" />
+					<Add library="advapi32" />
+					<Add library="Shlwapi" />
+					<Add library="bufferoverflowu" />
+					<Add directory="$(WIN8)/Lib/winv6.3/um/x86" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="/W3" />
+			<Add directory="$(3RDPARTY)/include" />
+		</Compiler>
+		<ResourceCompiler>
+			<Add directory="$(3RDPARTY)/include" />
+		</ResourceCompiler>
+		<Linker>
+			<Add directory="$(3RDPARTY)/lib" />
+		</Linker>
+		<Unit filename="EnableDebugPrivileges.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="GetProcessIdByName.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="GetProcessParentId.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Itoa_s.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="c.h" />
+		<Unit filename="entryPoint.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="entryThread.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="hack.h" />
+		<Unit filename="hackProc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="hackProc.h" />
+		<Unit filename="injectModule.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="memset.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="peInjection.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sfopen_s.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sfread.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sfwrite.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

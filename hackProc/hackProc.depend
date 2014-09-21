@@ -1,0 +1,939 @@
+# depslib dependency file v1.0
+1407923707 source:c:\users\lee\documents\github\hackproc\enabledebugprivileges.c
+	"hackProc.h"
+
+1411327721 c:\users\lee\documents\github\hackproc\hackproc.h
+	"hack.h"
+	<TlHelp32.h>
+	<process.h>
+	<Shlwapi.h>
+	<winternl.h>
+
+1411116403 c:\users\lee\documents\github\hackproc\hack.h
+	<float.h>
+	"c.h"
+
+1377103092 c:\program files (x86)\windows kits\8.1\include\um\windows.h
+	<winapifamily.h>
+	<sdkddkver.h>
+	<winresrc.h>
+	<excpt.h>
+	<stdarg.h>
+	<windef.h>
+	<winbase.h>
+	<wingdi.h>
+	<winuser.h>
+	<winnls.h>
+	<wincon.h>
+	<winver.h>
+	<winreg.h>
+	<winnetwk.h>
+	<cderr.h>
+	<dde.h>
+	<ddeml.h>
+	<dlgs.h>
+	<lzexpand.h>
+	<mmsystem.h>
+	<nb30.h>
+	<rpc.h>
+	<shellapi.h>
+	<winperf.h>
+	<winsock.h>
+	<wincrypt.h>
+	<winefs.h>
+	<winscard.h>
+	<winspool.h>
+	<ole.h>
+	<ole2.h>
+	<commdlg.h>
+	<stralign.h>
+	<winwlm.h>
+	<ole2.h>
+	<winsvc.h>
+	<mcx.h>
+	<imm.h>
+
+1371535460 c:\program files (x86)\windows kits\8.1\include\shared\winapifamily.h
+
+1377103056 c:\program files (x86)\windows kits\8.1\include\shared\sdkddkver.h
+
+1371534754 c:\program files (x86)\windows kits\8.1\include\um\winresrc.h
+	<winuser.rh>
+	<commctrl.rh>
+	<dde.rh>
+	<winnt.rh>
+	<dlgs.h>
+	<winver.h>
+
+1377103088 c:\program files (x86)\windows kits\8.1\include\um\winuser.rh
+
+1377103514 c:\program files (x86)\windows kits\8.1\include\um\commctrl.rh
+
+1371534750 c:\program files (x86)\windows kits\8.1\include\um\dde.rh
+
+1377102920 c:\program files (x86)\windows kits\8.1\include\um\winnt.rh
+
+1371533430 c:\program files (x86)\windows kits\8.1\include\um\dlgs.h
+	<winapifamily.h>
+
+1377103526 c:\program files (x86)\windows kits\8.1\include\um\winver.h
+	<winapifamily.h>
+	<SpecStrings.h>
+	<verrsrc.h>
+
+1371533312 c:\program files (x86)\windows kits\8.1\include\shared\specstrings.h
+	<sal.h>
+	<specstrings_strict.h>
+	<driverspecs.h>
+	<no_sal2.h>
+
+1371533312 c:\program files (x86)\windows kits\8.1\include\shared\sal.h
+	"codeanalysis\sourceannotations.h"
+	<ConcurrencySal.h>
+
+1371533304 c:\program files (x86)\windows kits\8.1\include\shared\concurrencysal.h
+
+1371533312 c:\program files (x86)\windows kits\8.1\include\shared\specstrings_strict.h
+	<specstrings_undef.h>
+
+1371533312 c:\program files (x86)\windows kits\8.1\include\shared\specstrings_undef.h
+
+1377102922 c:\program files (x86)\windows kits\8.1\include\shared\driverspecs.h
+	<specstrings.h>
+	"sdv_driverspecs.h"
+	<concurrencysal.h>
+
+1371533312 c:\program files (x86)\windows kits\8.1\include\shared\sdv_driverspecs.h
+
+1377103414 c:\program files (x86)\windows kits\8.1\include\shared\no_sal2.h
+
+1371533314 c:\program files (x86)\windows kits\8.1\include\um\verrsrc.h
+	<winapifamily.h>
+
+1377103092 c:\program files (x86)\windows kits\8.1\include\shared\windef.h
+	<winapifamily.h>
+	<minwindef.h>
+	<winnt.h>
+
+1377102916 c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h
+	<specstrings.h>
+	<winapifamily.h>
+	<winnt.h>
+
+1392834298 c:\program files (x86)\windows kits\8.1\include\um\winnt.h
+	<ctype.h>
+	<winapifamily.h>
+	<specstrings.h>
+	<kernelspecs.h>
+	<basetsd.h>
+	<guiddef.h>
+	<excpt.h>
+	<sdkddkver.h>
+	<intrin.h>
+	"pshpack4.h"
+	"poppack.h"
+	"pshpack4.h"
+	"poppack.h"
+	<pshpack4.h>
+	<poppack.h>
+	"pshpack4.h"
+	"pshpack2.h"
+	"pshpack1.h"
+	"poppack.h"
+	"pshpack2.h"
+	<pshpack2.h>
+	<poppack.h>
+	"poppack.h"
+	"pshpack8.h"
+	"poppack.h"
+	"poppack.h"
+	<apiset.h>
+	<string.h>
+	<string.h>
+	<ktmtypes.h>
+
+1371533306 c:\program files (x86)\windows kits\8.1\include\shared\kernelspecs.h
+	"DriverSpecs.h"
+
+1371533304 c:\program files (x86)\windows kits\8.1\include\shared\basetsd.h
+
+1371533306 c:\program files (x86)\windows kits\8.1\include\shared\guiddef.h
+	<string.h>
+
+1371533312 c:\program files (x86)\windows kits\8.1\include\shared\pshpack4.h
+
+1371533312 c:\program files (x86)\windows kits\8.1\include\shared\poppack.h
+
+1371533312 c:\program files (x86)\windows kits\8.1\include\shared\pshpack2.h
+
+1371533312 c:\program files (x86)\windows kits\8.1\include\shared\pshpack1.h
+
+1371533312 c:\program files (x86)\windows kits\8.1\include\shared\pshpack8.h
+
+1371532642 c:\program files (x86)\windows kits\8.1\include\shared\apiset.h
+
+1371535456 c:\program files (x86)\windows kits\8.1\include\shared\ktmtypes.h
+
+1377102920 c:\program files (x86)\windows kits\8.1\include\um\winbase.h
+	<winapifamily.h>
+	<macwin32.h>
+	<apisetcconv.h>
+	<minwinbase.h>
+	<processenv.h>
+	<fileapi.h>
+	<debugapi.h>
+	<utilapiset.h>
+	<handleapi.h>
+	<errhandlingapi.h>
+	<fibersapi.h>
+	<namedpipeapi.h>
+	<profileapi.h>
+	<heapapi.h>
+	<ioapiset.h>
+	<synchapi.h>
+	<interlockedapi.h>
+	<processthreadsapi.h>
+	<sysinfoapi.h>
+	<memoryapi.h>
+	<threadpoollegacyapiset.h>
+	<threadpoolapiset.h>
+	<bemapiset.h>
+	<jobapi.h>
+	<wow64apiset.h>
+	<libloaderapi.h>
+	<securitybaseapi.h>
+	<namespaceapi.h>
+	<systemtopologyapi.h>
+	<processtopologyapi.h>
+	<securityappcontainer.h>
+	<realtimeapiset.h>
+	<winerror.h>
+	<timezoneapi.h>
+	"winbase.inl"
+
+1371533304 c:\program files (x86)\windows kits\8.1\include\shared\apisetcconv.h
+
+1377102916 c:\program files (x86)\windows kits\8.1\include\um\minwinbase.h
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\processenv.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\fileapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\debugapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\utilapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\handleapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\errhandlingapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\fibersapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\namedpipeapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\profileapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\heapapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\ioapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\synchapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\interlockedapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\processthreadsapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\sysinfoapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1392834286 c:\program files (x86)\windows kits\8.1\include\um\memoryapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\threadpoollegacyapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\threadpoolapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102910 c:\program files (x86)\windows kits\8.1\include\um\bemapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102910 c:\program files (x86)\windows kits\8.1\include\um\jobapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\wow64apiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\libloaderapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\securitybaseapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\namespaceapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\systemtopologyapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102912 c:\program files (x86)\windows kits\8.1\include\um\processtopologyapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102910 c:\program files (x86)\windows kits\8.1\include\um\securityappcontainer.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\realtimeapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+
+1392834296 c:\program files (x86)\windows kits\8.1\include\shared\winerror.h
+	<specstrings.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\timezoneapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1392834294 c:\program files (x86)\windows kits\8.1\include\um\winbase.inl
+
+1377103094 c:\program files (x86)\windows kits\8.1\include\um\wingdi.h
+	<winapifamily.h>
+	<macwin32.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack2.h>
+	<poppack.h>
+	<pshpack2.h>
+	<poppack.h>
+	<pshpack4.h>
+	<poppack.h>
+	<pshpack4.h>
+	<poppack.h>
+	"pshpack4.h"
+	"poppack.h"
+
+1377103094 c:\program files (x86)\windows kits\8.1\include\um\winuser.h
+	<winapifamily.h>
+	<macwin32.h>
+	<stdarg.h>
+	<libloaderapi.h>
+	<pshpack2.h>
+	<poppack.h>
+	<tvout.h>
+	"winuser.inl"
+
+1371534754 c:\program files (x86)\windows kits\8.1\include\shared\tvout.h
+	<winapifamily.h>
+	<guiddef.h>
+
+1392834560 c:\program files (x86)\windows kits\8.1\include\um\winuser.inl
+
+1377102920 c:\program files (x86)\windows kits\8.1\include\um\winnls.h
+	<winapifamily.h>
+	<datetimeapi.h>
+	<libloaderapi.h>
+	<macwin32.h>
+	<stringapiset.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\datetimeapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\stringapiset.h
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<winnls.h>
+
+1377103092 c:\program files (x86)\windows kits\8.1\include\um\wincon.h
+	<winapifamily.h>
+	<wingdi.h>
+	<consoleapi.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\consoleapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<windows.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\winreg.h
+	<winapifamily.h>
+	<apiset.h>
+	<apisetcconv.h>
+	<minwindef.h>
+	<minwinbase.h>
+	<macwin32.h>
+	<reason.h>
+
+1371534750 c:\program files (x86)\windows kits\8.1\include\um\reason.h
+	<winapifamily.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\winnetwk.h
+	<winapifamily.h>
+	<wnnc.h>
+
+1377102910 c:\program files (x86)\windows kits\8.1\include\shared\wnnc.h
+	<winapifamily.h>
+
+1371533426 c:\program files (x86)\windows kits\8.1\include\shared\cderr.h
+
+1371534750 c:\program files (x86)\windows kits\8.1\include\um\dde.h
+	<windef.h>
+	<winapifamily.h>
+
+1377103086 c:\program files (x86)\windows kits\8.1\include\um\ddeml.h
+	<winapifamily.h>
+
+1377103056 c:\program files (x86)\windows kits\8.1\include\um\lzexpand.h
+	<winapifamily.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\mmsystem.h
+	<winapifamily.h>
+	<mmsyscom.h>
+	<pshpack1.h>
+	<mciapi.h>
+	<mmiscapi.h>
+	<mmiscapi2.h>
+	<playsoundapi.h>
+	<mmeapi.h>
+	<timeapi.h>
+	<joystickapi.h>
+	<poppack.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\mmsyscom.h
+	<winapifamily.h>
+	<pshpack1.h>
+	<macwin32.h>
+	<poppack.h>
+
+1377102916 c:\program files (x86)\windows kits\8.1\include\um\mciapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<mmsyscom.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\mmiscapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<mmsyscom.h>
+
+1377102916 c:\program files (x86)\windows kits\8.1\include\um\mmiscapi2.h
+	<apiset.h>
+	<apisetcconv.h>
+	<mmsyscom.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\playsoundapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<mmsyscom.h>
+
+1377102916 c:\program files (x86)\windows kits\8.1\include\um\mmeapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<mmsyscom.h>
+
+1377102916 c:\program files (x86)\windows kits\8.1\include\um\timeapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<mmsyscom.h>
+
+1377102916 c:\program files (x86)\windows kits\8.1\include\um\joystickapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<mmsyscom.h>
+
+1371532806 c:\program files (x86)\windows kits\8.1\include\um\nb30.h
+	<winapifamily.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\shared\rpc.h
+	<windows.h>
+	<pshpack2.h>
+	<basetsd.h>
+	<pshpack8.h>
+	<setjmp.h>
+	<rpcdce.h>
+	<rpcnsi.h>
+	<rpcerr.h>
+	<rpcmac.h>
+	<poppack.h>
+	<rpcdce.h>
+	<rpcnsi.h>
+	<rpcnterr.h>
+	<excpt.h>
+	<winerror.h>
+	<rpcasync.h>
+	<poppack.h>
+
+1371532828 c:\program files (x86)\windows kits\8.1\include\shared\rpcdce.h
+	<winapifamily.h>
+	<specstrings.h>
+	<guiddef.h>
+	<rpcdcep.h>
+
+1374494892 c:\program files (x86)\windows kits\8.1\include\shared\rpcdcep.h
+	<winapifamily.h>
+
+1371533588 c:\program files (x86)\windows kits\8.1\include\um\rpcnsi.h
+	<winapifamily.h>
+
+1371532828 c:\program files (x86)\windows kits\8.1\include\shared\rpcnterr.h
+	<winapifamily.h>
+
+1371532828 c:\program files (x86)\windows kits\8.1\include\shared\rpcasync.h
+	<winapifamily.h>
+	<pshpack8.h>
+	<ntddk.h>
+	<windef.h>
+	<poppack.h>
+
+1377103522 c:\program files (x86)\windows kits\8.1\include\um\shellapi.h
+	<winapifamily.h>
+	<SpecStrings.h>
+	<pshpack1.h>
+	<poppack.h>
+
+1371533316 c:\program files (x86)\windows kits\8.1\include\um\winperf.h
+	<winapifamily.h>
+	<pshpack8.h>
+	<poppack.h>
+
+1377102964 c:\program files (x86)\windows kits\8.1\include\um\winsock.h
+	<winapifamily.h>
+	<windows.h>
+	<inaddr.h>
+
+1371532804 c:\program files (x86)\windows kits\8.1\include\shared\inaddr.h
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\wincrypt.h
+	<specstrings.h>
+	<winapifamily.h>
+	<bcrypt.h>
+	<ncrypt.h>
+	<dpapi.h>
+
+1392834288 c:\program files (x86)\windows kits\8.1\include\shared\bcrypt.h
+	<winapifamily.h>
+
+1377102940 c:\program files (x86)\windows kits\8.1\include\um\ncrypt.h
+	<winapifamily.h>
+	<bcrypt.h>
+
+1371532798 c:\program files (x86)\windows kits\8.1\include\um\dpapi.h
+
+1371533200 c:\program files (x86)\windows kits\8.1\include\um\winefs.h
+	<winapifamily.h>
+
+1377102916 c:\program files (x86)\windows kits\8.1\include\um\winscard.h
+	<wtypes.h>
+	<winioctl.h>
+	"winsmcrd.h"
+	"SCardErr.h"
+	<winapifamily.h>
+
+1377103090 c:\program files (x86)\windows kits\8.1\include\shared\wtypes.h
+	"rpc.h"
+	"rpcndr.h"
+	"wtypesbase.h"
+
+1371532828 c:\program files (x86)\windows kits\8.1\include\shared\rpcndr.h
+	<winapifamily.h>
+	<pshpack8.h>
+	<basetsd.h>
+	<rpcnsip.h>
+	<rpcsal.h>
+	<poppack.h>
+
+1371533588 c:\program files (x86)\windows kits\8.1\include\um\rpcnsip.h
+	<winapifamily.h>
+
+1371532828 c:\program files (x86)\windows kits\8.1\include\shared\rpcsal.h
+	<specstrings.h>
+
+1392834552 c:\program files (x86)\windows kits\8.1\include\shared\wtypesbase.h
+	"rpc.h"
+	"rpcndr.h"
+	"basetsd.h"
+	"guiddef.h"
+
+1392834326 c:\program files (x86)\windows kits\8.1\include\um\winioctl.h
+	<pshpack1.h>
+	<poppack.h>
+	<winapifamily.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+
+1377102916 c:\program files (x86)\windows kits\8.1\include\shared\winsmcrd.h
+
+1377102916 c:\program files (x86)\windows kits\8.1\include\um\scarderr.h
+
+1377102916 c:\program files (x86)\windows kits\8.1\include\um\winspool.h
+	<winapifamily.h>
+	<prsht.h>
+
+1377103520 c:\program files (x86)\windows kits\8.1\include\um\prsht.h
+	<winapifamily.h>
+	<pshpack8.h>
+	<pshpack4.h>
+	"prsht.inl"
+	<poppack.h>
+
+1392835156 c:\program files (x86)\windows kits\8.1\include\um\prsht.inl
+
+1371533588 c:\program files (x86)\windows kits\8.1\include\um\ole.h
+	<winapifamily.h>
+	<pshpack1.h>
+	<poppack.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\ole2.h
+	<winapifamily.h>
+	<pshpack8.h>
+	<winerror.h>
+	<objbase.h>
+	<oleauto.h>
+	<oleidl.h>
+	<poppack.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\objbase.h
+	<winapifamily.h>
+	<rpc.h>
+	<rpcndr.h>
+	<pshpack8.h>
+	<combaseapi.h>
+	<objidl.h>
+	<urlmon.h>
+	<propidl.h>
+	<poppack.h>
+
+1377102914 c:\program files (x86)\windows kits\8.1\include\um\combaseapi.h
+	<apiset.h>
+	<apisetcconv.h>
+	<rpc.h>
+	<rpcndr.h>
+	<pshpack8.h>
+	<stdlib.h>
+	<wtypesbase.h>
+	<unknwnbase.h>
+	<objidlbase.h>
+	<guiddef.h>
+	<cguid.h>
+	<poppack.h>
+
+1377103090 c:\program files (x86)\windows kits\8.1\include\um\unknwnbase.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"wtypesbase.h"
+	<winapifamily.h>
+
+1377103086 c:\program files (x86)\windows kits\8.1\include\um\objidlbase.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"unknwnbase.h"
+	<winapifamily.h>
+
+1371533588 c:\program files (x86)\windows kits\8.1\include\um\cguid.h
+	<winapifamily.h>
+
+1377103086 c:\program files (x86)\windows kits\8.1\include\um\objidl.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"unknwn.h"
+	<winapifamily.h>
+	<winapifamily.h>
+
+1377103090 c:\program files (x86)\windows kits\8.1\include\um\unknwn.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"wtypes.h"
+	<winapifamily.h>
+
+1392834472 c:\program files (x86)\windows kits\8.1\include\um\urlmon.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"objidl.h"
+	"oleidl.h"
+	"servprov.h"
+	"msxml.h"
+	<winapifamily.h>
+
+1377103088 c:\program files (x86)\windows kits\8.1\include\um\oleidl.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"objidl.h"
+	<winapifamily.h>
+
+1377103026 c:\program files (x86)\windows kits\8.1\include\um\servprov.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"objidl.h"
+	<winapifamily.h>
+
+1377103052 c:\program files (x86)\windows kits\8.1\include\um\msxml.h
+	"rpc.h"
+	"rpcndr.h"
+	"unknwn.h"
+	"objidl.h"
+	"oaidl.h"
+	<winapifamily.h>
+
+1377103086 c:\program files (x86)\windows kits\8.1\include\um\oaidl.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"objidl.h"
+	<winapifamily.h>
+
+1377103088 c:\program files (x86)\windows kits\8.1\include\um\propidl.h
+	"rpc.h"
+	"rpcndr.h"
+	"windows.h"
+	"ole2.h"
+	"objidl.h"
+	"oaidl.h"
+	<winapifamily.h>
+
+1371533588 c:\program files (x86)\windows kits\8.1\include\um\oleauto.h
+	<winapifamily.h>
+	<pshpack8.h>
+	<oaidl.h>
+	<poppack.h>
+
+1377103516 c:\program files (x86)\windows kits\8.1\include\um\commdlg.h
+	<winapifamily.h>
+	<prsht.h>
+	<pshpack1.h>
+	"commdlg.inl"
+	<poppack.h>
+
+1392835148 c:\program files (x86)\windows kits\8.1\include\um\commdlg.inl
+
+1371535460 c:\program files (x86)\windows kits\8.1\include\shared\stralign.h
+	<winapifamily.h>
+
+1377102920 c:\program files (x86)\windows kits\8.1\include\um\winsvc.h
+	<winapifamily.h>
+
+1371533530 c:\program files (x86)\windows kits\8.1\include\um\mcx.h
+
+1377103088 c:\program files (x86)\windows kits\8.1\include\um\imm.h
+	<winapifamily.h>
+	<ime_cmodes.h>
+
+1371533318 c:\program files (x86)\windows kits\8.1\include\um\ime_cmodes.h
+
+1371535460 c:\program files (x86)\windows kits\8.1\include\um\tlhelp32.h
+	<winapifamily.h>
+
+1411114092 source:c:\users\lee\documents\github\hackproc\entrypoint.c
+	"hackProc.h"
+
+1411126133 source:c:\users\lee\documents\github\hackproc\entrythread.c
+	"hackProc.h"
+
+1411113917 source:c:\users\lee\documents\github\hackproc\getprocessidbyname.c
+	"hackProc.h"
+
+1409474211 source:c:\users\lee\documents\github\hackproc\injectmodule.c
+	"hackProc.h"
+
+1411113841 source:c:\users\lee\documents\github\hackproc\peinjection.c
+	"hackProc.h"
+
+1411334215 source:c:\users\lee\documents\github\hackproc\main.c
+	"hackProc.h"
+
+1410425929 source:c:\users\lee\documents\github\hackproc\hackproc.c
+	"hackProc.h"
+
+1410117275 c:\users\lee\documents\github\3rdparty\include\pstdint.h
+	<stddef.h>
+	<limits.h>
+	<signal.h>
+	<stdint.h>
+	<wchar.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1371534754 c:\program files (x86)\windows kits\8.1\include\shared\windowsx.h
+	<winapifamily.h>
+
+1371533026 c:\program files (x86)\windows kits\8.1\include\um\xinput.h
+	<windef.h>
+	<winapifamily.h>
+
+1410346360 source:c:\users\lee\documents\github\hackproc\sfopen_s.c
+	"hackProc.h"
+
+1410345341 source:c:\users\lee\documents\github\hackproc\sfread.c
+	"hackProc.h"
+
+1410345464 source:c:\users\lee\documents\github\hackproc\sfwrite.c
+	"hackProc.h"
+
+1411333833 c:\users\lee\documents\github\hackproc\c.h
+	<windef.h>
+	<Windows.h>
+	<windowsx.h>
+	<linux/limits.h>
+	<pstdint.h>
+
+1377102918 c:\program files (x86)\windows kits\8.1\include\shared\strsafe.h
+	<stdio.h>
+	<string.h>
+	<stdarg.h>
+	<specstrings.h>
+	<winapifamily.h>
+
+1410994087 source:c:\users\lee\documents\github\hackproc\getprocessparent.c
+	"hackProc.h"
+
+1377103524 c:\program files (x86)\windows kits\8.1\include\um\shlwapi.h
+	<winapifamily.h>
+	<SpecStrings.h>
+	<objbase.h>
+	<shtypes.h>
+	<pshpack8.h>
+	<poppack.h>
+
+1377103680 c:\program files (x86)\windows kits\8.1\include\um\shtypes.h
+	"rpc.h"
+	"rpcndr.h"
+	"wtypes.h"
+	"unknwn.h"
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+	<pshpack8.h>
+	<poppack.h>
+	<pshpack1.h>
+	<poppack.h>
+
+1411114057 source:c:\users\lee\documents\github\hackproc\getprocessparentid.c
+	"hackProc.h"
+
+1411333110 source:c:\users\lee\documents\github\hackproc\itoa_s.c
+	"hackProc.h"
+
+1411125944 source:c:\users\lee\documents\github\hackproc\memset.c
+	"hackProc.h"
+
+1374494926 c:\program files (x86)\windows kits\8.1\include\um\winternl.h
+	<winapifamily.h>
+	<windef.h>
+
