@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1412286356 source:c:\users\lee\documents\github\medit\medit.c
+	<stdio.h>
+	<string.h>
+

@@ -185,11 +185,11 @@ typedef enum   _MECMP
 typedef enum _CODE_T
 {
   CODE_W = 0,
+  CODE_CPY,
   CODE_INC,
   CODE_DEC,
   CODE_CMP,
   CODE_JOKER,
-  CODE_CPY,
   CODE_MASTER,
   CODE_COUNT
 } CODE_T;
@@ -216,21 +216,23 @@ typedef struct _BASES
   BASE a[ BASES_LIMIT ];
 } BASES;
 
+#define HACK_ACTIVE 0x80
+#define HACK_RADIOL 0x40
 typedef struct _HACK
 {
   U1       use : 1;
   U1 radioList : 1;
   U1     depth : 4;
   // ID (codelist file usage only)
-  U2        id : 16;
+  U2       id : 16;
   // Current Index
-  U2        ci : 16;
+  U2       _ci : 16;
   // Parent Index
-  U2        pi : 16;
+  U2       _pi : 16;
   // 1st Child Index
-  U2        fi : 16;
+  U2       _fi : 16;
   // Next Sibling Index
-  U2        ni : 16;
+  U2       _ni : 16;
 } HACK;
 
 #define HACKS_LIMIT 0xffu
@@ -251,13 +253,18 @@ typedef enum _DATA_TYPE
 #define CODE_LIMIT 20u
 typedef struct _CODE
 {
-  U1 type : 4;
-  U1 addrSize : 4;
-  U1 dataSize : 4;
-  U1 dataType : 4;
-  U1 info;
-  U1 loop;
-  U8 addr[2];
+  U1  _ci;
+  U1  _ni;
+  U1  _fi;
+  U1  _pi;
+  U1  _tm      : 4;
+  U1  type     : 4;
+  U1  addrSize : 4;
+  U1  dataSize : 4;
+  U1  dataType : 4;
+  U1  info;
+  U4  loop;
+  U8  addr[3];
   RLN a[CODE_LIMIT];
 } CODE;
 

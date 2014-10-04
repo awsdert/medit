@@ -34,16 +34,33 @@
 #include <windef.h>
 #include <Windows.h>
 #include <windowsx.h>
+#define WIDE_SIZE 2
 #else
 #include <linux/limits.h>
 #include <pstdint.h>
+#define WIDE_SIZE 4
 #endif
+
+#ifdef _UNICODE
+#ifndef UNICODE
+#define UNICODE
+#endif
+#define _WIDE
+#endif // _UNICODE
+
+#ifdef UNICODE
+#ifndef _UNICODE
+#define _UNICODE
+#define _WIDE
+#endif
+#endif // UNICODE
 
 OPEN_C
 
 #ifdef _WIN
 #define PATH_MAX MAX_PATH
 #define CHAR_BITS 8
+#define stdint_defined
 #define stdint_least_defined
 #define stdint_fast_defined
 

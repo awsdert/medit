@@ -3,18 +3,18 @@
  * Injected program entry point after Runtime library is initialized
  * Can call any runtime and system routines.
  */
+STARTUPINFO si = { sizeof(si), 0 };
+HACKDATA data = {0};
+HACKINFO hackInfo = {0};
+CODES codes = {0};
 DWORD main()
 {
   int   procId = s_getpid();
-  STARTUPINFO si = { sizeof(si), 0 };
   char  procIdTxt[ 10 ] = {0};
   char  procTmp[ MAX_PATH ] = {0};
-  HACKDATA data = {0};
   char tmp[ MAX_PATH ] = {0};
   char *procTmp2 = procTmp, *tmp2 = tmp;
   UZ   envRetSize = 0;
-  HACKINFO hackInfo = {0};
-  CODES codes = {0};
   GetStartupInfo(&si);
   if ( si.lpReserved2 && ((DWORD*)si.lpReserved2)[0] == 0 && ((DWORD*)si.lpReserved2)[0] == 0 )
     entryPoint( ((DWORD*)si.lpReserved2)[2] );

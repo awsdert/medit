@@ -86,14 +86,14 @@
 		<Unit filename="Itoa_s.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="c.h" />
+		<Unit filename="../c.h" />
 		<Unit filename="entryPoint.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="entryThread.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="hack.h" />
+		<Unit filename="../hack.h" />
 		<Unit filename="hackProc.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -124,6 +124,15 @@
 			<envvars />
 			<debugger />
 			<lib_finder disable_auto="1" />
+			<DoxyBlocks>
+				<comment_style block="0" line="2" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

@@ -18,6 +18,7 @@
 					<Add option="/W3" />
 					<Add option="/Zi" />
 					<Add option="/D_DEBUG" />
+					<Add option="/D_X86_" />
 					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(WIN8)/include/shared" />
 				</Compiler>
@@ -48,6 +49,7 @@
 					<Add option="/Ox" />
 					<Add option="/W3" />
 					<Add option="/DNDEBUG" />
+					<Add option="/D_X86_" />
 					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(WIN8)/include/shared" />
 				</Compiler>

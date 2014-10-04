@@ -937,3 +937,74 @@
 	<winapifamily.h>
 	<windef.h>
 
+1407923707 source:c:\users\lee\documents\github\medit\hackproc\enabledebugprivileges.c
+	"hackProc.h"
+
+1411923259 c:\users\lee\documents\github\medit\hackproc\hackproc.h
+	"../hack.h"
+	<TlHelp32.h>
+	<process.h>
+	<Shlwapi.h>
+	<winternl.h>
+
+1411116403 c:\users\lee\documents\github\medit\hackproc\hack.h
+	<float.h>
+	"c.h"
+
+1411333833 c:\users\lee\documents\github\medit\hackproc\c.h
+	<windef.h>
+	<Windows.h>
+	<windowsx.h>
+	<linux/limits.h>
+	<pstdint.h>
+
+1411114092 source:c:\users\lee\documents\github\medit\hackproc\entrypoint.c
+	"hackProc.h"
+
+1411113917 source:c:\users\lee\documents\github\medit\hackproc\getprocessidbyname.c
+	"hackProc.h"
+
+1411114057 source:c:\users\lee\documents\github\medit\hackproc\getprocessparentid.c
+	"hackProc.h"
+
+1410425929 source:c:\users\lee\documents\github\medit\hackproc\hackproc.c
+	"hackProc.h"
+
+1409474211 source:c:\users\lee\documents\github\medit\hackproc\injectmodule.c
+	"hackProc.h"
+
+1411333110 source:c:\users\lee\documents\github\medit\hackproc\itoa_s.c
+	"hackProc.h"
+
+1411125944 source:c:\users\lee\documents\github\medit\hackproc\memset.c
+	"hackProc.h"
+
+1411113841 source:c:\users\lee\documents\github\medit\hackproc\peinjection.c
+	"hackProc.h"
+
+1410346360 source:c:\users\lee\documents\github\medit\hackproc\sfopen_s.c
+	"hackProc.h"
+
+1410345341 source:c:\users\lee\documents\github\medit\hackproc\sfread.c
+	"hackProc.h"
+
+1410345464 source:c:\users\lee\documents\github\medit\hackproc\sfwrite.c
+	"hackProc.h"
+
+1411334339 source:c:\users\lee\documents\github\medit\hackproc\entrythread.c
+	"hackProc.h"
+
+1411461265 source:c:\users\lee\documents\github\medit\hackproc\main.c
+	"hackProc.h"
+
+1411921147 c:\users\lee\documents\github\medit\hack.h
+	<float.h>
+	"c.h"
+
+1411922376 c:\users\lee\documents\github\medit\c.h
+	<windef.h>
+	<Windows.h>
+	<windowsx.h>
+	<linux/limits.h>
+	<pstdint.h>
+

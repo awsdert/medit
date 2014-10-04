@@ -27,16 +27,27 @@ typedef struct _TARGET
 
 typedef MEFILE PROFILE;
 
+typedef struct _MECONFIG
+{
+  char  *name;
+  char  *file;
+  TARGET  tar;
+  MEMORY *mem;
+  PROFILE pro;
+  HACK  *hack;
+  CODE  *code;
+} MECONFIG;
+
 typedef struct _MECFG
 {
-  char      lang[7];
-  TARGET    tar[2];
-  MEMORY   *mem[2];
-  PROFILE   pro[2];
-  HACKS     hacks;
-  HACK      _hack;
-  HACK     *hack[2];
-  CODE     *code[2];
+  char lang[7];
+  HACKINFO info;
+  char    _hname[HACKS_COUNT ][NAME_LEN];
+  char    _bname[BLOCKS_COUNT][NAME_LEN];
+  HACK    _hack;
+  MEMORY   _mem;
+  MECONFIG  src;
+  MECONFIG  dst;
 } MECFG;
 
 #endif // _DATA_H

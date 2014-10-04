@@ -3,7 +3,7 @@
 HACK_FUNC _hackFuncArmaxRaw = {0};
 CODE_FUNC _codeFuncArmaxRaw = {0};
 
-long txt2rawHackArmaxRaw( HACK *raw, Ipipe *pipe )
+long txt2rawHackArmaxRaw( HACK *raw, HACKS *hl, Ipipe *pipe )
 {
   char text[ 20 ] = {0};
   char temp[  6 ] = {0};
@@ -32,16 +32,10 @@ long txt2rawHackArmaxRaw( HACK *raw, Ipipe *pipe )
     ++txt;
   temp[4] = text[txt];
   ++txt;
-  raw->id = strtoul( temp, NULL, 16 );
-  /* Region ID */
-  switch ( text[txt] )
-  {
-  case '1': raw->info = REG_EU; break;
-  default:  raw->info = REG_US;
-  }
+  raw->id = strtoul( temp, NULL, 16 ) & UINT_LEAST16_MAX;
   return gid;
 }
-void raw2txtHackArmaxRaw( HACK *raw, Ipipe *pipe, long gid )
+void raw2txtHackArmaxRaw( HACK *raw, HACKS* hl, Ipipe *pipe, long gid )
 {
   char text[ 20 ] = {0};
   char temp[  6 ] = {0};
@@ -72,24 +66,24 @@ void raw2txtHackArmaxRaw( HACK *raw, Ipipe *pipe, long gid )
   text[i] = temp[4];
   ++i;
   /* Region */
-  switch ( raw->info  & 0xF )
+  switch ( _codeFuncArmaxRaw.getRegion() )
   {
-    case REG_US: text[i] = '1'; break;
-    case REG_EU: text[i] = '0'; break;
+    case REGION_US: text[i] = '1'; break;
+    case REGION_EU: text[i] = '0'; break;
     default: return;
   }
   ++i;
   /* RadioList or CheckList */
-  if ( !raw->first )
+  if ( !raw->_fi )
     text[i] = '0';
-  else if ( raw->info & HACK_RADIOL )
+  else if ( raw->radioList )
     text[i] = '2';
   else
     text[i] = '1';
   ++i;
   /* Parent ID */
   memset( temp, 0, 5 );
-  _ltoa_s( raw->pid, temp, 5, 16 );
+  _ltoa_s( hl->a[ raw->_pi ].id, temp, 5, 16 );
   do
   {
     text[i] =  temp[j];
@@ -99,7 +93,7 @@ void raw2txtHackArmaxRaw( HACK *raw, Ipipe *pipe, long gid )
   /* Append/Insert Text */
   ipWrLine( pipe, text, 20, "\r\n" );
 }
-ssv  txt2rawCodeArmaxRawRead( ulv *cp1, ulv *cp2, CODELIST *cl, ssv *line )
+ssv  txt2rawCodeArmaxRawRead( ulv *cp1, ulv *cp2, CODELIST *cl, usv *line )
 {
   char *text = NULL;
   char temp[ 10 ] = {0};
@@ -115,215 +109,288 @@ ssv  txt2rawCodeArmaxRawRead( ulv *cp1, ulv *cp2, CODELIST *cl, ssv *line )
   ++(*line);
   return 1;
 }
+void _txt2rawCodeArmaxRawMaster( CODE *raw, CODELIST *cl, ulv p1, ulv p2 )
+{
+  raw->type = CODE_MASTER;
+  if ( p2 & 0xFF )
+    _codeFuncArmaxRaw.setRegion( REGION_EU );
+  else
+    _codeFuncArmaxRaw.setRegion( REGION_US );
+  p2 >>= 8;
+  raw->loop = p2 & 0xFF;
+  p2 >>= 8;
+  raw->addr[2] = p2;
+}
+void _txt2rawCodeArmaxRawWrite( CODE *raw, ulv p1, ulv p2 )
+{
+  raw->type = CODE_W;
+  switch ( raw->dataSize )
+  {
+  case 1:
+    raw->a[0].u = (p2 & 0xff);
+    raw->loop = (p2 >>= 8);
+    break;
+  case 2:
+    raw->a[0].u = (p2 & 0xffff);
+    raw->loop = (p2 >>= 16);
+    break;
+  default:
+    raw->a[0].u = p2;
+    raw->loop = 0;
+  }
+}
+
+void _txt2rawCodeArmaxRawAdd( CODE *raw, ulv p1, ulv p2 )
+{
+  raw->type = CODE_INC;
+  switch ( raw->dataSize )
+  {
+  case 1:
+    raw->a[0].u = (p2 & 0xFF);
+    raw->loop = (p2 >>= 8);
+    break;
+  case 2:
+    raw->a[0].u = (p2 & 0xFFFF);
+    raw->loop = (p2 >>= 16);
+    break;
+  default:
+    raw->a[0].u = p2;
+    raw->loop = 0;
+  }
+}
+
+void _txt2rawCodeArmaxRawPtr( CODE *raw, ulv p1, ulv p2 )
+{
+  raw->type = CODE_W;
+  switch ( raw->dataSize )
+  {
+  case 1:
+    raw->a[0].u = (p2 & 0xFF);
+    raw->addr[2] = (p2 >>= 8);
+    break;
+  case 2:
+    raw->a[0].u = (p2 & 0xFFFF);
+    raw->addr[2] = (p2 >>= 16);
+    break;
+  default:
+    raw->a[0].u = p2;
+    raw->addr[2] = 0;
+  }
+}
+
+void _txt2rawCodeArmaxRawTest( CODE *raw, CODELIST *cl, usv *line, ulv p1, ulv p2 )
+{
+  raw->type = CODE_CMP;
+  raw->addr[0] = (p1 & 0xFFFFFF);
+  raw->a[0].u = p2;
+  p1 >>= 24;
+  raw->loop = 1;
+  raw->info = ((p1 & 6u) == 6u) ? CODE_JOKER : CODE_CMP;
+  raw->dataSize = (p1 & 0x7);
+  switch ( p1 & 0x38 )
+  {
+    case 0x10: raw->info = CMP_NE; break;
+    case 0x18: raw->info = CMP_LT; raw->dataType = DATA_TYPE_SI; break;
+    case 0x20: raw->info = CMP_MT; raw->dataType = DATA_TYPE_SI; break;
+    case 0x28: raw->info = CMP_LT; break;
+    case 0x30: raw->info = CMP_MT; break;
+    case 0x38: raw->info = CMP_IA; break;
+  }
+  switch ( p1 & 0xC0 )
+  {
+    case 0x40: raw->loop = 2; break;
+    case 0x80: raw->loop = 0; break;
+  }
+}
+
+void _txt2rawCodeArmaxRawLoop( CODE *raw, CODELIST *cl, usv *line, ulv p2 )
+{
+  ulv p3 = 0, p4 = 0;
+  raw->type = CODE_W;
+  if ( txt2rawCodeArmaxRawRead( &p3, &p4, cl, line ) )
+  {
+    raw->addr[0] = (p2 & 0x1FFFFFF);
+    raw->a[0].u = p3;
+    raw->a[1].u = (p4 & 0xFFF);
+    p2 >>= 25;
+    p4 >>= 16;
+    raw->dataSize = (p2 & 0x7);
+    p2 >>= 3;
+    raw->loop = (p4 & 0xFF);
+  }
+  else
+    memset( raw, 0, sizeof( CODE ) );
+}
+
 usv txt2rawCodeArmaxRaw( CODE *raw, CODELIST* cl, usv line )
 {
   long i = 0, j = 0;
-  ulv  cp1 = 0, cp2 = 0, cp3 = 0, cp4 = 0;
+  ulv  p1 = 0, p2 = 0;
   ulv tmp = 0;
   ucv nxt = 0, type = 0;
-  if ( !_codeFuncArmaxRaw.getRamNo || !txt2rawCodeArmaxRawRead( &cp1, &cp2, cl, &line ) || ( !cp1 && !txt2rawCodeArmaxRawRead( &cp3, &cp4, cl, &line ) ) )
+  if ( !_codeFuncArmaxRaw.getBaseNo || !_codeFuncArmaxRaw.setRegion ||
+    !txt2rawCodeArmaxRawRead( &p1, &p2, cl, &line ) )
     /* Codelist unusable, move on to next hack */
     return cl->rows;
-  type = cp1 >> 28;
-  tmp = ( cp1 & 0xF000000 ) >> 24;
-  nxt =  ( tmp >= 8 && tmp <= 0xD );
-  if ( type >= 4 && type < 0xC )
-    raw->type = CODE_JOKER;
+  else if ( p1 == 0xDEADC0DE )
+    return line;
+  else if ( !p1 )
+  {
+    if ( p2 & 0x80000000 )
+      _txt2rawCodeArmaxRawLoop( raw, cl, &line, p2 );
+    else
+      _txt2rawCodeArmaxRawWrite( raw, p1, p2 );
+  }
+  else if ( p1 & 0x3C000000 )
+    _txt2rawCodeArmaxRawTest( raw, cl, &line, p1, p2 );
   else
-    raw->type = CODE_CMP;
-  raw->loop = 1;
-  if ( cp3 )
-  switch ( type )
   {
-    /* TODO: Add other code types once supported */
-    case 0:
-      if ( tmp <= 5 )
-        raw->type = CODE_W;
-      else if ( nxt )
-        raw->info = CMP_EQ;
-    break;
-    case 1:
-      if ( tmp <= 5 )
-        raw->info = CMP_NE;
-      else if ( nxt )
-      {
-        raw->sval = 1;
-        raw->info = CMP_LT;
-      }
-    break;
-    case 2:
-      if ( tmp <= 5 )
-      {
-        raw->sval = 1;
-        raw->info = CMP_MT;
-      }
-      else if ( nxt )
-        raw->info = CMP_LT;
-    break;
-    case 3:
-      if ( tmp <= 5 )
-        raw->info = CMP_MT;
-    break;
-    case 4:
-      if ( tmp <= 5 )
-      {
-        raw->type = CODE_W;
-        raw->ptr  = 1;
-      }
-    break;
-    case 8:
-      if ( tmp <= 5 )
-        raw->type = CODE_INC;
-    break;
-    case 0xC:
-      if ( tmp <= 5 )
-        raw->type = CODE_MASTER;
-      else if ( nxt )
-      {
-        raw->info = CMP_NE;
-        raw->loop = 0;
-      }
-    break;
-    case 0xD:
-      if ( tmp <= 5 )
-      {
-        raw->info = CMP_EQ;
-        raw->loop = 0;
-      }
-      else if ( nxt )
-      {
-        raw->info = CMP_MT;
-        raw->loop = 0;
-        raw->sval = 1;
-      }
-    break;
-    case 0xE:
-      if ( tmp <= 5 )
-      {
-        raw->info = CMP_LT;
-        raw->loop = 0;
-        raw->sval = 0;
-      }
-      else if ( nxt )
-      {
-        raw->info = CMP_MT;
-        raw->loop = 0;
-      }
-    break;
-    case 0xF:
-      if ( tmp <= 5 )
-      {
-        raw->info = CMP_LT;
-        raw->loop = 0;
-      }
-  }
-  switch ( tmp )
-  {
-    case 0: case 1: case 8:   case 9:   raw->size = 8;  break;
-    case 2: case 3: case 0xA: case 0xB: raw->size = 16; break;
-    default: raw->size = 32; break;
-  }
-  raw->addr[1] = ( cp1 & 0xFFFFFF );
-  switch ( tmp )
-  {
-  case 1: case 3:   case 5:
-  case 9: case 0xB: case 0xD:
-    raw->addr[1] |= 0x1000000;
+    raw->addr[0] = (p1 & 0x1FFFFFF);
+    p1 >>= 25;
+    raw->dataSize = (p1 & 0x7);
+    p1 >>= 3;
+    switch ( p1 >> 30 )
+    {
+    case 0:   _txt2rawCodeArmaxRawWrite( raw, p1, p2 );  break;
+    case 1:   _txt2rawCodeArmaxRawPtr( raw, p1, p2 );    break;
+    case 2:   _txt2rawCodeArmaxRawAdd( raw, p1, p2 );    break;
+    case 3: _txt2rawCodeArmaxRawMaster( raw, cl, p1, p2 ); break;
+    }
   }
   return line;
 }
-scv  _raw2txtCodeArmaxRaw( CODE* raw, Ipipe *pipe, ucv *I )
+void _newCodeLine( STR *line, STRA *cl )
 {
-  ucv lines = 1, size = 4, repeat = 0, size2 = 0;
-  ulv line[3][2] = {0}, val = 0;
-  if ( raw->addr[0] > 0x1FFFFFF || raw->addr[1] > 0xFFFF || raw->loop > 0xFF ||
-      ( raw->type = CODE_W && raw->loop && raw->buff[1] > 0xFF ) ||
-      raw->tmem != _codeFuncArmaxRaw.getRamNo("ee") ) return 0;
-  switch ( raw->size )
+  line->c = 20;
+  line->s = line->c;
+  line->a = (char*)malloc( line->s );
+  memset( line->a, 0, line->s );
+  cl->s += sizeof( STR );
+  cl->a = (STR*)realloc( cl->a, cl->s );
+  cl->a[ cl->c ] = *line;
+  ++(cl->c);
+}
+void _fillCodeLine( STR *line, ulv p1, ulv p2 )
+{
+  _ultoa_s( p1,  line->a,     9, 16 );
+  line->a[9] = ' ';
+  _ultoa_s( p1, &line->a[10], 9, 16 );
+}
+ucv _raw2txtCodeArmaxRawWrite( CODE *raw, STRA *cl, CODE *c1, CODE *c2 )
+{
+  STR l1 = {0};
+  ulv p1 = 0, p2 = 0, i = 0;
+  switch ( raw->dataSize )
   {
     case 1:
-      size = 0;
-      val = raw->buff[*I] & 0xFF;
-      raw->buff[*I] >>= 8;
-    break;
-    case 2: case 3:
-      size = 2;
-      val = raw->buff[*I] & 0xFFFF;
-      raw->buff[*I] >>= 16;
-    break;
-    default:
-      size = 4;
-      val = raw->buff[*I] & 0xFFFFFFFF;
-      raw->buff[*I] >>= 32;
+      if ( raw->loop > 0xffffff )
+        return 0;
+      p2 = raw->loop << 8;
+      break;
+    case 2:
+      if ( raw->loop > 0xffff )
+        return 0;
+      p2 = raw->loop << 16;
+      break;
+    case 8:
+    if ( raw->info )
+    {
+      do
+      {
+         c1.a[i].u = raw->a[i].u & 0xffffffff;
+         c2.a[i].u = raw->a[i].u >> 32;
+        _raw2txtCodeArmaxRawWrite( &c1, cl );
+        _raw2txtCodeArmaxRawWrite( &c2, cl );
+        c1.addr[0] += 8;
+        c2.addr[0] += 8;
+      }
+      while ( i < raw->info );
+    }
+    else
+    {
+      _raw2txtCodeArmaxRawWrite( &c1, cl, c1, c2 );
+      _raw2txtCodeArmaxRawWrite( &c2, cl, c1, c2 );
+    }
+    return 1;
   }
-  raw->size -= size;
-  repeat = ( raw->size > 0 );
-  if ( raw->buff[*I] == 0 )
-    ++(*I);
-  line[0][0] = raw->addr[0];
-  line[0][0] = (size << 24);
+  p1 = raw->addr[0] & 0x1ffffff;
+  p1 |= ((ulv)raw->dataSize << 24);
+  p2 |= (ulv)raw->a[0].u;
+  _newCodeLine( &l1, cl );
+  _fillCodeLine( &l1, p1, p2 );
+  return 1;
+}
+ucv _raw2txtCodeArmaxRawLoop( CODE *raw, STRA *cl, CODE *c1, CODE *c2 )
+{
+  ulv p1 = 0, p2 = 0, p3 = 0, p4 = 0, i = 0;
+  STRA l1 = {0}, l2 = {0};
+  _newCodeLine( &l1, cl );
+  _newCodeLine( &l2, cl );
+  if ( raw->loop > 0xff )
+    return 0;
+  if ( raw->dataSize == 8 )
+  {
+    if ( raw->info )
+    {
+      c1->a[1].u = 0;
+      c2->a[1].u = 0;
+      do
+      {
+        c1->a[0].u = (ulv)raw->a[i].u;
+        c2->a[0].u = (ulv)(raw->a[i].u >> 32);
+        _raw2txtCodeArmaxRawLoop( c1, cl, c1, c2 );
+        _raw2txtCodeArmaxRawLoop( c2, cl, c1, c2 );
+        c1->addr[0] += 8;
+        c2->addr[0] += 8;
+        ++i;
+      }
+      while ( i < raw->info );
+    }
+    else
+    {
+      _raw2txtCodeArmaxRawLoop( c1, cl, c1, c2 );
+      _raw2txtCodeArmaxRawLoop( c2, cl, c1, c2 );
+    }
+    return 1;
+  }
+  p2 = (ulv)raw->addr[0];
+  p2 |= 0x80000000;
+  if ( raw->dataSize > 1 )
+    p2 |= ((ulv)raw->dataSize) << 24;
+  p3 = (ulv)raw->a[0].u;
+  p4 = (ulv)raw->addr[1];
+  p4 |= raw->loop << 16;
+  p4 |= (ulv)(raw->a[1].u << 24);
+  _fillCodeLine( &l1, p1, p2 );
+  _fillCodeLine( &l2, p3, p3 );
+  return 1;
+}
+ucv raw2txtCodeArmaxRaw( CODE *raw, STRA *cl )
+{
+  CODE c1 = *raw, c2 = *raw;
+  if ( raw->addr > 0x1ffffff || raw->dataType )
+    return 0;
+  c1.info = 0;
+  c1.dataSize = 4;
+  c1.a[0].u = (ulv)raw->a[0].u;
+  c1.a[1].u = (ulv)raw->a[1].u;
+  c2.info = 0;
+  c2.dataSize = 4;
+  c2.a[0].u = (ulv)(raw->a[0].u >> 32);
+  c2.a[1].u = (ulv)(raw->a[1].u >> 32);
+  c2.addr[0] += 4;
   switch ( raw->type )
   {
     case CODE_W:
-      if ( !raw->loop )
-        line[0][1] = val;
-      else
-      {
-        line[0][1] = line[0][0] | 0x80000000;
-        line[0][0] = 0;
-        line[1][0] = val;
-        /* Only list codes use the info parameter so is safe for checking */
-        line[1][1] = raw->info ? 0 : ( ( raw->buff[1] & 0xFF ) << 24 );
-        /* Increment Address, may need looking at */
-        line[1][1] |= raw->addr[1];
-        /* Ensure our next slide write starts at right address */
-        raw->addr[0] += size;
-      }
+      if ( raw->loop && ( raw->dataSize >= 4 || raw->a[1].u ) )
+        return _raw2txtCodeArmaxRawLoop( raw, cl );
+      else if ( !raw->addr[2] )
+        return _raw2txtCodeArmaxRawWrite( raw, cl );
     break;
-    case CODE_INC:
-      if ( raw->loop )
-        return -1;
-      line[0][0] |= 0x10000000;
-      line[0][1] = val;
-    break;
-    case CODE_DEC:
-      if ( raw->loop )
-        return -1;
-      line[0][0] |= 0x20000000;
-      line[0][1] = val;
-    break;
-    case CODE_CMP:
-      line[0][0] |= 0xA0000000;
-    break;
-    case CODE_JOKER:
-      line[0][0] |= 0xB0000000;
-    break;
-    case CODE_MASTER:
-      line[0][0] |= 0xC0000000;
-      line[0][1]  = raw->loop << 16;
-    break;
-    /* Unable to convert */
-    default: return -1;
+    case CODE_INC: break;
+    case CODE_CMP: case CODE_JOKER: break;
+    case CODE_MASTER: break;
   }
-  return repeat;
-}
-ucv raw2txtCodeArmaxRaw( CODE *raw, Ipipe *pipe )
-{
-  CODE tmp = *raw;
-  ucv I = 0,
-    /* This just prevents us doing more than we should */
-    C = (raw->type == CODE_CMP) ? 1 : ( raw->info && 0xFF );
-  scv res = 0;
-  if ( C > 20 ) C = 20;
-  do
-  {
-    res = _raw2txtCodeArmaxRaw( &tmp, pipe, &I );
-    if ( res < 0 )
-      /* Unsupported, Hack should be omitted from codelist */
-      return 0;
-  }
-  while ( res == 1 && I < C );
-  return 1;
 }
 
 ARMAX_RAW_EXP HACK_FUNC* GetHackFuncs( void ) { return &_hackFuncArmaxRaw; }

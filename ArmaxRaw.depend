@@ -2,13 +2,14 @@
 1405183578 source:c:\users\lee\documents\github\medit\armaxrawmain.c
 	"ArmaxRawMain.h"
 
-1406098613 c:\users\lee\documents\github\medit\armaxrawmain.h
+1412282550 c:\users\lee\documents\github\medit\armaxrawmain.h
 	"_hack.h"
 
-1406098446 c:\users\lee\documents\github\medit\_hack.h
+1412283260 c:\users\lee\documents\github\medit\_hack.h
+	"hack.h"
 	<Ipipe.h>
 
-1405767861 c:\users\lee\documents\github\ipipe\ipipe.h
+1406194786 c:\users\lee\documents\github\ipipe\ipipe.h
 	"IpipeTypes.h"
 
 1405766771 c:\users\lee\documents\github\ipipe\ipipetypes.h
@@ -841,4 +842,21 @@
 	<ime_cmodes.h>
 
 1371533318 c:\program files (x86)\windows kits\8.1\include\um\ime_cmodes.h
+
+1412283207 source:c:\users\lee\documents\github\medit\armaxraw.c
+	"ArmaxRawMain.h"
+
+1412282698 c:\users\lee\documents\github\medit\hack.h
+	<float.h>
+	"c.h"
+
+1411922376 c:\users\lee\documents\github\medit\c.h
+	<windef.h>
+	<Windows.h>
+	<windowsx.h>
+	<linux/limits.h>
+	<pstdint.h>
+
+1371534754 c:\program files (x86)\windows kits\8.1\include\shared\windowsx.h
+	<winapifamily.h>
 

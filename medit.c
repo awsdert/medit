@@ -1,66 +1,68 @@
-#include "_hack.h"
-/** \brief Recursive Function for hacking
-  \param hbeg Begin at Hack ID
-  \param cbeg Begin at Code ID
-  \param hend Stop at Hack ID
-  \param cend Stop at Code ID
-**/
-HACKS hacks = {0};
-char  hname[9] = {0};
-CODES codes = {0};
-Ipipe cpipe = {0};
-char  cpath[FILENAME_MAX] = {0};
-void mset( void* ptr, ucv fillWith, uzv size )
+#include <stdio.h>
+#include <string.h>
+// This will be used for short-cuts & starting x86/x64 versions
+#define SEG_LENGTH 128
+#define SEG_LEN 127
+#define SEG_DELIM "\\"
+#define CMD_LENGTH 8192
+#define CMD_LEN 8191
+#define EXE_EXT ".exe"
+#define __STR( STRING ) #STRING
+#define _STR( STRING ) __STR( STRING )
+#define STR( STRING ) _STR( STRING )
+char path[CMD_LENGTH] = {0};
+char cmd[CMD_LENGTH] = {0};
+int main( int argc, char const *argv[] )
 {
-  ucv *buff = (ucv*)ptr;
-  uzv i = 0;
+  int segc = 0;
+#ifdef _WIN3
+  FILE *test = NULL;
+#endif // _WIN32
+  size_t length = 0;
+  char *tokSeg = NULL, *tmp = cmd,
+    *tmpSeg = NULL,
+    *prvSeg = NULL,
+    *curSeg = NULL,
+    arcSeg[SEG_LENGTH] = {0};
+  strcpy_s( path, CMD_LEN, argv[0] );
+  curSeg = strtok_s( path, "\\/", &tokSeg );
+  cmd[0] = '"';
   do
   {
-    buff[i] = fillWith;
-    ++i;
+    ++segc;
+    tmpSeg = prvSeg;
+    prvSeg = curSeg;
+    curSeg = strtok_s( NULL, "\\/", &tokSeg );
+    if ( tmpSeg )
+    {
+      strcat_s( cmd, CMD_LEN, tmpSeg );
+      strcat_s( cmd, CMD_LEN, SEG_DELIM );
+    }
   }
-  while ( i < size );
-}
-long hack( long hid, long cid, long hend, long cend )
-{
-  HACK *hack = &hacks.buff[hid];
-  CODE *code = &codes.buff[cid];
-  if ( cend < 0 )
-  {
-    mset( hname, 0, 9 );
-    _itoa_s( hid, hname, 9, 16 );
-    mset( cpath, 0, FILENAME_MAX );
-    cend = codes.size;
-  }
-  else if ( !cend )
-    cend = codes.size;
-  return hid;
-}
-char
-  /** \brief Target Information File **/
-  *tinfo = NULL,
-  /** \brief Target Path **/
-  *tpath = NULL,
-  /** \brief Hacklist Path **/
-  *hpath = NULL,
-  /** \brief Codelist Path **/
-  cpath[ FILENAME_MAX ] = {0},
-  hname[ 9 ] = {0};
-DWORD main( void )
-{
-  Ipipe
-    tpipe = {0},
-    hpipe = {0},
-    cpipe = {0};
-  HACKS hacks = {0};
-  CODES codes = {0};
-  if ( !cpath[0] )
-  {
-    // We must insert ourself first
-    return EXIT_FAILURE;
-  }
-  ipInitPiping();
-  tpipe = GetProcessHandle();
-  //hack( &tpipe, &hacks, &codes, &cpipe, cpath, 0, 0, 0, -1 );
-  return EXIT_SUCCESS;
+  while ( curSeg );
+  memset( path, 0, CMD_LEN );
+#ifdef _WIN32
+  getenv_s( &length, path, CMD_LEN, "SYSTEM" );
+  strcat_s( path, CMD_LEN, "wowsys64" );
+  if ( fopen_s( &test, path, "r" ) == ERROR_SEVERITY_SUCCESS )
+    strcat_s( arcSeg, SEG_LEN, "msw-x64" );
+  else
+    strcat_s( arcSeg, SEG_LEN, "msw-x86" );
+#else
+#error Not supported
+#endif
+#ifdef _DEBUG
+  strcat_s( arcSeg, SEG_LEN, "-d" );
+#endif
+  // Add compiler
+  strcat_s( arcSeg, SEG_LEN,
+#ifdef _MSC_VER
+    "-vc" );
+#else
+    "-gcc" );
+#endif
+  strcat_s( cmd, CMD_LEN, "meditGui-" );
+  strcat_s( cmd, CMD_LEN, arcSeg );
+  strcat_s( cmd, CMD_LEN, "\"" );
+  return 0;
 }

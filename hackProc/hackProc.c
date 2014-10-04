@@ -13,7 +13,7 @@ S4      hackProc( HACKDATA *data,  HACKINFO *info, CODES *codesBuff, S4 hi, U2 c
           else *((U1*)ADDR) = DATA & U1_MAX
   CODES *codes = ( hi < 0 ) ? &(info->codes) : codesBuff;
   CODE *code;
-  int i = 0;
+  U4 i = 0;
   U2 j = 0, cmp = 0;
   DWORD sys = 0;
   U8 addr = 0, tmpa = 0;
@@ -188,7 +188,7 @@ S4      hackProc( HACKDATA *data,  HACKINFO *info, CODES *codesBuff, S4 hi, U2 c
         break;
       }
       // Skip children & remaining codes, move onto next sibling
-      return ( info->hacks.a[hi].ni || -1 );
+      return ( info->hacks.a[hi]._ni || -1 );
     default: ci = codes->c;
     }
   }
@@ -198,7 +198,7 @@ S4      hackProc( HACKDATA *data,  HACKINFO *info, CODES *codesBuff, S4 hi, U2 c
     sfseek( data->codes, sizeof(CODES) * hi, SEEK_SET );
     sfwrite( codesBuff, sizeof(CODES), 1, data->codes );
     sfflush( data->codes );
-    hi = info->hacks.a[hi].fi;
+    hi = info->hacks.a[hi]._fi;
   }
   else
   {
@@ -208,5 +208,5 @@ S4      hackProc( HACKDATA *data,  HACKINFO *info, CODES *codesBuff, S4 hi, U2 c
   }
   while ( hi >= 0 )
     hi = hackProc( data, info, codesBuff, hi, 0 );
-  return ( info->hacks.a[hi].ni || -1 );
+  return ( info->hacks.a[hi]._ni || -1 );
 }
