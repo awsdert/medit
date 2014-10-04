@@ -1,7 +1,5 @@
 *.dll
 *.exe
 *.pdb
-*.pdb
-*.pdb
-*.pdb
-vc120.pdb
+doxygen/*
+*/doxygen/*
