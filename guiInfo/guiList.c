@@ -1,15 +1,16 @@
 #include "../_guiMain.h"
 
-Ihandle* meMkList( Icallback func, char *lbl0, ... )
+Ihandle* meMkList( Icallback func, ... )
 {
   Ihandle *hbox = IupHbox( NULL ),
           *sbox = IupScrollBox( hbox ),
          *frame = NULL, *ih = NULL;
-  char   *title = lbl0;
+  char   *title = NULL;
   char const *DLGFGCOLOR = IupGetAttribute( NULL, "DLGFGCOLOR" );
   char const *DLGBGCOLOR = IupGetAttribute( NULL, "DLGBGCOLOR" );
   va_list   va;
-  va_start( va, lbl0 );
+  va_start( va, func );
+  title = va_arg( va, char* );
   while ( title )
   {
     ih = IupLabel( title );
@@ -35,7 +36,7 @@ Ihandle* meMkList( Icallback func, char *lbl0, ... )
   IupSetAttribute( hbox, IUP_GAP, "10" );
   IupSetAttribute( hbox, IUP_EXPAND, IUP_YES );
   IupSetAttribute( sbox, IUP_EXPAND, IUP_HORIZONTAL );
-  IupSetCallback(  sbox, "_ME_BUTTON_CB", func );
+  IupSetCallback(  sbox, "VALUECHANGED", func );
   return sbox;
 }
 
@@ -48,7 +49,6 @@ int meListP_ButtonCB( Ihandle *sbox, int button, int pressed, int x, int y, char
   Icallback func = NULL;
   int i = 0, c = IupGetChildCount( hbox );
   div_t res = {0};
-  typedef int (*motionCB)( Ihandle*, int, int, int, int, char* );
   if ( pressed )
   {
     if ( iup_isbutton1( status ) )
@@ -82,7 +82,9 @@ int meListP_ButtonCB( Ihandle *sbox, int button, int pressed, int x, int y, char
     }
     if ( ih )
     {
-      func = IupGetCallback( sbox, "_ME_BUTTON_CB" );
+      func = IupGetCallback( sbox, "VALUECHANGED" );
+      IupSetInt( sbox, IUP_VALUE, i );
+      IupSetAttribute( sbox, "VALUE_TITLE", IupGetAttribute( ih, IUP_TITLE ) );
       IupSetAttribute(sbox, "_IUP_DRAG_SB", NULL);
       for ( i = 0; i < c; ++i )
       {
@@ -91,10 +93,10 @@ int meListP_ButtonCB( Ihandle *sbox, int button, int pressed, int x, int y, char
         IupSetAttribute( frame, "SUNKEN", IUP_NO );
         IupRedraw( frame, 0 );
       }
-      lbl   = IupGetChild( ih, 0 );
+      lbl = IupGetChild( ih, 0 );
       IupSetAttribute( ih, "SUNKEN", IUP_YES );
       if ( func )
-        ((motionCB)func)( ih, button, pressed, x, y, status );
+        func( ih );
       IupRedraw( ih, 0 );
       IupFlush();
     }

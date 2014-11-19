@@ -2,6 +2,7 @@
 static FILE *hLang = NULL;
 static GUI _gui = {0};
 static CFG _cfg = {0};
+
 GUI* appGetGui( void ) { return &_gui; }
 CFG* appGetCfg( void ) { return &_cfg; }
 void _appInitCwd( char *argv[] );
@@ -25,7 +26,7 @@ int main( int argc, char *argv[] )
   char
     text[100][20] = {{0}},
     szSep[] = "\\/",
-    szLine[ FILENAME_MAX ] = {0},
+    szLine[ PATH_MAX ] = {0},
     *szTok = NULL, *szPrv = NULL, *szNow = NULL, *szTmp = NULL;
   HMODULE      lib = NULL;
   HACK_FUNC* hfunc = NULL;
@@ -45,9 +46,9 @@ int main( int argc, char *argv[] )
   _appInitCwd( argv );
   /* Capture default font */
   szTok = NULL;
-  memset( szLine, 0, FILENAME_MAX );
+  memset( szLine, 0, PATH_MAX );
   szTmp = IupGetAttribute( NULL, "DEFAULTFONT" );
-  strcpy_s( szLine, FILENAME_MAX, szTmp );
+  strcpy_s( szLine, PATH_MAX, szTmp );
   szTmp = strtok_s( szLine, ", ", &szTok );
   strcat_s( gui->font, 20, szTmp );
   szTmp = strtok_s( NULL, ", ", &szTok );
@@ -68,7 +69,7 @@ mkGui:
   //lib = meLoadLib( "ArmaxRaw", &hfunc, &cfunc );
   if ( lib )
   {
-    memset( szLine, 0, FILENAME_MAX );
+    memset( szLine, 0, PATH_MAX );
     hacks->c = HACKS_COUNT;
     memset( hacks->a, 0, BUFSIZ * sizeof(HACK) );
     pipe = ipOpenFile( "C:\\p\\Omniconvert\\ArmaxRaw\\ff12.txt", 0666, SHARE_READ | SHARE_WRITE );
@@ -108,7 +109,7 @@ mkGui:
 #endif
   /* Main List */
   gui->listMain =
-    meMkList( (Icallback)meMenu_ButtonCB,
+    meMkList( guiMenu_OnValueChanged,
             lang->x[ LNG_ORGANISATION ],
             lang->x[ LNG_PLATFORM ],
             lang->x[ LNG_TARGET ],
@@ -134,39 +135,4 @@ mkGui:
   lib = meFreeLib( lib );
   IupClose();
   return ret;
-}
-
-char szAppCwd[ FILENAME_MAX ] = {0};
-char szAppExe[ 25 ] = {0};
-char szAppVer[ 25 ] = {0};
-
-void        _appInitCwd( char *argv[] )
-{
-  char
-    szCwd[FILENAME_MAX] = {0},
-    szSep[] = "\\/",
-   *szTok = NULL,
-   *szTmp = NULL,
-   *szPrv = NULL,
-   *szNxt = NULL;
-  /* Capture CWD and APPNAME */
-  szPrv = strtok_s( argv[0], szSep, &szTok );
-  szNxt = strtok_s( NULL,   szSep, &szTok );
-  do
-  {
-    szTmp = szPrv;
-    szPrv = szNxt;
-    szNxt = strtok_s( NULL, szSep, &szTok );
-    strcat_s( szAppCwd, FILENAME_MAX, szTmp );
-    strcat_s( szAppCwd, FILENAME_MAX, DIR_SEP  );
-  }
-  while ( szNxt );
-  szTmp = strtok_s( szPrv, ".", &szTok );
-  strcpy_s( szAppExe, 25, szTmp );
-  szNxt = strtok_s( szTmp, "-", &szTok );
-  szNxt = strtok_s( NULL,  DIR_SEP, &szTok );
-  strcpy_s( szAppVer, 25, szNxt );
-  IupSetGlobal( "APP_CWD", szAppCwd );
-  IupSetGlobal( "APP_EXE", szAppExe );
-  IupSetGlobal( "APP_VER", szAppVer );
 }

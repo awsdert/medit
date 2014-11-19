@@ -13,7 +13,7 @@ typedef struct _CFG_PFM
 {
   char name[NAME_MAX];
   char file[NAME_MAX];
-  ENDIAN_TYPE endian;
+  uchar endian;
 } CFG_PFM;
 
 typedef struct _CFG_TAR
@@ -62,5 +62,10 @@ typedef struct _CFG
 } CFG;
 
 CFG* appGetCfg( void );
+
+char const* appGetCwp( void );
+char const* appGetCwd( void );
+char const* appGetExe( void );
+char const* appGetVer( void );
 
 SHUT_C

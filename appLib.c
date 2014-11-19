@@ -15,14 +15,14 @@ uchar getBaseNo( char *name )
 HMODULE meLoadLib( char* name, HACK_FUNC **hfunc, CODE_FUNC **cfunc )
 {
   HMODULE lib = NULL;
-  char szFile[ FILENAME_MAX ] = {0};
+  char szFile[ PATH_MAX ] = {0};
   GETHACKFUNCS gethacks = NULL;
   GETCODEFUNCS getcodes = NULL;
-  strcpy_s( szFile, FILENAME_MAX, IupGetAttribute( NULL, "APP_CWD" ) );
-  strcat_s( szFile, FILENAME_MAX, name );
-  strcat_s( szFile, FILENAME_MAX, "-" );
-  strcat_s( szFile, FILENAME_MAX, IupGetAttribute( NULL, "APP_VER" ) );
-  strcat_s( szFile, FILENAME_MAX, ".dll" );
+  strcpy_s( szFile, PATH_MAX, IupGetAttribute( NULL, "APP_CWD" ) );
+  strcat_s( szFile, PATH_MAX, name );
+  strcat_s( szFile, PATH_MAX, "-" );
+  strcat_s( szFile, PATH_MAX, IupGetAttribute( NULL, "APP_VER" ) );
+  strcat_s( szFile, PATH_MAX, ".dll" );
   lib = LoadLibrary( szFile );
   if ( !lib )
   {

@@ -40,14 +40,39 @@ int guiFile_OnKAny( Ihandle *ih, int c );
 int guiName_OnValueChanged( Ihandle *ih );
 int guiFile_OnValueChanged( Ihandle *ih );
 
+
+typedef struct _GUI_BASE
+{
+  GUI_MAIN main;
+  GUI_MAIN base;
+  GUI_TEXT name;
+  GUI_SPIN addr;
+  GUI_SPIN size;
+  GUI_SPIN depth;
+} GUI_BASE;
+
+int guiAddr_OnKAny( Ihandle *ih, int c );
+int guiSize_OnKAny( Ihandle *ih, int c );
+int guiDepth_OnKAny( Ihandle *ih, int c );
+int guiAddr_OnValueChanged( Ihandle *ih );
+int guiSize_OnValueChanged( Ihandle *ih );
+int guiDepth_OnValueChanged( Ihandle *ih );
+
 typedef struct _GUI_PFM
 {
   GUI_MAIN main;
   GUI_TEXT name;
   GUI_TEXT file;
-  Ihandle *fsetEndian;
+  GUI_SPIN memory;
   Ihandle *listEndian;
+#ifdef GUI_SHARED
+  GUI_BASE base;
+#else
+  GUI_BASE base[0x10];
+#endif
 } GUI_PFM;
+
+int guiEndian_OnValueChanged( Ihandle *ih );
 
 typedef struct _GUI_TAR
 {
@@ -190,6 +215,7 @@ typedef struct _GUI
   GUI_TAR       tar;
   GUI_HACKS   hacks;
   GUI_CODES  *codes;
+  GUI_BASE    *base;
   GUI_VAL      *val;
   GUI_CMP      *cmp;
 } GUI;
@@ -204,20 +230,24 @@ Ihandle* meMkList( Icallback func, ... );
 #define guiGetListPos_Lbl(  vbox, pos ) IupGetChild( guiGetListPos_Fset( vbox, pos ), 0 )
 
 // Used by min 2 initialisers, search & code sections
-void guiCmp_OnInit( void );
-void guiVal_OnInit( void );
+void  guiCmp_OnInit( void );
+void  guiVal_OnInit( void );
 
 // On Language Change should call these
-void guiOrg_OnLang( void );
-void guiPfm_OnLang( void );
-void guiTar_OnLang( void );
-void guiCmp_OnLang( void );
-void guiVal_OnLang( void );
+void  guiOrg_OnLang( void );
+void  guiPfm_OnLang( void );
+void guiBase_OnLang( void );
+void  guiTar_OnLang( void );
+void  guiPfl_OnLang( void );
+void  guiCmp_OnLang( void );
+void  guiVal_OnLang( void );
 
-int guiOrg_OnShow( Ihandle *ih );
-int guiPfm_OnShow( Ihandle *ih );
-int guiTar_OnShow( Ihandle *ih );
-int guiQry_OnShow( Ihandle *ih );
+int   guiOrg_OnShow( Ihandle *ih );
+int   guiPfm_OnShow( Ihandle *ih );
+int  guiBase_OnShow( Ihandle *ih );
+int   guiTar_OnShow( Ihandle *ih );
+int   guiPfl_OnShow( Ihandle *ih );
+int   guiQry_OnShow( Ihandle *ih );
 
 /**
   \brief Loads *.dll, *.so, etc
@@ -236,8 +266,8 @@ HMODULE meLoadLib( char* name, HACK_FUNC **hfunc, CODE_FUNC **cfunc );
 **/
 HMODULE meFreeLib( HMODULE lib );
 
-int meMenu_ButtonCB( Ihandle *ih, int button, int pressed, int x, int y, char* status );
-int meListP_ButtonCB( Ihandle    *ih, int button, int pressed, int x, int y, char* status );
+int guiMenu_OnValueChanged( Ihandle *ih );
+int meListP_ButtonCB( Ihandle *ih, int button, int pressed, int x, int y, char* status );
 int meListP_MotionCB( Ihandle *sbox, int x, int y, char* status );
 /** \brief Converts number to text
   \param value Number to convert

@@ -12,36 +12,37 @@ void guiPfm_OnLang( void )
   strcat_s( pfm_lb, pfm_lb_max, " " );
   strcat_s( pfm_lb, pfm_lb_max, lang->x[ LNG_BIG ] );
   IupSetAttribute( gui->pfm.main.fset,              IUP_TITLE, lang->x[ LNG_PLATFORM ] );
-  IupSetAttribute( gui->pfm.fsetEndian,             IUP_TITLE, lang->x[ LNG_ENDIAN ] );
+  IupSetAttribute( gui->pfm.listEndian,             IUP_TITLE, lang->x[ LNG_ENDIAN ] );
   IupSetAttribute( guiGetListPos_Lbl( hbox, ENDIAN_SYS ), IUP_TITLE, lang->x[ LNG_SYSTEM ] );
   IupSetAttribute( guiGetListPos_Lbl( hbox, ENDIAN_L ),   IUP_TITLE, lang->x[ LNG_LITTLE ] );
   IupSetAttribute( guiGetListPos_Lbl( hbox, ENDIAN_LB ),  IUP_TITLE, pfm_lb );
   IupSetAttribute( guiGetListPos_Lbl( hbox, ENDIAN_B ),   IUP_TITLE, lang->x[ LNG_BIG    ] );
+#ifdef GUI_SHARED
+  gui->base = &gui->pfm.base;
+  guiBase_OnLang();
+#endif
 }
+extern guiBase_OnInit( void );
 void guiPfm_OnInit( void )
 {
   GUI *gui = appGetGui();
-  gui->pfm.listEndian = meMkList( NULL,
+  // Endian
+  gui->pfm.listEndian = meMkList( guiEndian_OnValueChanged,
     MSTR( ENDIAN_SYS ), MSTR( ENDIAN_L ), MSTR( ENDIAN_LB ), MSTR( ENDIAN_B ), NULL );
-  gui->pfm.fsetEndian = IupFrame( gui->pfm.listEndian );
-  IupSetAttribute( gui->pfm.fsetEndian, "FLOATING", IUP_YES );
-  IupSetAttribute( gui->pfm.fsetEndian, IUP_EXPAND, IUP_HORIZONTAL );
+  IupSetAttribute( gui->pfm.listEndian, "FLOATING", IUP_YES );
+  IupSetAttribute( gui->pfm.listEndian, IUP_EXPAND, IUP_HORIZONTAL );
   // Main
 #ifdef GUI_SHARED
-  IupAppend( gui->pfm.main.vb, gui->pfm.fsetEndian );
-  IupMap( gui->pfm.fsetEndian );
+  gui->base = &gui->pfm.base;
+  gui->base->main.fset = gui->dlgMain;
+  gui->base->main.vb   = gui->vbMain;
+  guiBase_OnInit();
+  IupAppend( gui->pfm.main.vb, gui->pfm.listEndian );
+  IupMap( gui->pfm.listEndian );
 #else
-  gui->pfm.tbName = IupText( NULL );
-  gui->pfm.tbFile = IupText( NULL );
-  gui->pfm.vbName  = IupVbox( gui->pfm.tbName, NULL );
-  gui->pfm.vbFile  = IupVbox( gui->pfm.tbFile, NULL );
-  IupSetAttribute( gui->pfm.fsetName, "FLOATING", IUP_YES );
-  IupSetAttribute( gui->pfm.fsetFile, "FLOATING", IUP_YES );
-  IupSetAttribute( gui->pfm.tbName, IUP_EXPAND, IUP_HORIZONTAL );
-  IupSetAttribute( gui->pfm.tbFile, IUP_EXPAND, IUP_HORIZONTAL );
-  gui->pfm.fsetName = IupFrame( gui->pfm.vbName );
-  gui->pfm.fsetFile = IupFrame( gui->pfm.vbFile );
-  gui->pfm.vbMain  = IupVbox( gui->pfm.fsetName, gui->pfm.fsetFile, gui->pfm.fsetEndian, NULL );
+  guiText_OnInit( &gui->pfm.name, (Icallback)guiName_OnKAny, guiName_OnValueChanged );
+  guiText_OnInit( &gui->pfm.file, (Icallback)guiFile_OnKAny, guiFile_OnValueChanged );
+  gui->pfm.vbMain  = IupVbox( gui->pfm.name.fset, gui->pfm.file.fset, gui->pfm.listtEndian, NULL );
   IupSetAttribute( gui->pfm.fsetMain, "FLOATING", IUP_YES );
 #endif
   guiPfm_OnLang();
@@ -58,14 +59,25 @@ int guiPfm_OnShow( Ihandle *ih )
   IupSetAttribute( gui->org.main.fset, IUP_TITLE, appGetText( LNG_PLATFORM ) );
   IupSetAttribute( gui->pfm.name.tb, IUP_TEXT, cfg->dst.name );
   IupSetAttribute( gui->pfm.file.tb, IUP_TEXT, cfg->dst.file );
-  IupSetInt( gui->pfm.listEndian, IUP_VALUE, (int)cfg->dst.pfm.endian );
+  IupSetInt( gui->pfm.listEndian, IUP_VALUE, cfg->dst.pfm.endian );
   IupSetAttribute( gui->pfm.main.fset,  "FLOATING", IUP_NO );
   IupSetAttribute( gui->pfm.name.fset,  "FLOATING", IUP_NO );
   IupSetAttribute( gui->pfm.file.fset,  "FLOATING", IUP_NO );
-  IupSetAttribute( gui->pfm.fsetEndian, "FLOATING", IUP_NO );
+  IupSetAttribute( gui->pfm.listEndian, "FLOATING", IUP_NO );
   IupShow( gui->pfm.name.fset );
-  IupShow( gui->pfm.name.fset );
-  IupShow( gui->pfm.fsetEndian );
+  IupShow( gui->pfm.file.fset );
+  IupShow( gui->pfm.listEndian );
+#ifdef GUI_SHARED
+  gui->base = &gui->pfm.base;
+  IupShow( gui->base->base.fset );
+#endif
+  return IUP_DEFAULT;
+}
+
+int guiEndian_OnValueChanged( Ihandle *ih )
+{
+  CFG *cfg = appGetCfg();
+  cfg->dst.pfm.endian = IupGetInt( ih, IUP_VALUE );
   return IUP_DEFAULT;
 }
 #endif

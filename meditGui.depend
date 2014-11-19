@@ -850,7 +850,7 @@
 	"_guiMain.h"
 	<Ipipe.h>
 
-1416355368 c:\users\lee\documents\github\medit\_guimain.h
+1416409374 c:\users\lee\documents\github\medit\_guimain.h
 	<iup.h>
 	"appLng.h"
 	"appCfg.h"
@@ -934,10 +934,10 @@
 1416159558 source:c:\users\lee\documents\github\medit\guisea.c
 	"_guiMain.h"
 
-1416354594 source:c:\users\lee\documents\github\medit\applib.c
+1416402987 source:c:\users\lee\documents\github\medit\applib.c
 	"_guiMain.h"
 
-1416355306 source:c:\users\lee\documents\github\medit\applng.c
+1416402987 source:c:\users\lee\documents\github\medit\applng.c
 	"appLng.h"
 
 1416160266 source:c:\users\lee\documents\github\medit\guihacks.c
@@ -952,7 +952,7 @@
 1416355016 c:\users\lee\documents\github\medit\applng.h
 	<ipipe/main.h>
 
-1416354594 c:\users\lee\documents\github\medit\appcfg.h
+1416404493 c:\users\lee\documents\github\medit\appcfg.h
 	"_hack.h"
 
 1415900780 c:\users\lee\documents\github\medit\guisea.h
@@ -1027,7 +1027,7 @@
 1416354594 source:c:\users\lee\documents\github\medit\guiinfo\guifile.c
 	"../guiMain.h"
 
-1416354146 source:c:\users\lee\documents\github\medit\guiinfo\guilist.c
+1416409222 source:c:\users\lee\documents\github\medit\guiinfo\guilist.c
 	"../_guiMain.h"
 
 1416354594 source:c:\users\lee\documents\github\medit\guiinfo\guiname.c
@@ -1036,7 +1036,7 @@
 1416355017 source:c:\users\lee\documents\github\medit\guiinfo\guiorg.c
 	"../guiMain.h"
 
-1416355017 source:c:\users\lee\documents\github\medit\guiinfo\guipfm.c
+1416409245 source:c:\users\lee\documents\github\medit\guiinfo\guipfm.c
 	"../guiMain.h"
 
 1416354169 source:c:\users\lee\documents\github\medit\guiinfo\guispin.c
@@ -1069,6 +1069,15 @@
 1416354239 source:c:\users\lee\documents\github\medit\guiqry\uqry.c
 	"../guiQry.h"
 
-1416355016 source:c:\users\lee\documents\github\medit\meditsmallgui.c
+1416403763 source:c:\users\lee\documents\github\medit\meditsmallgui.c
+	"guiMain.h"
+
+1416403792 source:c:\users\lee\documents\github\medit\appcwd.c
+	"appCfg.h"
+
+1416407951 source:c:\users\lee\documents\github\medit\guiinfo\guibase.c
+	"../guiMain.h"
+
+1416403763 source:c:\users\lee\documents\github\medit\meditgui.c
 	"guiMain.h"
 

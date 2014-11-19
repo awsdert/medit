@@ -88,6 +88,9 @@
 		<Unit filename="_guiMain.h" />
 		<Unit filename="_hack.h" />
 		<Unit filename="appCfg.h" />
+		<Unit filename="appCwd.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="appLib.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -108,6 +111,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="guiHacks/guiHacks.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiInfo/guiBase.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="guiInfo/guiCmp.c">
@@ -164,7 +170,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="hack.h" />
-		<Unit filename="meditSmallGui.c">
+		<Unit filename="meditGui.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
