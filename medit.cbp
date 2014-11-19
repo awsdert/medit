@@ -98,6 +98,7 @@
 			<Add library="Ipipe-$(TARGET_NAME)" />
 			<Add directory="$(LIB)" />
 		</Linker>
+		<Unit filename="../Ipipe/ipipe/c.h" />
 		<Unit filename="medit.c">
 			<Option compilerVar="CC" />
 		</Unit>

@@ -1,11 +1,15 @@
 #pragma once
 #ifndef _GUIMAIN_H
 #define _GUIMAIN_H
-#include "search.h"
+#include "guiQry.h"
 
-void
-RdTxtHacks( HACK_FUNC *hfunc, HACKS *hacks, CODE_FUNC *cfunc, CODES *codes, Ipipe *file );
-void
-WrTxtHacks( HACK_FUNC *hfunc, HACKS *hacks, CODE_FUNC *cfunc, CODES *codes, Ipipe *file );
+OPEN_C
+
+void RdTxtHacks(
+  HACK_FUNC *hfunc, HACKL *hacks, CODE_FUNC *cfunc, CODES *codes, Ipipe *file );
+void WrTxtHacks(
+  HACK_FUNC *hfunc, HACKL *hacks, CODE_FUNC *cfunc, CODES *codes, Ipipe *file );
+
+SHUT_C
 
 #endif // _GUIMAIN_H

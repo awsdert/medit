@@ -297,8 +297,8 @@ ucv _raw2txtCodeArmaxRawWrite( CODE *raw, STRA *cl, CODE *c1, CODE *c2 )
     {
       do
       {
-         c1.a[i].u = raw->a[i].u & 0xffffffff;
-         c2.a[i].u = raw->a[i].u >> 32;
+         c1->a[i].u = raw->a[i].u & 0xffffffff;
+         c2->a[i].u = raw->a[i].u >> 32;
         _raw2txtCodeArmaxRawWrite( &c1, cl );
         _raw2txtCodeArmaxRawWrite( &c2, cl );
         c1.addr[0] += 8;

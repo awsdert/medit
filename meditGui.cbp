@@ -2,13 +2,13 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="meditGui" />
+		<Option title="meditSmallGui" />
 		<Option pch_mode="2" />
 		<Option compiler="msvc2013-x86" />
 		<Build>
 			<Target title="msw-x86-d-vc">
-				<Option output="$(BIN)/medit/meditGui-$(TARGET_NAME)" prefix_auto="1" extension_auto="1" />
-				<Option object_output="$(TEMP)/obj/medit/gui/$(TARGET_NAME)" />
+				<Option output="$(BIN)/medit/$(PROJECT_NAME)-$(TARGET_NAME)" prefix_auto="1" extension_auto="1" />
+				<Option object_output="$(TEMP)/obj/medit/$(PROJECT_NAME)/$(TARGET_NAME)" />
 				<Option type="0" />
 				<Option compiler="msvc2013-x86" />
 				<Compiler>
@@ -44,8 +44,8 @@
 				</Linker>
 			</Target>
 			<Target title="msw-x86-vc">
-				<Option output="$(BIN)/medit/meditGui-$(TARGET_NAME)" prefix_auto="1" extension_auto="1" />
-				<Option object_output="$(TEMP)/obj/medit/gui/$(TARGET_NAME)" />
+				<Option output="$(BIN)/medit/$(PROJECT_NAME)-$(TARGET_NAME)" prefix_auto="1" extension_auto="1" />
+				<Option object_output="$(TEMP)/obj/medit/$(PROJECT_NAME)/$(TARGET_NAME)" />
 				<Option type="0" />
 				<Option compiler="msvc2013-x86" />
 				<Compiler>
@@ -82,44 +82,89 @@
 		</Build>
 		<Compiler>
 			<Add option="/W3" />
+			<Add option="/DGUI_SHARED" />
 		</Compiler>
-		<Unit filename="OnInit.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="RdTxtHacks.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="_guiMain.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="../Ipipe/ipipe/c.h" />
 		<Unit filename="_guiMain.h" />
 		<Unit filename="_hack.h" />
-		<Unit filename="data.h" />
+		<Unit filename="appCfg.h" />
+		<Unit filename="appLib.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="appLng.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="appLng.h" />
 		<Unit filename="ftoa.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="guiMain.c">
+		<Unit filename="guiHacks/RdTxtHacks.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiHacks/guiCode.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiHacks/guiCodes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiHacks/guiHacks.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiInfo/guiCmp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiInfo/guiFile.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiInfo/guiList.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiInfo/guiName.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiInfo/guiOrg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiInfo/guiPfm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiInfo/guiSpin.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiInfo/guiTar.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiInfo/guiText.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiInfo/guiVal.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="guiMain.h" />
-		<Unit filename="lang.c">
+		<Unit filename="guiMenu.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="lang.h" />
-		<Unit filename="search.c">
+		<Unit filename="guiQry.h" />
+		<Unit filename="guiQry/bQry.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="search.h" />
-		<Unit filename="search_fpn.c">
+		<Unit filename="guiQry/fQry.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="search_gui.c">
+		<Unit filename="guiQry/guiQry.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="search_int.c">
+		<Unit filename="guiQry/iQry.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="search_uint.c">
+		<Unit filename="guiQry/search.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiQry/uQry.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="hack.h" />
+		<Unit filename="meditSmallGui.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
@@ -127,6 +172,15 @@
 			<envvars />
 			<debugger />
 			<lib_finder disable_auto="1" />
+			<DoxyBlocks>
+				<comment_style block="0" line="2" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

@@ -7,8 +7,8 @@
 		<Option compiler="msvc2013-x86" />
 		<Build>
 			<Target title="msw-x86-d-vc">
-				<Option output="$(BIN)/medit/hackProc" prefix_auto="1" extension_auto="1" />
-				<Option object_output="$(TMP)/obj/medit/hackProc/$(TARGET_NAME)/" />
+				<Option output="$(BIN)/medit/$(PROJECT_NAME)-$(TARGET_NAME)" prefix_auto="1" extension_auto="1" />
+				<Option object_output="$(TMP)/obj/medit/$(PROJECT_NAME)/$(TARGET_NAME)/" />
 				<Option type="1" />
 				<Option compiler="msvc2013-x86" />
 				<Compiler>
@@ -36,8 +36,8 @@
 				</Linker>
 			</Target>
 			<Target title="msw-x86-vc">
-				<Option output="$(BIN)/medit/hackProc" prefix_auto="1" extension_auto="1" />
-				<Option object_output="$(TMP)/obj/medit/hackProc/$(TARGET_NAME)/" />
+				<Option output="$(BIN)/medit/$(PROJECT_NAME)-$(TARGET_NAME)" prefix_auto="1" extension_auto="1" />
+				<Option object_output="$(TMP)/obj/medit/$(PROJECT_NAME)/$(TARGET_NAME)/" />
 				<Option type="1" />
 				<Option compiler="msvc2013-x86" />
 				<Compiler>
@@ -74,6 +74,8 @@
 		<Linker>
 			<Add directory="$(3RDPARTY)/lib" />
 		</Linker>
+		<Unit filename="../c.h" />
+		<Unit filename="../hack.h" />
 		<Unit filename="EnableDebugPrivileges.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -86,14 +88,12 @@
 		<Unit filename="Itoa_s.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../c.h" />
 		<Unit filename="entryPoint.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="entryThread.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="../hack.h" />
 		<Unit filename="hackProc.c">
 			<Option compilerVar="CC" />
 		</Unit>

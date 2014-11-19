@@ -1,10 +1,24 @@
-#include "guiMain.h"
-long
-_RdTxtHacks( HACK_FUNC *hfunc, HACKS *hacks, CODE_FUNC *cfunc, CODES *codes, Ipipe *file, CODELIST *cl, long cgid, long hid, long pid, long cdepth, long  mode, usv i )
+#include "../guiMain.h"
+ushort _RdTxtHacks(
+  HACK_FUNC *hfunc,
+  HACKL        *hl,
+  CODE_FUNC *cfunc,
+  CODES     *codes,
+  Ipipe      *file,
+  CODELIST     *cl,
+  long        cgid,
+  ushort       hid,
+  uchar        pid,
+  ushort    cdepth,
+  long        mode,
+  ushort         i )
 {
-  DWORD len = 0;
-  long cid = 0, depth = cdepth, gid = -1, j = 0, k = 0;
-  HACK *hack = &hacks->buff[hid];
+  DWORD    len = 0;
+  long     cid = 0, gid = -1, j = 0, k = 0;
+  ushort depth = cdepth;
+  HACKS *hacks = &hl->hacks;
+  HACK   *hack = &hacks->a[hid];
+  char   *name = hl->names[hid];
   if ( mode == 0 )
     len = ipRdLine( file, cl->x[i], cl->cols );
   else
@@ -27,43 +41,43 @@ _RdTxtHacks( HACK_FUNC *hfunc, HACKS *hacks, CODE_FUNC *cfunc, CODES *codes, Ipi
     {
       cl->rows = i;
       for ( i = 0; i < cl->rows;
-        i = cfunc->txt2raw( &codes->buff[cid], cl, i ), ++cid );
+        i = cfunc->txt2raw( &codes->a[cid], cl, i ), ++cid );
       cl->rows = 30;
       if ( hid == 0 )
       {
-        _RdTxtHacks( hfunc, hacks, cfunc, codes, file, cl, gid, 1, 0, 0, 2, i );
+        _RdTxtHacks( hfunc, hl, cfunc, codes, file, cl, gid, 1, 0, 0, 2, i );
         break;
       }
-      else if ( hack->pid != pid || depth == cdepth )
+      else if ( hack->_pi != pid || depth == cdepth )
         ++hid;
       else if ( depth < cdepth )
       {
         if ( depth > 0 )
-          hack->pid = -depth;
+          hack->_pi = -depth;
         else if ( cdepth > 0 )
-          hack->pid = -(cdepth - 1);
+          hack->_pi = -(cdepth - 1);
         else
-          hack->pid = 0;
+          hack->_pi = 0;
         break;
       }
       else
       {
-        hack->pid = hid - 1;
-        hid = _RdTxtHacks( hfunc, hacks, cfunc, codes, file, cl, cgid, hid + 1, hid - 1, depth, 2, i );
+        hack->_pi = hid - 1;
+        hid = _RdTxtHacks( hfunc, hl, cfunc, codes, file, cl, cgid, hid + 1, hid - 1, depth, 2, i );
         mode = 3;
       }
       /* Finish reading hack name/header */
-      hack = &hacks->buff[ hid ];
+      hack = &hacks->a[ hid ];
       if ( mode == 3 )
       {
-        if ( hack->pid < 0 )
+        if ( hack->_pi < 0 )
         {
-          if ( -hack->pid != cdepth )
+          if ( -hack->_pi != cdepth )
             break;
-          hack->pid = pid;
+          hack->_pi = pid;
         }
         ++hid;
-        hack = &hacks->buff[ hid ];
+        hack = &hacks->a[ hid ];
       }
       mode = 0;
     }
@@ -82,8 +96,8 @@ _RdTxtHacks( HACK_FUNC *hfunc, HACKS *hacks, CODE_FUNC *cfunc, CODES *codes, Ipi
         way to ensure the user is forced to enter a gid before converters
         requiring one can work
       */
-      hack->pid = pid;
-      gid = hfunc->txt2raw( hack, file );
+      hack->_pi = pid;
+      gid = hfunc->txt2raw( hack, hl, file );
       if ( gid != cgid && hid > 0 )
       {
         mode = 3;
@@ -100,12 +114,12 @@ _RdTxtHacks( HACK_FUNC *hfunc, HACKS *hacks, CODE_FUNC *cfunc, CODES *codes, Ipi
           ++depth;
         else
         {
-          hack->name[j] = cl->x[i][k];
+          name[j] = cl->x[i][k];
           ++j; ++k;
         }
       }
       while ( k < cl->cols && cl->x[i][k] );
-      hack->name[ NAME_LAST ] = 0;
+      name[ NAME_LAST ] = 0;
       //IupMessage( "Hack Load", hacks->buff[i].name );
       mode = 1;
       i = 0;
@@ -121,11 +135,15 @@ _RdTxtHacks( HACK_FUNC *hfunc, HACKS *hacks, CODE_FUNC *cfunc, CODES *codes, Ipi
   }
   return hid;
 }
-void
-RdTxtHacks( HACK_FUNC *hfunc, HACKS *hacks, CODE_FUNC *cfunc, CODES *codes, Ipipe *file )
+void RdTxtHacks(
+  HACK_FUNC *hfunc,
+  HACKL        *hl,
+  CODE_FUNC *cfunc,
+  CODES     *codes,
+  Ipipe      *file )
 {
   CODELIST cl = {0};
   cl.rows = 30;
   cl.cols = 50;
-  _RdTxtHacks( hfunc, hacks, cfunc, codes, file, &cl, -1, 0, 0, 0, 0, 0 );
+  _RdTxtHacks( hfunc, hl, cfunc, codes, file, &cl, -1, 0, 0, 0, 0, 0 );
 }

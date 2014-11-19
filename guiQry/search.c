@@ -1,4 +1,4 @@
-#include "search.h"
+#include "../guiQry.h"
 #define SEARCH( T, C ) \
   ipSkPipe( &mepI.pipe, 0, FPOS_SOF ); \
   strcpy_s( szPath, 10, szNow ); \
@@ -24,34 +24,34 @@
   while ( i < C ); \
   ipShutPipe( &mepO.pipe );
 
-void search( usv used )
+void search( ushort used )
 {
   Ipipe prev = {0};
-  MEPIPE mepI = {{0}}, mepO = {{0}}, mepP = {{0}};
-  ME_LPV fpMecM = {0}, fpMecN = {0};
-  ME_SHV siMecM = {0}, siMecN = {0};
-  ME_UHV uiMecM = {0}, uiMecN = {0};
+  MEPIPE   mepI   = {{0}}, mepO = {{0}}, mepP = {{0}};
+  ME_LPN   fpMecM = {0}, fpMecN = {0};
+  ME_LINT  siMecM = {0}, siMecN = {0};
+  ME_ULINT uiMecM = {0}, uiMecN = {0};
   DWORD  isEof = 0;
-  scv siSz[] =
+  schar iSz[] =
     {
-      sizeof(huge),
+      sizeof(lint),
       sizeof(long),
       sizeof(int),
       sizeof(short),
       sizeof(char)
-    }, *uiSz = siSz,
-    fpSz[] =
+    }, *uSz = iSz,
+    fSz[] =
     {
-      sizeof(lpv),
-      sizeof(dpv),
-      sizeof(fpv)
+      sizeof(lpn),
+      sizeof(dpn),
+      sizeof(fpn)
     };
   int i = 0, c = 5, qNo = 0;
   char szDmp[4] = {0}, szPath[10] = {0}, szNow[10] = "q", szOld[10] = {0};
   char const
-    fpEx[] = ".mef",
-    siEx[] = ".mes",
-    uiEx[] = ".meu";
+    fEx[] = ".mef",
+    iEx[] = ".mes",
+    uEx[] = ".meu";
   mepI.pipe = ipOpenFile( "test.xps", 0666, SHARE_READ );
   _itoa_s( qNo, szDmp, 4, 10 );
   strcat_s( szNow, 10, DIR_SEP );
@@ -75,9 +75,9 @@ void search( usv used )
   ipShutPipe( &mepI.pipe );
   ipShutPipe( &mepO.pipe );
   mepI.pipe = ipOpenFile( szPath, 0666, 0 );
-  SEARCH( fp, 3 );
-  SEARCH( si, 5 );
-  SEARCH( ui, 5 );
+  SEARCH( f, 3 );
+  SEARCH( i, 5 );
+  SEARCH( u, 5 );
   /* Close Down Pipes */
   if ( prev.pipe )
   {

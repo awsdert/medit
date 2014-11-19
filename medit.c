@@ -1,12 +1,20 @@
-#include <stdio.h>
-#include <string.h>
+// Safeguard against forced c++ compile
+#include "c.h"
+#include STD_INC( stdio )
+#include STD_INC( stdlib )
+#include STD_INC( string )
+USING( std::memset )
+USING( std::fopen_s )
+USING( std::getenv_s )
+USING( std::strcat_s )
+USING( std::strcpy_s )
+USING( std::strtok_s )
+USING( std::string )
 // This will be used for short-cuts & starting x86/x64 versions
 #define SEG_LENGTH 128
-#define SEG_LEN 127
-#define SEG_DELIM "\\"
+#define SEG_LEN    127
 #define CMD_LENGTH 8192
-#define CMD_LEN 8191
-#define EXE_EXT ".exe"
+#define CMD_LEN    8191
 #define __STR( STRING ) #STRING
 #define _STR( STRING ) __STR( STRING )
 #define STR( STRING ) _STR( STRING )
@@ -15,7 +23,7 @@ char cmd[CMD_LENGTH] = {0};
 int main( int argc, char const *argv[] )
 {
   int segc = 0;
-#ifdef _WIN3
+#ifdef _WIN32
   FILE *test = NULL;
 #endif // _WIN32
   size_t length = 0;
@@ -44,7 +52,7 @@ int main( int argc, char const *argv[] )
 #ifdef _WIN32
   getenv_s( &length, path, CMD_LEN, "SYSTEM" );
   strcat_s( path, CMD_LEN, "wowsys64" );
-  if ( fopen_s( &test, path, "r" ) == ERROR_SEVERITY_SUCCESS )
+  if ( fopen_s( &test, path, "r" ) == 0 )
     strcat_s( arcSeg, SEG_LEN, "msw-x64" );
   else
     strcat_s( arcSeg, SEG_LEN, "msw-x86" );

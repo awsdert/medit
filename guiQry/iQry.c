@@ -1,4 +1,4 @@
-#include "search.h"
+#include "../guiQry.h"
 
 #define _QCAST( NUM, T, BUFF ) \
   NUM = *((T*)&(BUFF[i]))
@@ -10,20 +10,27 @@
   }
 #define QCMP1( CMP_T ) res = ( iNum CMP_T pNum );
 #define QCMP2( CMP_T ) res = (( iNum CMP_T pNum ) != pNum);
-void siQry( ucv used, MEPIPE *mepI, MEPIPE *mepO, MEPIPE *mepP, Ipipe prev, scv bytes, ME_SHV *mecM, ME_SHV *mecN )
+void iQry( uchar    used,
+          MEPIPE   *mepI,
+          MEPIPE   *mepO,
+          MEPIPE   *mepP,
+          Ipipe     prev,
+          schar    bytes,
+          ME_LINT  *mecM,
+          ME_LINT  *mecN )
 {
   DWORD cbRead = 0,
-    shvSz = sizeof(shv),
-    slvSz = sizeof(slv),
-    sivSz = sizeof(siv),
-    ssvSz = sizeof(ssv),
-    scvSz = sizeof(scv);
-  shv
+    lintSz  = sizeof(lint),
+    longSz  = sizeof(long),
+    intSz   = sizeof(int),
+    shortSz = sizeof(short),
+    scharSz = sizeof(char);
+  lint
     iNum = 0,
     pNum = 0;
-  DWORD i = 0, c = BUFSIZ - bytes;
-  ucv res = 0;
-  scv offset = -( bytes - 1 );
+  ulong i = 0, c = BUFSIZ - bytes;
+  uchar res = 0;
+  schar offset = -( bytes - 1 );
   cbRead = ipRdPipe( &mepI->pipe, mepI->buff, BUFSIZ );
   if ( !prev.pipe )
     memset( mepO->buff, UCHAR_MAX, BUFSIZ );
@@ -46,11 +53,11 @@ old:
       res = mepO->buff[i];
       if ( !res )
         goto next;
-      QCAST( shv )
-      else QCAST( slv )
-      else QCAST( siv )
-      else QCAST( ssv )
-      else QCAST( scv )
+      QCAST( lint )
+      else QCAST( long  )
+      else QCAST( int   )
+      else QCAST( short )
+      else QCAST( schar )
         c = 0;
       switch ( used )
       {

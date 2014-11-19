@@ -35,11 +35,11 @@ void ftoa( double value, char* dst, int sigDigits )
   dst[++i] = 0;
 }
 
-void ftoa_s( double value, char* dst, uzv length, int sigDigits )
+void ftoa_s( double value, char* dst, size_t length, int sigDigits )
 {
   char tmp[ _CVTBUFSIZE ] = {0};
   int dec = 0, sign = 0;
-  uzv i = 0, d = 0, c = 0;
+  size_t i = 0, d = 0, c = 0;
   if ( length < 1 )
     return;
   memset( dst, 0, length );

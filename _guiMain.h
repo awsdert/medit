@@ -1,27 +1,68 @@
 #pragma once
-#ifndef __MAIN_H
-#define __MAIN_H
-
 #include <iup.h>
-#include "lang.h"
-#include "data.h"
+#include "appLng.h"
+#include "appCfg.h"
 
-typedef struct _MEGUI_MAIN
-{
-  Ihandle *main_dlg;
-  Ihandle *main_vbox;
-  Ihandle *main_dd;
-} MEGUI_MAIN;
+OPEN_C
 
-typedef struct _MEGUI_CMP
+typedef struct _GUI_MAIN
 {
-  Ihandle *main_fset;
-  Ihandle *main_vbox;
-  Ihandle *main_list;
-  Ihandle *dump_fset;
-  Ihandle *redo_fset;
-  Ihandle *undo_fset;
-} MEGUI_CMP;
+  Ihandle *fset;
+  Ihandle *vb;
+} GUI_MAIN;
+
+typedef struct _GUI_TEXT
+{
+  Ihandle *fset;
+  Ihandle *tb;
+} GUI_TEXT;
+
+void guiText_OnInit( GUI_TEXT *guiText, Icallback OnKAny, Icallback OnValueChanged );
+
+typedef struct _GUI_SPIN
+{
+  Ihandle *fset;
+  Ihandle *tb;
+  Ihandle *spin;
+} GUI_SPIN;
+
+void guiSpin_OnInit( GUI_SPIN *guiSpin, Icallback OnKAny, Icallback OnValueChanged );
+
+typedef struct _GUI_ORG
+{
+  GUI_MAIN main;
+  GUI_TEXT name;
+  GUI_TEXT file;
+} GUI_ORG;
+
+int guiName_OnKAny( Ihandle *ih, int c );
+int guiFile_OnKAny( Ihandle *ih, int c );
+int guiName_OnValueChanged( Ihandle *ih );
+int guiFile_OnValueChanged( Ihandle *ih );
+
+typedef struct _GUI_PFM
+{
+  GUI_MAIN main;
+  GUI_TEXT name;
+  GUI_TEXT file;
+  Ihandle *fsetEndian;
+  Ihandle *listEndian;
+} GUI_PFM;
+
+typedef struct _GUI_TAR
+{
+  GUI_MAIN main;
+  GUI_TEXT name;
+  GUI_TEXT file;
+  GUI_TEXT path;
+  GUI_TEXT targ;
+} GUI_TAR;
+
+typedef struct _GUI_CMP
+{
+  GUI_MAIN    main;
+  Ihandle *listCmp;
+} GUI_CMP;
 
 typedef enum _MEVAL
 {
@@ -41,48 +82,143 @@ typedef enum _MEVAL
   VAL_COUNT
 } MEVAL_T;
 
-typedef struct _MEGUI_VAL
+typedef struct _GUI_VAL
 {
-  Ihandle *main_fset;
-  Ihandle *main_vbox;
-  Ihandle *main_tbox;
-  Ihandle *type_lbl;
-  Ihandle *type_list;
-} MEGUI_VAL;
+  GUI_MAIN     main;
+  GUI_MAIN    value;
+  Ihandle  *tbValue;
+  Ihandle *listType;
+} GUI_VAL;
 
-typedef struct _MEGUI_SEA
-{
-  Ihandle *main_fset;
-  Ihandle *main_vbox;
-  Ihandle *main_list;
-} MEGUI_SEA;
+int guiVal_OnKAny( Ihandle *ih, int c );
+int guiVal_OnValueChanged( Ihandle *ih );
 
-typedef struct _MEGUI_RES
+typedef enum _LIST_T
 {
-  Ihandle *main_fset;
-  Ihandle *main_vbox;
+  LIST_FIRST = 0,
+  LIST_PREV,
+  LIST_NEXT,
+  LIST_FINAL,
+  LIST_NEW,
+  LIST_DEL,
+  LIST_MOV,
+  LIST_COUNT
+} LIST_T;
+
+typedef struct _GUI_CODE
+{
+  GUI_MAIN     main;
+  GUI_MAIN     code;
+  GUI_SPIN  spinVal;
+  GUI_CMP       cmp;
+  GUI_VAL       val;
+  Ihandle *listCode;
+} GUI_CODE;
+
+typedef struct _GUI_CODES
+{
+  GUI_MAIN      main;
+  GUI_MAIN     codes;
+  GUI_CODE      code;
+  Ihandle *treeCodes;
+  Ihandle   *listMod;
+  Ihandle   *listPos;
+} GUI_CODES;
+
+typedef struct _GUI_HACK
+{
+  GUI_MAIN   main;
+  GUI_TEXT   name;
+  GUI_CODES codes;
+  GUI_CODE   code;
+  Ihandle *spinID;
+} GUI_HACK;
+
+typedef struct _GUI_HACKS
+{
+  GUI_MAIN   main;
+  GUI_MAIN  hacks;
+  GUI_HACK   hack;
+  GUI_CODES codes;
+  Ihandle *treeHacks;
+  Ihandle *listPos;
+} GUI_HACKS;
+
+typedef enum _QRY_T
+{
+  QRY_ANY = 0,
+  QRY_MUST,
+  QRY_NONE,
+  QRY_COUNT
+} QRY_T;
+
+typedef struct _GUI_QRY
+{
+  GUI_MAIN     main;
+  GUI_CMP       cmp;
+  Ihandle *listType;
+  Ihandle  *listVal;
+  Ihandle  *spinVal;
+  uchar q; uchar  c;
+#ifdef GUI_SHARED
+  GUI_VAL val;
+#else
+  GUI_VAL val[QRY_COUNT][CMP_COUNT];
+#endif
+} GUI_QRY;
+
+typedef struct _GUI_RES
+{
+  GUI_MAIN   main;
+  GUI_CODES codes;
   /* Matrix Box */
-  Ihandle *main_mbox;
-} MEGUI_RES;
+  Ihandle   *mbMain;
+} GUI_RES;
 
-typedef struct _MEGUI
+typedef struct _GUI
 {
-  char font[20];
-  char fontSize[5];
-  MEGUI_MAIN main;
-  MEGUI_SEA  sea;
-  MEGUI_RES  res;
-  MEGUI_VAL  val;
-  MEGUI_CMP  cmp;
-} MEGUI;
+  char     font[20];
+  char  fontSize[5];
+  Ihandle  *dlgMain;
+  Ihandle   *vbMain;
+  Ihandle *listMain;
+  Ihandle  *listSet;
+  GUI_QRY       qry;
+  GUI_RES       res;
+  GUI_ORG       org;
+  GUI_PFM       pfm;
+  GUI_TAR       tar;
+  GUI_HACKS   hacks;
+  GUI_CODES  *codes;
+  GUI_VAL      *val;
+  GUI_CMP      *cmp;
+} GUI;
 
-MEGUI* meGetGui( void );
+GUI* appGetGui( void );
+void execHacksId( pid_t pid );
 
 Ihandle* meMkList( Icallback func, ... );
+#define guiGetListPosFset( ih, pos ) IupGetChild( IupGetChild( ih, 0 ), pos )
+#define guiGetListPosLbl(  ih, pos ) IupGetChild( guiGetListPosFset(ih, pos) , 0 )
+#define guiGetListPos_Fset( vbox, pos ) IupGetChild( vbox, pos )
+#define guiGetListPos_Lbl(  vbox, pos ) IupGetChild( guiGetListPos_Fset( vbox, pos ), 0 )
 
-int meSea_OnInit( Ihandle *ih );
-int meCmp_OnInit( Ihandle *ih );
-int meVal_OnInit( Ihandle *ih );
+// Used by min 2 initialisers, search & code sections
+void guiCmp_OnInit( void );
+void guiVal_OnInit( void );
+
+// On Language Change should call these
+void guiOrg_OnLang( void );
+void guiPfm_OnLang( void );
+void guiTar_OnLang( void );
+void guiCmp_OnLang( void );
+void guiVal_OnLang( void );
+
+int guiOrg_OnShow( Ihandle *ih );
+int guiPfm_OnShow( Ihandle *ih );
+int guiTar_OnShow( Ihandle *ih );
+int guiQry_OnShow( Ihandle *ih );
+
 /**
   \brief Loads *.dll, *.so, etc
   \param name 1st part of library filename, version and extension is appended to this
@@ -117,7 +253,6 @@ void ftoa( double value, char* dst, int sigDigits );
   \param sigDigits How many digits after decimal point to include
   Will NULL terminate dst
 **/
-void ftoa_s( double value, char *dst, uzv length, int sigDigits );
+void ftoa_s( double value, char *dst, size_t length, int sigDigits );
 
-
-#endif
+SHUT_C
