@@ -6,5 +6,6 @@
 		<Project filename="../Ipipe/Ipipe.cbp" />
 		<Project filename="medit.cbp" />
 		<Project filename="hackProc/hackProc.cbp" />
+		<Project filename="../iup/iup.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

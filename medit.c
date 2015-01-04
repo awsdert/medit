@@ -1,5 +1,5 @@
 // Safeguard against forced c++ compile
-#include "c.h"
+#include <ipipe/c.h>
 #include STD_INC( stdio )
 #include STD_INC( stdlib )
 #include STD_INC( string )

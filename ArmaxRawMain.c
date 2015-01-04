@@ -1,14 +1,18 @@
 #include "ArmaxRawMain.h"
 
-C_EXT ARMAX_RAW_EXP BOOL APIENTRY
+EXT_C ARMAX_RAW_EXP BOOL APIENTRY
   DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
-  HACK_FUNC* hfunc = GetHackFuncs();
-  CODE_FUNC* cfunc = GetCodeFuncs();
-  hfunc->raw2txt = raw2txtHackArmaxRaw;
-  hfunc->txt2raw = txt2rawHackArmaxRaw;
-  cfunc->raw2txt = raw2txtCodeArmaxRaw;
-  cfunc->txt2raw = txt2rawCodeArmaxRaw;
+  HACK_LIB_COM* hfunc = GetHackFuncs();
+  CODE_LIB_COM* cfunc = GetCodeFuncs();
+  hfunc->OnLoad  = armaxRawHack_OnLoad;
+  hfunc->RdLine  = armaxRawHack_RdLine;
+  hfunc->OnSave  = armaxRawHack_OnSave;
+  hfunc->WrLine  = armaxRawHack_WrLine;
+  hfunc->raw2txt = armaxRawHack_Raw2Txt;
+  hfunc->txt2raw = armaxRawHack_Txt2Raw;
+  cfunc->raw2txt = armaxRawCode_Raw2Txt;
+  cfunc->txt2raw = armaxRawCode_Txt2Raw;
   switch (fdwReason)
   {
   case DLL_PROCESS_ATTACH:

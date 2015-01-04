@@ -67,12 +67,15 @@
 		<Compiler>
 			<Add option="/W3" />
 			<Add directory="$(3RDPARTY)/include" />
+			<Add directory="$(IPIPE)" />
 		</Compiler>
 		<ResourceCompiler>
 			<Add directory="$(3RDPARTY)/include" />
+			<Add directory="$(IPIPE)" />
 		</ResourceCompiler>
 		<Linker>
 			<Add directory="$(3RDPARTY)/lib" />
+			<Add directory="$(LIB)" />
 		</Linker>
 		<Unit filename="../c.h" />
 		<Unit filename="../hack.h" />

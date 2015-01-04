@@ -14,6 +14,7 @@ typedef enum _LNG_T
   LNG_RESULTS,
   LNG_EDITOR,
   LNG_HACKS,
+  LNG_HACK,
   LNG_ABOUT,
   LNG_DUMP,
   LNG_UNDO,
@@ -23,12 +24,17 @@ typedef enum _LNG_T
   LNG_ENDIAN,
   LNG_SYSTEM,
   LNG_LITTLE,
+  LNG_PDP,
   LNG_BIG,
   LNG_PATH,
   LNG_TYPE,
   LNG_ID,
   LNG_MEMORY,
+  LNG_ADDRESS,
+  LNG_SIZE,
+  LNG_DEPTH,
   LNG_RANGE,
+  LNG_CODES,
   LNG_CODE,
   LNG_WRITE,
   LNG_COPY,
@@ -36,6 +42,8 @@ typedef enum _LNG_T
   LNG_REMOVE,
   LNG_COMPARISON,
   LNG_JOKER,
+  LNG__M_, // (M)
+  LNG_QQQ, // ???
   LNG_VALUE,
   LNG_ALWAYS,
   LNG_TRUE,
@@ -57,12 +65,11 @@ typedef struct _LANG
 {
   char x[LNG_T_COUNT][NAME_MAX];
 } LANG;
+extern LANG const *appLang;
 /**
   Default Language is English (GB), used only for making translations
   by another app that will be developed
 **/
-LANG const* appGetDefaultLang();
-LANG const* appGetLang();
 char const* appGetText( LNG_T text );
 
 /**

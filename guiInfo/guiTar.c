@@ -1,62 +1,92 @@
-#include "../guiMain.h"
-
+#include "guiTar.h"
+#ifndef EMULATOR
+GUI_TAR guiTar = {{NULL}};
+void guiTar_OnDefPath( char *path );
+void guiTar_OnDefExt(  char *path );
+void guiTar_OnLoad( Ipipe *file );
+void guiTar_OnReset( void );
+void guiTar_OnSave( Ipipe *file );
+void guiTar_OnApply( void );
 void guiTar_OnLang( void )
 {
-  GUI *gui = appGetGui();
-  LANG const *lang = appGetLang();
-  IupSetAttribute( gui->tar.main.fset, IUP_TITLE, lang->x[ LNG_TARGET ] );
-  IupSetAttribute( gui->tar.name.fset, IUP_TITLE, lang->x[ LNG_NAME   ] );
-  IupSetAttribute( gui->tar.file.fset, IUP_TITLE, lang->x[ LNG_FILE   ] );
-  IupSetAttribute( gui->tar.path.fset, IUP_TITLE, lang->x[ LNG_PATH   ] );
-  IupSetAttribute( gui->tar.targ.fset, IUP_TITLE, lang->x[ LNG_TARGET ] );
+  IupSetAttribute( guiTar.main.fset, IUP_TITLE, appLang->x[ LNG_TARGET ] );
+  IupSetAttribute( guiTar.name.fset, IUP_TITLE, appLang->x[ LNG_NAME   ] );
+  IupSetAttribute( guiTar.file.fset, IUP_TITLE, appLang->x[ LNG_FILE   ] );
+  IupSetAttribute( guiTar.path.fset, IUP_TITLE, appLang->x[ LNG_PATH   ] );
+  IupSetAttribute( guiTar.targ.fset, IUP_TITLE, appLang->x[ LNG_TARGET ] );
+  IupSetAttribute( guiTar.indx.fset, IUP_TITLE, appLang->x[ LNG_MEMORY ] );
+  guiBase = &guiTar.base;
+  guiBase_OnLang();
 }
-
-void guiTar_OnInit( void )
+extern void  guiPfm_OnInit( void );
+extern void guiBase_OnInit( void );
+void  guiTar_OnInit( void )
 {
-  GUI *gui = appGetGui();
-  guiText_OnInit( &gui->tar.path, NULL, NULL );
-  guiText_OnInit( &gui->tar.targ, NULL, NULL );
-#ifndef GUI_SHARED
-  guiText_OnInit( &gui->tar.name, NULL, NULL );
-  guiText_OnInit( &gui->tar.file, NULL, NULL );
-  gui->tar.main.vb   = IupVbox( gui->tar.name.fset, gui->tar.file.fset,
-                                gui->tar.path.fset, gui->tar.targ.fset, NULL );
-  gui->tar.main.fset = IupFrame( gui->tar.main.vb );
-  IupSetAttribute( gui->tar.main.fset, "FLOATING", IUP_YES );
+  guiPfm_OnInit();
+  guiText_OnInit( &guiTar.path, NULL, NULL );
+  guiText_OnInit( &guiTar.targ, NULL, NULL );
+  guiBase = &guiTar.base;
+  guiBase_OnInit();
+#ifdef GUI_SHARED
+  guiTar.main =  guiOrg.main;
+  guiTar.name =  guiOrg.name;
+  guiTar.file =  guiOrg.file;
+  IupAppend( guiTar.main.vb, guiTar.path.fset );
+  IupAppend( guiTar.main.vb, guiTar.targ.fset );
+  IupAppend( guiTar.main.vb, guiTar.base.main.fset );
+  IupMap( guiTar.path.fset );
+  IupMap( guiTar.targ.fset );
+  IupMap( guiTar.base.main.fset );
 #else
-  gui->tar.main = gui->org.main;
-  gui->tar.name = gui->org.name;
-  gui->tar.file = gui->org.file;
-  IupAppend( gui->tar.main.vb, gui->tar.path.fset );
-  IupAppend( gui->tar.main.vb, gui->tar.targ.fset );
-  IupMap( gui->tar.path.fset );
-  IupMap( gui->tar.targ.fset );
+  guiText_OnInit( &guiTar.name, NULL, NULL );
+  guiText_OnInit( &guiTar.file, NULL, NULL );
+  guiTar.main.vb   = IupVbox(  guiTar.name.fset, guiTar.file.fset,
+                                guiTar.path.fset, guiTar.targ.fset,
+                                guiTar.base.main.fset, NULL );
+  guiTar.main.fset = IupFrame( guiTar.main.vb );
+  IupSetAttribute( guiTar.main.fset, "FLOATING", IUP_YES );
 #endif
   guiTar_OnLang();
 }
 
 int guiTar_OnShow( Ihandle *ih )
 {
-  GUI *gui = appGetGui();
-  CFG *cfg = appGetCfg();
-  cfg->src.name = cfg->src.tar.name;
-  cfg->src.file = cfg->src.tar.file;
-  cfg->dst.name = cfg->dst.tar.name;
-  cfg->dst.file = cfg->dst.tar.file;
-  IupSetAttribute( gui->tar.main.fset, IUP_TITLE, appGetText( LNG_TARGET ) );
-  IupSetAttribute( gui->tar.name.tb, IUP_TEXT, cfg->dst.name );
-  IupSetAttribute( gui->tar.file.tb, IUP_TEXT, cfg->dst.file );
-  IupSetAttribute( gui->tar.path.tb, IUP_TEXT, cfg->dst.tar.path );
-  IupSetAttribute( gui->tar.targ.tb, IUP_TEXT, cfg->dst.tar.targ );
-  IupSetAttribute( gui->tar.main.fset, "FLOATING", IUP_NO );
-  IupSetAttribute( gui->tar.name.fset, "FLOATING", IUP_NO );
-  IupSetAttribute( gui->tar.file.fset, "FLOATING", IUP_NO );
-  IupSetAttribute( gui->tar.path.fset, "FLOATING", IUP_NO );
-  IupSetAttribute( gui->tar.targ.fset, "FLOATING", IUP_NO );
-  IupShow( gui->tar.name.fset );
-  IupShow( gui->tar.file.fset );
-  IupShow( gui->tar.path.fset );
-  IupShow( gui->tar.targ.fset );
+  srcName = srcTar.name;
+  srcFile = srcTar.file;
+  tmpName = tmpTar.name;
+  tmpFile = tmpTar.file;
+  appMethods.OnDefPath = guiTar_OnDefPath;
+  appMethods.OnDefExt  = guiTar_OnDefExt;
+  appMethods.OnLoad    = guiTar_OnLoad;
+  appMethods.OnReset   = guiTar_OnReset;
+  appMethods.OnSave    = guiTar_OnSave;
+  appMethods.OnApply   = guiTar_OnApply;
+  guiText_SendShowMsg( &guiTar.name, tmpName );
+  guiText_SendShowMsg( &guiTar.file, tmpFile );
+  guiText_SendShowMsg( &guiTar.path, tmpTar.path );
+  guiText_SendShowMsg( &guiTar.targ, tmpTar.targ );
+  IupSetAttribute( guiTar.main.fset, "FLOATING", IUP_NO );
+  if ( IupGetInt( guiTar.indx.spin, IUP_VALUE ) > 0 )
+  {
+    guiBase = &guiTar.base;
+    IupShow( guiTar.base.main.fset );
+  }
+  guiTar_OnLang();
   return IUP_DEFAULT;
 }
-
+void guiTar_OnLoad( Ipipe *file ) { ipRdPipe( file, &srcTar, sizeof(DATA_TAR) ); }
+void guiTar_OnReset( void ) { tmpTar = srcTar; }
+void guiTar_OnSave( Ipipe *file ) { ipWrPipe( file, &srcTar, sizeof(DATA_TAR) ); }
+void guiTar_OnApply( void ) { srcTar = tmpTar; }
+extern void guiPfm_OnDefPath( char *path );
+void guiTar_OnDefPath( char *path )
+{
+  guiPfm_OnDefPath( path );
+  strcat_s( path, PATH_MAX, DIR_SEP );
+  strcat_s( path, PATH_MAX, appSession.tar );
+}
+void guiTar_OnDefExt( char *path )
+{
+  strcat_s( path, PATH_MAX, "m-tar" );
+}
+#endif

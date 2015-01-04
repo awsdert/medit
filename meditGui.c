@@ -1,27 +1,38 @@
 #include "guiMain.h"
 static FILE *hLang = NULL;
-static GUI _gui = {0};
-static CFG _cfg = {0};
+GUI          appGui = {0};
+GUI_MAIN     guiDlg = {NULL};
+SESSION  appSession = {"en",""};
+DATA_ORG     srcOrg = {""};
+DATA_ORG     tmpOrg = {""};
+DATA_PFM     srcPfm = {""};
+DATA_PFM     tmpPfm = {""};
+DATA_TAR     tmpTar = {""};
+DATA_TAR     srcTar = {""};
+DATA_PRO     srcPro = {""};
+DATA_PRO     tmpPro = {""};
+METHODS  appMethods = {NULL};
 
-GUI* appGetGui( void ) { return &_gui; }
-CFG* appGetCfg( void ) { return &_cfg; }
-void _appInitCwd( char *argv[] );
-
+void* guiCfg_OnOpen( char *path, size_t *size )
+{
+  strcat_s( path, PATH_MAX, "session.m-cfg" );
+  *size = sizeof(SESSION);
+  return &appSession;
+}
+extern void _appInitCwd( char *argv[], char *appName );
+#ifdef TEST_HL_LIB
+extern void testHLLib( void );
+#endif // TEST_HL_LIB
 // This is the only place that needs these so no header required
-extern void    _appInitLang( void );
-extern void guiHacks_OnInit( void );
-extern void   guiOrg_OnInit( void );
-extern void   guiPfm_OnInit( void );
-extern void   guiTar_OnInit( void );
-extern void   guiQry_OnInit( void );
+extern void guiOpen( uchar saveFile );
+extern void   _appInitLang( void );
+extern void guiMenu_OnInit( void );
+extern void  guiQry_OnInit( void );
 
 int main( int argc, char *argv[] )
 {
-  GUI *gui = &_gui;
-  CFG *cfg = &_cfg;
   int    ret = 0;
   long   i = 0, p = 0, j = 0, k = 0, c = 0, l = 0, lines = 100;
-  LANG const *lang = appGetLang();
   Ipipe pipe = {0};
   char
     text[100][20] = {{0}},
@@ -29,13 +40,10 @@ int main( int argc, char *argv[] )
     szLine[ PATH_MAX ] = {0},
     *szTok = NULL, *szPrv = NULL, *szNow = NULL, *szTmp = NULL;
   HMODULE      lib = NULL;
-  HACK_FUNC* hfunc = NULL;
-  CODE_FUNC* cfunc = NULL;
+  HACK_LIB_COM* hfunc = NULL;
+  CODE_LIB_COM* cfunc = NULL;
   DWORD   size = 0;
-  HACKL     hl = {0};
-  HACKS *hacks = &hl.hacks;
-  CODES  codes = {0};
-  char **lngx = (char**)lang->x;
+  char **lngx = (char**)appLang->x;
   /* Initialise IUP */
   if ( IupOpen(&argc, &argv) == IUP_ERROR )
   {
@@ -43,30 +51,28 @@ int main( int argc, char *argv[] )
     return -1;
   }
   ipInitPiping( PP_TXT( WORKSPACE_NAME ), PP_TXT( TARGET_NAME ) );
-  _appInitCwd( argv );
-  /* Capture default font */
+  _appInitCwd( argv, "medit" );
+  // Capture default font
   szTok = NULL;
   memset( szLine, 0, PATH_MAX );
   szTmp = IupGetAttribute( NULL, "DEFAULTFONT" );
   strcpy_s( szLine, PATH_MAX, szTmp );
   szTmp = strtok_s( szLine, ", ", &szTok );
-  strcat_s( gui->font, 20, szTmp );
+  strcat_s( appGui.font, 20, szTmp );
   szTmp = strtok_s( NULL, ", ", &szTok );
-  strcat_s( gui->fontSize, 5, szTmp );
-  /* Open Configuration/Language Files */
+  strcat_s( appGui.fontSize, 5, szTmp );
+  // Prep directories in case they don't exist
   pipe = ipMkDir( "", 0666, SHARE_READ | SHARE_WRITE, ACTION_OPEN_NEW );
   ipShutPipe( &pipe );
   pipe = ipMkDir( "lang", 0666, SHARE_READ | SHARE_WRITE, ACTION_OPEN_NEW );
   ipShutPipe( &pipe );
-  pipe = ipMkFile("medit.mecfg", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
-  if ( !pipe.pipe )
-    goto mkGui;
-  ipRdPipe( &pipe, &cfg, sizeof(CFG) );
-  ipShutPipe( &pipe );
-  cfg->lang[6] = 0; // Just force a NULL character
-  appLoadLang( cfg->lang );
-mkGui:
-  //lib = meLoadLib( "ArmaxRaw", &hfunc, &cfunc );
+  // Just force a NULL character
+  appSession.lang[6] = 0;
+  appLoadLang( appSession.lang );
+#ifdef TEST_HL_LIB
+  // Change string to match library being tested
+  testHLLib();
+  lib = appLoadLib( "ArmaxRaw", &hfunc, &cfunc );
   if ( lib )
   {
     memset( szLine, 0, PATH_MAX );
@@ -77,62 +83,25 @@ mkGui:
     ipShutPipe( &pipe );
     memset( &pipe, 0, sizeof( Ipipe ) );
   }
-  /* Get on with GUI */
-  // Organisation
-  guiOrg_OnInit();
-  // Platform
-#ifdef GUI_SHARED
-  gui->pfm.main = gui->org.main;
-  gui->pfm.name = gui->org.name;
-  gui->pfm.file = gui->org.file;
 #endif
-  guiPfm_OnInit();
-  // Target
-#ifdef GUI_SHARED
-  gui->tar.main = gui->org.main;
-  gui->tar.name = gui->org.name;
-  gui->tar.file = gui->org.file;
-#endif
-  guiTar_OnInit();
-  // Hacks
-#ifdef GUI_SHARED
-  gui->hacks.main = gui->org.main;
-  gui->hacks.hack.main = gui->org.main;
-  gui->hacks.hack.name = gui->org.name;
-#endif
-  guiHacks_OnInit();
-  // Search
-  guiQry_OnInit();
-#ifdef GUI_SHARED
-  gui->res.main  = gui->qry.main;
-  gui->res.codes = gui->hacks.codes;
-#endif
+  // Get on with GUI
   /* Main List */
-  gui->listMain =
-    meMkList( guiMenu_OnValueChanged,
-            lang->x[ LNG_ORGANISATION ],
-            lang->x[ LNG_PLATFORM ],
-            lang->x[ LNG_TARGET ],
-            lang->x[ LNG_PROFILE ],
-            lang->x[ LNG_SEARCH ],
-            lang->x[ LNG_RESULTS ],
-            lang->x[ LNG_EDITOR ],
-            lang->x[ LNG_HACKS ],
-            lang->x[ LNG_ABOUT ], NULL );
-  gui->vbMain =
-    IupVbox( gui->listMain, gui->qry.main.fset, gui->org.main.fset, NULL );
-  gui->dlgMain = IupDialog( gui->vbMain );
-  IupSetAttribute( gui->dlgMain, IUP_TITLE,   "Medit" );
-  IupSetAttribute( gui->dlgMain, IUP_SIZE,    "320x320"  );
+  guiDlg.vb = IupVbox( NULL );
+  guiDlg.fset = IupDialog( guiDlg.vb );
+  guiMenu_OnInit();
+  IupSetAttribute( guiDlg.fset, IUP_TITLE,   "Medit" );
+  IupSetAttribute( guiDlg.fset, IUP_SIZE,    "320x320"  );
   /* Show all */
-  IupRefresh( gui->dlgMain );
+  IupRefresh( guiDlg.fset );
   IupFlush();
-  IupShow( gui->dlgMain );
+  IupShow( guiDlg.fset );
   ret = IupMainLoop();
-  pipe = ipMkFile("medit.mecfg", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
-  ipWrPipe( &pipe, &cfg, sizeof( CFG ) );
+  pipe = ipMkFile("default.m-session", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
+  ipWrPipe( &pipe, &appSession, sizeof( SESSION ) );
   ipShutPipe( &pipe );
-  lib = meFreeLib( lib );
+#ifdef TEST_HL_LIB
+  lib = appFreeLib( lib );
+#endif
   IupClose();
   return ret;
 }

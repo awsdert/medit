@@ -1,43 +1,60 @@
-#include "../guiMain.h"
+#include "guiOrg.h"
 // Example app would be PCSX2 which is primary testing ground for Medit v1
 #ifndef EMULATOR
-void guiOrg_OnLang( void )
+GUI_ORG guiOrg = {{NULL}};
+void  guiOrg_OnLang( void )
 {
-  GUI *gui = appGetGui();
-  LANG const *lang = appGetLang();
-  IupSetAttribute( gui->org.main.fset, IUP_TITLE, lang->x[ LNG_ORGANISATION ] );
-  IupSetAttribute( gui->org.name.fset, IUP_TITLE, lang->x[ LNG_NAME         ] );
-  IupSetAttribute( gui->org.file.fset, IUP_TITLE, lang->x[ LNG_FILE         ] );
+  IupSetAttribute( guiOrg.main.fset, IUP_TITLE, appLang->x[ LNG_ORGANISATION ] );
+  IupSetAttribute( guiOrg.name.fset, IUP_TITLE, appLang->x[ LNG_NAME         ] );
+  IupSetAttribute( guiOrg.file.fset, IUP_TITLE, appLang->x[ LNG_FILE         ] );
 }
-
-void guiOrg_OnInit( void )
+void  guiOrg_OnInit( void )
 {
-  GUI *gui = appGetGui();
-  guiText_OnInit( &gui->org.name, (Icallback)guiName_OnKAny, (Icallback)guiName_OnValueChanged );
-  guiText_OnInit( &gui->org.file, (Icallback)guiFile_OnKAny, (Icallback)guiFile_OnValueChanged );
-  gui->org.main.vb   = IupVbox(  gui->org.name.fset,  gui->org.file.fset,  NULL );
-  gui->org.main.fset = IupFrame( gui->org.main.vb );
-  IupSetAttribute( gui->org.main.fset, "FLOATING", IUP_YES );
+  guiText_OnInit( &guiOrg.name, (Icallback)guiName_OnKAny, (Icallback)guiName_OnValueChanged );
+  guiText_OnInit( &guiOrg.file, (Icallback)guiFile_OnKAny, (Icallback)guiFile_OnValueChanged );
+  guiOrg.main.vb   = IupVbox(  guiOrg.name.fset,  guiOrg.file.fset,  NULL );
+  guiOrg.main.fset = IupFrame( guiOrg.main.vb );
+  IupAppend( guiDlg.vb, guiOrg.main.fset );
+  IupMap( guiOrg.main.fset );
+  IupSetAttribute( guiOrg.main.fset, IUP_EXPAND, IUP_YES );
+  IupSetAttribute( guiOrg.main.fset, "FLOATING", IUP_YES );
   guiOrg_OnLang();
 }
-
-int guiOrg_OnShow( Ihandle *ih )
+void  guiOrg_OnDefPath( char *path );
+void  guiOrg_OnDefExt(  char *path );
+void  guiOrg_OnLoad( Ipipe *file );
+void  guiOrg_OnReset( void );
+void  guiOrg_OnSave( Ipipe *file );
+void  guiOrg_OnApply( void );
+int   guiOrg_OnShow( Ihandle *ih )
 {
-  GUI *gui = appGetGui();
-  LANG const *lang = appGetLang();
-  CFG *cfg = appGetCfg();
-  cfg->src.name = cfg->src.org.name;
-  cfg->src.file = cfg->src.org.file;
-  cfg->dst.name = cfg->dst.org.name;
-  cfg->dst.file = cfg->dst.org.file;
-  IupSetAttribute( gui->org.main.fset,  IUP_TITLE, appGetText( LNG_ORGANISATION ) );
-  IupSetStrAttribute( gui->org.name.tb, IUP_TEXT,  cfg->dst.name );
-  IupSetStrAttribute( gui->org.file.tb, IUP_TEXT,  cfg->dst.file );
-  IupSetAttribute( gui->org.main.fset, "FLOATING", IUP_NO );
-  IupSetAttribute( gui->org.name.fset, "FLOATING", IUP_NO );
-  IupSetAttribute( gui->org.file.fset, "FLOATING", IUP_NO );
-  IupShow( gui->org.name.fset );
-  IupShow( gui->org.file.fset );
+  srcName = srcOrg.name;
+  srcFile = srcOrg.file;
+  tmpName = tmpOrg.name;
+  tmpFile = tmpOrg.file;
+  appMethods.OnDefPath = guiOrg_OnDefPath;
+  appMethods.OnDefExt  = guiOrg_OnDefExt;
+  appMethods.OnLoad    = guiOrg_OnLoad;
+  appMethods.OnReset   = guiOrg_OnReset;
+  appMethods.OnSave    = guiOrg_OnSave;
+  appMethods.OnApply   = guiOrg_OnApply;
+  guiText_SendShowMsg( &guiOrg.name, tmpName );
+  guiText_SendShowMsg( &guiOrg.file, tmpFile );
+  IupSetAttribute( guiOrg.main.fset, "FLOATING", IUP_NO );
+  guiOrg_OnLang();
   return IUP_DEFAULT;
 }
+void guiOrg_OnDefPath( char *path )
+{
+  strcat_s( path, PATH_MAX, "org" );
+  strcat_s( path, PATH_MAX, appSession.org );
+}
+void guiOrg_OnDefExt( char *path )
+{
+  strcat_s( path, PATH_MAX, "m-org" );
+}
+void  guiOrg_OnLoad( Ipipe *file ) { ipRdPipe( file, &srcOrg, sizeof(DATA_ORG) ); }
+void  guiOrg_OnReset( void ) { tmpOrg = srcOrg; }
+void  guiOrg_OnSave( Ipipe *file ) { ipWrPipe( file, &srcOrg, sizeof(DATA_ORG) ); }
+void  guiOrg_OnApply( void ) { srcOrg = tmpOrg; }
 #endif

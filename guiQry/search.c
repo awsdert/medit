@@ -1,4 +1,4 @@
-#include "../guiQry.h"
+#include "qry.h"
 #define SEARCH( T, C ) \
   ipSkPipe( &mepI.pipe, 0, FPOS_SOF ); \
   strcpy_s( szPath, 10, szNow ); \
@@ -27,7 +27,7 @@
 void search( ushort used )
 {
   Ipipe prev = {0};
-  MEPIPE   mepI   = {{0}}, mepO = {{0}}, mepP = {{0}};
+  ME_PIPE   mepI   = {{0}}, mepO = {{0}}, mepP = {{0}};
   ME_LPN   fpMecM = {0}, fpMecN = {0};
   ME_LINT  siMecM = {0}, siMecN = {0};
   ME_ULINT uiMecM = {0}, uiMecN = {0};

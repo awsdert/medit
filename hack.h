@@ -66,16 +66,16 @@ typedef union _NUM
      lpn l;
      dpn d[       NODES_NEEDED( lpn,   dpn ) ];
      fpn f[       NODES_NEEDED( lpn,   fpn ) ];
-   ulint u_lint[  NODES_NEEDED( lpn,  lint ) ];
-    lint s_lint[  NODES_NEEDED( lpn,  lint ) ];
-   ulong u_long[  NODES_NEEDED( lpn,  long ) ];
-    long s_long[  NODES_NEEDED( lpn,  long ) ];
-    uint u_int[   NODES_NEEDED( lpn,   int ) ];
-     int s_int[   NODES_NEEDED( lpn,   int ) ];
-  ushort u_short[ NODES_NEEDED( lpn, short ) ];
-   short s_short[ NODES_NEEDED( lpn, short ) ];
-   uchar u_char[  sizeof(lpn) ];
-   schar s_char[  sizeof(lpn) ];
+   ulint _ulint[  NODES_NEEDED( lpn,  lint ) ];
+    lint _lint[   NODES_NEEDED( lpn,  lint ) ];
+   ulong _ulong[  NODES_NEEDED( lpn,  long ) ];
+    long _long[   NODES_NEEDED( lpn,  long ) ];
+    uint _uint[   NODES_NEEDED( lpn,   int ) ];
+     int _int[    NODES_NEEDED( lpn,   int ) ];
+  ushort _ushort[ NODES_NEEDED( lpn, short ) ];
+   short _short[  NODES_NEEDED( lpn, short ) ];
+   uchar _uchar[  sizeof(lpn) ];
+   schar _schar[  sizeof(lpn) ];
 } NUM;
 
 typedef enum   _MECMP
@@ -110,19 +110,11 @@ typedef enum _CODE_T
   CODE_COUNT
 } CODE_T;
 
-typedef enum _ENDIAN_TYPE
-{
-  ENDIAN_SYS = 0,
-  ENDIAN_L,
-  ENDIAN_LB,
-  ENDIAN_B,
-  ENDIAN_COUNT
-} ENDIAN_TYPE;
-
 typedef struct _BASE
 {
   ulint addr;
   ulint size;
+  uchar depth;
 } BASE;
 
 #define BASES_COUNT 0x10
@@ -133,67 +125,63 @@ typedef struct _BASES
   BASE  a[ BASES_COUNT ];
 } BASES;
 
-#define HACK_ACTIVE 0x80
-#define HACK_RADIOL 0x40
+typedef uchar hack_t;
+#define HACK_T_MAX UCHAR_MAX
 typedef struct _HACK
 {
   uchar   use : 1;
   // Is Radio List
-  uchar    rl : 1;
-  uchar depth : 4;
+  uchar   irl : 1;
   // ID (codelist file usage only)
-  uchar   id;
+  ulong   id;
   // Current Index
-  uchar  _ci;
+  hack_t _ci;
   // Parent Index
-  uchar  _pi;
+  hack_t _pi;
   // 1st Child Index
-  uchar  _fi;
+  hack_t _fi;
   // Next Sibling Index
-  uchar  _ni;
+  hack_t _ni;
 } HACK;
-
-#define HACKS_COUNT 0xff
-#define HACKS_LAST  0xfe
+static size_t const HACKS_SIZE = (sizeof(size_t) + (3 * sizeof(hack_t)));
 typedef struct _HACKS
 {
-  uchar c : 8;
-  HACK  a[HACKS_COUNT];
+  hack_t i;
+  hack_t c;
+  hack_t _c;
+  size_t s;
+  HACK   a[1];
 } HACKS;
-
-typedef enum _DATA_TYPE
-{
-  DATA_TYPE_UI = 0,
-  DATA_TYPE_SI,
-  DATA_TYPE_RF,
-  DATA_TYPE_COUNT
-} DATA_TYPE;
 
 #define CODEV_COUNT 20
 #define CODEV_LAST  19
 typedef struct _CODE
 {
+  uchar type : 4;
+  uchar size : 4;
+  // 'i', 'u', 'f', 'x', 'o', 'B' (binary), 'b' (boolean)
+  char  format;
+  ulint addr[3];
+  NUM   a[CODEV_COUNT];
+  ulong loop;
+  uchar info;
   uchar _ci;
   uchar _ni;
   uchar _fi;
   uchar _pi;
   uchar _tm      : 4;
-  uchar type     : 4;
-  uchar addrSize : 4;
-  uchar dataSize : 4;
-  uchar dataType : 4;
-  uchar info;
-  ulong loop;
-  ulint addr[3];
-  RLN   a[CODEV_COUNT];
 } CODE;
 
 #define CODES_COUNT 30
 #define CODES_LAST  29
+static size_t const CODES_SIZE = (sizeof(size_t) + 3);
 typedef struct _CODES
 {
-  uchar c : 8;
-  CODE  a[ CODES_COUNT ];
+  uchar  i;
+  uchar  c;
+  uchar  _c;
+  size_t s;
+  CODE   a[1];
 } CODES;
 
 /*

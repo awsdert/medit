@@ -14,7 +14,7 @@ DWORD main()
   char  procTmp[ MAX_PATH ] = {0};
   char tmp[ MAX_PATH ] = {0};
   char *procTmp2 = procTmp, *tmp2 = tmp;
-  UZ   envRetSize = 0;
+  size_t envRetSize = 0;
   GetStartupInfo(&si);
   if ( si.lpReserved2 && ((DWORD*)si.lpReserved2)[0] == 0 && ((DWORD*)si.lpReserved2)[0] == 0 )
     entryPoint( ((DWORD*)si.lpReserved2)[2] );

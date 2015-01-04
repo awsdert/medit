@@ -1,6 +1,6 @@
 #include "appLng.h"
 
-static LANG const _langDef =
+static LANG const _appDefLang =
 {{
   // Main list
   "Organisation",
@@ -11,6 +11,7 @@ static LANG const _langDef =
   "Results",
   "Editor",
   "Hacks",
+  "Hack",
   "About",
   // Search Menu
   "Dump",
@@ -22,12 +23,17 @@ static LANG const _langDef =
   "Endian",
   "System",
   "Little",
+  "PDP",
   "Big",
   "Path",
   "Type",
   "ID",
   "Memory",
+  "Address",
+  "Size",
+  "Depth",
   "Range",
+  "Codes",
   "Code",
   "Write",
   "Copy",
@@ -35,6 +41,8 @@ static LANG const _langDef =
   "Remove",
   "Comparison",
   "Joker",
+  "(M)",
+  "???",
   "Value",
   "Always",
   "True",
@@ -53,10 +61,8 @@ static LANG const _langDef =
   "Load",
   "Save"
 }};
-static LANG _lang = {{{0}}};
-LANG const* appGetLang( void ) { return &_lang; }
-LANG const* appGetDefaultLang( void ) { return &_langDef; }
-char const* appGetText(  LNG_T text ) { return _lang.x[ text ]; }
+static LANG _appLang = {{{0}}};
+LANG const *appLang = &_appLang;
 
 void appLoadLang( char *name )
 {
@@ -71,7 +77,7 @@ void appLoadLang( char *name )
     strcat_s( fname,    PATH_MAX, name );
     strcat_s( fname,    PATH_MAX, ".applang" );
     pipe = ipMkFile( fname, 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
-    ipRdPipe( &pipe, &_lang, sizeof(LANG) );
+    ipRdPipe( &pipe, &_appLang, sizeof(LANG) );
     ipShutPipe( &pipe );
   }
   else
@@ -79,6 +85,6 @@ void appLoadLang( char *name )
     memset( name, 0, strlen( name ) );
     name[0] = 'e';
     name[1] = 'n';
-    _lang = _langDef;
+    _appLang = _appDefLang;
   }
 }

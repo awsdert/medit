@@ -1,4 +1,4 @@
-#include "../guiQry.h"
+#include "qry.h"
 
 #define _QCAST( NUM, T, BUFF ) \
   NUM = *((T*)&(BUFF[i]))
@@ -11,9 +11,9 @@
 #define QCMP1( CMP_T ) res = ( iNum CMP_T pNum );
 #define QCMP2( CMP_T ) res = (( iNum CMP_T pNum ) != pNum);
 void iQry( uchar    used,
-          MEPIPE   *mepI,
-          MEPIPE   *mepO,
-          MEPIPE   *mepP,
+          ME_PIPE   *mepI,
+          ME_PIPE   *mepO,
+          ME_PIPE   *mepP,
           Ipipe     prev,
           schar    bytes,
           ME_LINT  *mecM,

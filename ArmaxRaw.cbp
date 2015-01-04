@@ -86,6 +86,8 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="ArmaxRawMain.h" />
+		<Unit filename="_hack.h" />
+		<Unit filename="hack.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

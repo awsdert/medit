@@ -1,4 +1,4 @@
-#include "../guiMain.h"
+#include "guiSpin.h"
 void guiSpin_OnInit( GUI_SPIN *guiSpin, Icallback OnKAny, Icallback OnValueChanged )
 {
   guiSpin->tb   = IupText(NULL);

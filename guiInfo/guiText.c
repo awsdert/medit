@@ -1,5 +1,10 @@
-#include "../guiMain.h"
-
+#include "guiText.h"
+void guiText_SendShowMsg( GUI_TEXT *guiText, char *text )
+{
+  IupSetAttribute( guiText->tb, IUP_VALUE, text );
+  IupSetAttribute( guiText->fset, "FLOATING", IUP_NO );
+  IupShow( guiText->fset );
+}
 void guiText_OnInit( GUI_TEXT *guiText, Icallback OnKAny, Icallback OnValueChanged )
 {
   guiText->tb   = IupText(NULL);

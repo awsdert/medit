@@ -1,37 +1,43 @@
-#include "../guiMain.h"
+#include "guiVal.h"
+GUI_VAL *guiVal = NULL;
+void guiVal_SetGUI( GUI_VAL *val ) { guiVal = val; }
 void guiVal_OnLang( void )
 {
-  GUI *gui = appGetGui();
-  LANG const *lang = appGetLang();
-  IupSetAttribute( gui->val->value.fset, IUP_TITLE, lang->x[ LNG_VALUE ] );
-  IupSetAttribute( gui->val->listType,   IUP_TITLE, lang->x[ LNG_TYPE  ] );
+  IupSetAttribute( guiVal->value.fset, IUP_TITLE, appLang->x[ LNG_VALUE ] );
+  IupSetAttribute( guiVal->hlType,   IUP_TITLE, appLang->x[ LNG_TYPE  ] );
 }
 void guiVal_OnInit( void )
 {
-  GUI *gui = appGetGui();
-  Ihandle *hbox;
+  Ihandle *layout;
   int i = 0;
   Ihandle *child, *kid;
-  gui->val->tbValue  = IupText( NULL );
-  gui->val->listType = meMkList( NULL,
-    "schar", "uchar",
-    "short", "ushort",
-    "int",   "uint",
-    "long",  "ulong",
-    "lint",  "ulint",
-    "float", "double", "ldouble", NULL );
-  hbox = IupGetChild( gui->val->listType, 0 );
+  guiVal->tbValue  = IupText( NULL );
+  guiVal->hlType = IupHList(NULL);
+  IupSetStrAttribute( guiVal->hlType,  "1",  "schar" );
+  IupSetStrAttribute( guiVal->hlType,  "2",  "uchar" );
+  IupSetStrAttribute( guiVal->hlType,  "3",  "short" );
+  IupSetStrAttribute( guiVal->hlType,  "4", "ushort" );
+  IupSetStrAttribute( guiVal->hlType,  "5",    "int" );
+  IupSetStrAttribute( guiVal->hlType,  "6",   "uint" );
+  IupSetStrAttribute( guiVal->hlType,  "7",   "long" );
+  IupSetStrAttribute( guiVal->hlType,  "8",  "ulong" );
+  IupSetStrAttribute( guiVal->hlType,  "9",   "lint" );
+  IupSetStrAttribute( guiVal->hlType, "10",  "ulint" );
+  IupSetStrAttribute( guiVal->hlType, "11",    "fpn" );
+  IupSetStrAttribute( guiVal->hlType, "12",    "dpn" );
+  IupSetStrAttribute( guiVal->hlType, "13",    "lpn" );
+  layout = IupGetChild( guiVal->hlType, 0 );
   for ( ; i < VAL_COUNT; ++i )
   {
-    child = IupGetChild( hbox, i );
+    child = IupGetChild( layout, i );
     kid = IupGetChild( child, 0 );
     IupSetInt( child, IUP_VALUE, i );
   }
-  gui->val->value.vb = IupVbox( gui->val->tbValue, gui->val->listType, NULL );
-  gui->val->value.fset = IupFrame( gui->val->value.vb );
-  IupSetAttribute( gui->val->value.fset, IUP_SIZE, "100x30" );
-  IupSetAttribute( gui->val->value.fset, IUP_EXPAND, IUP_HORIZONTAL );
-  IupAppend( gui->val->main.vb, gui->val->value.fset );
-  IupMap( gui->val->value.fset );
+  guiVal->value.vb   = IupVbox(  guiVal->tbValue, guiVal->hlType, NULL );
+  guiVal->value.fset = IupFrame( guiVal->value.vb );
+  IupSetAttribute( guiVal->value.fset, IUP_SIZE, "100x30" );
+  IupSetAttribute( guiVal->value.fset, IUP_EXPAND, IUP_HORIZONTAL );
+  IupAppend( guiVal->main.vb, guiVal->value.fset );
+  IupMap( guiVal->value.fset );
   guiVal_OnLang();
 }

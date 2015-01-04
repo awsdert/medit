@@ -1,23 +1,10 @@
 #include "_guiMain.h"
-uchar getBaseNo( char *name )
-{
-  CFG *cfg = appGetCfg();
-  uchar i = 0;
-  do
-  {
-    if ( _strcmpi( name, cfg->dst.tar.bname[i] ) == 0 )
-      break;
-    ++i;
-  }
-  while ( i < BASES_COUNT );
-  return i;
-}
-HMODULE meLoadLib( char* name, HACK_FUNC **hfunc, CODE_FUNC **cfunc )
+HLIB appLoadLib( char* name, HACK_LIB_COM **hfunc, CODE_LIB_COM **cfunc )
 {
   HMODULE lib = NULL;
   char szFile[ PATH_MAX ] = {0};
-  GETHACKFUNCS gethacks = NULL;
-  GETCODEFUNCS getcodes = NULL;
+  HACKLIBCOM gethacks = NULL;
+  CODELIBCOM getcodes = NULL;
   strcpy_s( szFile, PATH_MAX, IupGetAttribute( NULL, "APP_CWD" ) );
   strcat_s( szFile, PATH_MAX, name );
   strcat_s( szFile, PATH_MAX, "-" );
@@ -29,8 +16,8 @@ HMODULE meLoadLib( char* name, HACK_FUNC **hfunc, CODE_FUNC **cfunc )
     IupMessage( "Failure to load Library", name );
     return NULL;
   }
-  gethacks = (GETHACKFUNCS)GetProcAddress( lib, "GetHackFuncs");
-  getcodes = (GETCODEFUNCS)GetProcAddress( lib, "GetCodeFuncs");
+  gethacks = (HACKLIBCOM)GetProcAddress( lib, "GetHackFuncs");
+  getcodes = (CODELIBCOM)GetProcAddress( lib, "GetCodeFuncs");
   if ( !gethacks )
   {
     IupMessage( "Failure to load hack functions", name );
@@ -45,10 +32,10 @@ HMODULE meLoadLib( char* name, HACK_FUNC **hfunc, CODE_FUNC **cfunc )
   }
   (*hfunc) = gethacks();
   (*cfunc) = getcodes();
-  (*cfunc)->getBaseNo = getBaseNo;
+  (*cfunc)->GetBase = GetBase;
   return lib;
 }
-HMODULE meFreeLib( HMODULE lib )
+HLIB appFreeLib( HLIB lib )
 {
   FreeLibrary( lib );
   return NULL;

@@ -23,7 +23,7 @@ typedef struct _HACKDATA
 } HACKDATA;
 
 /// \brief Handles actual hacking
-S4      hackProc( HACKDATA *data, HACKINFO *info, CODES *codesBuff, S4 hi, U2 ci );
+int      hackProc( HACKDATA *data, HACKINFO *info, CODES *codesBuff, int hi, ulong ci );
 /// \brief If you need to ask then you should give up now
 BOOL    EnableDebugPrivileges(void);
 /// \brief Injects this process into target process

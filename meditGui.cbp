@@ -87,38 +87,44 @@
 		<Unit filename="../Ipipe/ipipe/c.h" />
 		<Unit filename="_guiMain.h" />
 		<Unit filename="_hack.h" />
-		<Unit filename="appCfg.h" />
 		<Unit filename="appCwd.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="appLib.c">
+		<Unit filename="appData.h" />
+		<Unit filename="appLang.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="appLng.c">
+		<Unit filename="appLib.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="appLng.h" />
 		<Unit filename="ftoa.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="guiHacks/RdTxtHacks.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="guiHacks/guiCode.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="guiHacks/guiCode.h" />
 		<Unit filename="guiHacks/guiCodes.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="guiHacks/guiCodes.h" />
+		<Unit filename="guiHacks/guiHack.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiHacks/guiHack.h" />
 		<Unit filename="guiHacks/guiHacks.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="guiHacks/guiHacks.h" />
 		<Unit filename="guiInfo/guiBase.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="guiInfo/guiBase.h" />
 		<Unit filename="guiInfo/guiCmp.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="guiInfo/guiCmp.h" />
 		<Unit filename="guiInfo/guiFile.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -131,26 +137,35 @@
 		<Unit filename="guiInfo/guiOrg.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="guiInfo/guiOrg.h" />
+		<Unit filename="guiInfo/guiPfl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiInfo/guiPfl.h" />
 		<Unit filename="guiInfo/guiPfm.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="guiInfo/guiPfm.h" />
 		<Unit filename="guiInfo/guiSpin.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="guiInfo/guiSpin.h" />
 		<Unit filename="guiInfo/guiTar.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="guiInfo/guiTar.h" />
 		<Unit filename="guiInfo/guiText.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="guiInfo/guiText.h" />
 		<Unit filename="guiInfo/guiVal.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="guiInfo/guiVal.h" />
 		<Unit filename="guiMain.h" />
 		<Unit filename="guiMenu.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="guiQry.h" />
 		<Unit filename="guiQry/bQry.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -160,9 +175,15 @@
 		<Unit filename="guiQry/guiQry.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="guiQry/guiQry.h" />
+		<Unit filename="guiQry/guiRes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiQry/guiRes.h" />
 		<Unit filename="guiQry/iQry.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="guiQry/qry.h" />
 		<Unit filename="guiQry/search.c">
 			<Option compilerVar="CC" />
 		</Unit>

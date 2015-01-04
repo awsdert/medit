@@ -1,47 +1,43 @@
-#include "../guiMain.h"
-void guiCode_OnLang( GUI_CODE *code )
+#include "guiCode.h"
+GUI_CODE *guiCode = NULL;
+CODE *srcCode;
+CODE *tmpCode;
+void guiCode_SetGUI( GUI_CODE *code, CODE *src, CODE *tmp )
 {
-  GUI *gui = appGetGui();
-  LANG const *lang = appGetLang();
-  Ihandle *hb = IupGetChild( code->listCode, 0 );
-  // Change Code UI Language
-  IupSetAttribute( code->code.fset, IUP_TITLE, lang->x[ LNG_CODE ] );
-  IupSetAttribute( guiGetListPos_Lbl( hb, CODE_W     ), IUP_TITLE, lang->x[ LNG_WRITE      ] );
-  IupSetAttribute( guiGetListPos_Lbl( hb, CODE_CPY   ), IUP_TITLE, lang->x[ LNG_COPY       ] );
-  IupSetAttribute( guiGetListPos_Lbl( hb, CODE_INC   ), IUP_TITLE, lang->x[ LNG_ADD        ] );
-  IupSetAttribute( guiGetListPos_Lbl( hb, CODE_DEC   ), IUP_TITLE, lang->x[ LNG_REMOVE     ] );
-  IupSetAttribute( guiGetListPos_Lbl( hb, CODE_CMP   ), IUP_TITLE, lang->x[ LNG_COMPARISON ] );
-  IupSetAttribute( guiGetListPos_Lbl( hb, CODE_JOKER ), IUP_TITLE, lang->x[ LNG_JOKER      ] );
+  guiCode = code;
 }
-void guiCode_OnInit( GUI_CODES *codes )
+void guiCode_OnLang( void )
 {
-  GUI *gui = appGetGui();
-  GUI_CODE *code = &codes->code;
+  IupSetAttribute( guiCode->code.fset, IUP_TITLE, appLang->x[ LNG_CODE ] );
+  IupSetAttribute( guiCode->type, "1", appLang->x[ LNG_WRITE      ] );
+  IupSetAttribute( guiCode->type, "2", appLang->x[ LNG_COPY       ] );
+  IupSetAttribute( guiCode->type, "3", appLang->x[ LNG_ADD        ] );
+  IupSetAttribute( guiCode->type, "4", appLang->x[ LNG_REMOVE     ] );
+  IupSetAttribute( guiCode->type, "5", appLang->x[ LNG_COMPARISON ] );
+  IupSetAttribute( guiCode->type, "6", appLang->x[ LNG_JOKER      ] );
+  IupSetStrAttribute( guiCode->type, "7", "(M)" );
+}
+extern void guiCmp_OnInit( void );
+extern void guiVal_OnInit( void );
+void guiCode_OnInit( void )
+{
   // We don't need this anywhere else so just leave it be
-  guiSpin_OnInit( &code->spinVal, NULL, NULL );
+  guiSpin_OnInit( &guiCode->indx, NULL, NULL );
   // Initialise Code UI
-  code->listCode = meMkList( NULL, "=#", "<>", "++", "--", "?", "!", "(M)", NULL );
-  gui->cmp = &code->cmp;
-  gui->val = &code->val;
-  code->main     = codes->main;
-  code->cmp.main = codes->main;
-  code->val.main = codes->main;
-  code->code.vb  = IupVbox( code->listCode, code->spinVal.fset, NULL );
-  IupAppend( code->main.vb, code->code.fset );
-  IupMap( code->code.fset );
+  guiCode->type = IupHList(NULL);
+  guiCode->cmp.main = guiCode->main;
+  guiCmp_SetGUI( &guiCode->cmp );
   guiCmp_OnInit();
+  guiCode->val.main = guiCode->main;
+  guiVal_SetGUI( &guiCode->val );
   guiVal_OnInit();
-  guiCode_OnLang( code );
+  guiCode->code.vb  = IupVbox( guiCode->type, guiCode->indx.fset, NULL );
+  IupAppend( guiCode->main.vb, guiCode->code.fset );
+  IupMap( guiCode->code.fset );
+  guiCode_OnLang();
 }
 int guiCode_OnShow( Ihandle *ih )
 {
-  GUI *gui = appGetGui();
-  IupSetAttribute( gui->listSet, IUP_VISIBLE, IUP_YES );
-/* FIXME: Create and program these events
-  IupSetCallback( gui->code.listSet, "_:)_BUTTON_CB", guiCodeApply_OnButton );
-  IupSetCallback( gui->code.listSet, "_:(_BUTTON_CB", guiCodeReset_OnButton );
-  IupSetCallback( gui->code.listSet, "_/\\_BUTTON_CB", guiCodeLoad_OnButton );
-  IupSetCallback( gui->code.listSet, "_\\/_BUTTON_CB", guiCodeSave_OnButton );
-*/
+  IupSetAttribute( guiData, IUP_VISIBLE, IUP_YES );
   return IUP_DEFAULT;
 }

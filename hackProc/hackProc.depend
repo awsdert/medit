@@ -940,7 +940,7 @@
 1407920107 source:c:\users\lee\documents\github\medit\hackproc\enabledebugprivileges.c
 	"hackProc.h"
 
-1411919659 c:\users\lee\documents\github\medit\hackproc\hackproc.h
+1419432380 c:\users\lee\documents\github\medit\hackproc\hackproc.h
 	"../hack.h"
 	<TlHelp32.h>
 	<process.h>
@@ -967,7 +967,7 @@
 1411110457 source:c:\users\lee\documents\github\medit\hackproc\getprocessparentid.c
 	"hackProc.h"
 
-1412279098 source:c:\users\lee\documents\github\medit\hackproc\hackproc.c
+1419432380 source:c:\users\lee\documents\github\medit\hackproc\hackproc.c
 	"hackProc.h"
 
 1409470611 source:c:\users\lee\documents\github\medit\hackproc\injectmodule.c
@@ -997,11 +997,23 @@
 1411457665 source:c:\users\lee\documents\github\medit\hackproc\main.c
 	"hackProc.h"
 
-1412279098 c:\users\lee\documents\github\medit\hack.h
+1416763604 c:\users\lee\documents\github\medit\hack.h
 	<float.h>
-	"c.h"
+	<ipipe/c.h>
 
 1414343832 c:\users\lee\documents\github\medit\c.h
+	<windef.h>
+	<Windows.h>
+	<windowsx.h>
+	<linux/limits.h>
+
+1417214448 c:\users\lee\documents\github\ipipe\ipipe\c.h
+	<climits>
+	<cstdint>
+	<cstdio>
+	<limits.h>
+	<stdint.h>
+	<stdio.h>
 	<windef.h>
 	<Windows.h>
 	<windowsx.h>

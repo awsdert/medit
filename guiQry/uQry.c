@@ -1,9 +1,9 @@
-#include "../guiQry.h"
+#include "qry.h"
 
 void uQry( uchar    used,
-          MEPIPE   *mepI,
-          MEPIPE   *mepO,
-          MEPIPE   *mepP,
+          ME_PIPE   *mepI,
+          ME_PIPE   *mepO,
+          ME_PIPE   *mepP,
           Ipipe     prev,
           schar    bytes,
           ME_ULINT *mecM,

@@ -1,13 +1,12 @@
 #pragma once
-#ifndef __HACK_H
-#define __HACK_H
 #include "hack.h"
 #include <ipipe/main.h>
 OPEN_C
 
 typedef enum _REGION_T
 {
-  REGION_US = 0,
+  REGION_ANY = 0,
+  REGION_US,
   REGION_EU,
   REGION_UK,
   REGION_AUS,
@@ -19,47 +18,38 @@ typedef enum _REGION_T
 
 typedef struct _HACKL
 {
-  HACKS hacks;
-  char  names[HACKS_COUNT][ NAME_MAX ];
+  char **names;
+  HACKS *hacks;
 } HACKL;
 
-/** \brief Object through which DLL and EXE can communicate with each other
-  \param txt2raw pointer DLL must fill when it is attached
-  \param raw2txt pointer DLL must fill when it is attached
-**/
-
-typedef struct _HACK_FUNC
+typedef struct _HACK_LIB_COM
 {
-  void (*getHackName)( ushort hi, char       *name, size_t len );
-  void (*setHackName)( ushort hi, char const *name, size_t len );
-  long (*txt2raw)( HACK *raw, HACKL *hl, Ipipe *pipe );
-  void (*raw2txt)( HACK *raw, HACKL *hl, Ipipe *pipe, long gid );
-} HACK_FUNC;
+  hack_t* (*ReSize)( HACKL *hl, hack_t *indexList, hack_t count );
+  // File Handling
+  void    (*OnLoad)( Ipipe *file, char const *dataDir );
+  void    (*OnSave)( Ipipe *file, char const *dataDir );
+  // Replace with handler of _source when not loading/saving a file
+  uchar   (*RdLine)( char  *line, void *_source );
+  uchar   (*WrLine)( char  *line, void *_source );
+  // 80 characters per line
+  uchar   (*txt2raw)( HACK *hack, char *line, void *_source );
+  uchar   (*raw2txt)( HACK *hack, char *line, void *_source );
+  HACKL    hl;
+  REGION_T region;
+  ulong gid;
+} HACK_LIB_COM;
 
-typedef struct _CODELIST
+typedef struct _CODE_LIB_COM
 {
-  ushort rows;
-  ushort cols;
-  char x[30][50];
-} CODELIST;
+  uchar  (*GetBase)( char *name );
+  uchar* (*ReSize)( CODES **codes, uchar *indexList, uchar count );
+  // 80 characters per line
+  uchar  (*txt2raw)( CODE *code, char *line, void *_source );
+  uchar  (*raw2txt)( CODE *code, char *line, void *_source );
+  CODES  *codes;
+} CODE_LIB_COM;
 
-/** \brief Object through which DLL and EXE can communicate with each other
-  \param getRamNo pointer EXE must fill after acquiring object pointer
-  \param txt2raw pointer DLL must fill when it is attached
-  \param raw2txt pointer DLL must fill when it is attached
-**/
-typedef struct _CODE_FUNC
-{
-  uchar    (*getBaseNo)( char* id );
-  void     (*setRegion)( REGION_T region );
-  REGION_T (*getRegion)( void );
-  ushort   (*txt2raw)( CODE *raw, CODELIST *cl, ushort line );
-  uchar    (*raw2txt)( CODE *raw, Ipipe *pipe );
-} CODE_FUNC;
-
-typedef HACK_FUNC* (*GETHACKFUNCS)( void );
-typedef CODE_FUNC* (*GETCODEFUNCS)( void );
+typedef HACK_LIB_COM* (*HACKLIBCOM)( void );
+typedef CODE_LIB_COM* (*CODELIBCOM)( void );
 
 SHUT_C
-
-#endif

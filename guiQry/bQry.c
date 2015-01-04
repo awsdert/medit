@@ -1,4 +1,4 @@
-#include "../guiQry.h"
+#include "qry.h"
 void* bQry( pid_t pid, size_t size )
 {
   HANDLE ph = OpenProcess( PROCESS_QUERY_INFORMATION, FALSE, pid );

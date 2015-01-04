@@ -1,5 +1,5 @@
 #pragma once
-#include "_guiMain.h"
+#include "../hack.h"
 #include <ipipe/main.h>
 
 OPEN_C
@@ -16,24 +16,12 @@ OPEN_C
   if ( mecM->used[c] ) rBl = ( rBl &&  (tNum CMP_T mNum)); \
   if ( mecN->used[c] ) rBl = ( rBl && !(tNum CMP_T nNum))
 
-
-
-typedef struct _MEPIPE
+typedef struct _ME_PIPE
 {
   Ipipe pipe;
   uchar buff[BUFSIZ];
-} MEPIPE;
+} ME_PIPE;
 
-typedef union _FPN
-{
-    fpn val;
-  uchar buf[ sizeof( fpn ) ];
-} FPN;
-typedef union _DPN
-{
-    dpn val;
-  uchar buf[ sizeof( dpn ) ];
-} DPN;
 typedef union _LPN
 {
     lpn val;
@@ -58,28 +46,28 @@ typedef struct _ME_LINT
    lint buff[CMP_COUNT];
 } ME_LINT;
 
-int guiQryMenu_OnClick( Ihandle *ih, int button, int pressed, int x, int y, char* status );
+
 void* bQry( pid_t pid, size_t size );
-void fQry( uchar    used,
-          MEPIPE   *mepI,
-          MEPIPE   *mepO,
-          MEPIPE   *mepP,
+void  fQry( uchar   used,
+          ME_PIPE  *mepI,
+          ME_PIPE  *mepO,
+          ME_PIPE  *mepP,
           Ipipe     prev,
           schar    bytes,
           ME_LPN   *mecM,
           ME_LPN   *mecN );
-void iQry( uchar    used,
-          MEPIPE   *mepI,
-          MEPIPE   *mepO,
-          MEPIPE   *mepP,
+void  iQry( uchar   used,
+          ME_PIPE  *mepI,
+          ME_PIPE  *mepO,
+          ME_PIPE  *mepP,
           Ipipe     prev,
           schar    bytes,
           ME_LINT  *mecM,
           ME_LINT  *mecN );
-void uQry( uchar    used,
-          MEPIPE   *mepI,
-          MEPIPE   *mepO,
-          MEPIPE   *mepP,
+void  uQry( uchar   used,
+          ME_PIPE  *mepI,
+          ME_PIPE  *mepO,
+          ME_PIPE  *mepP,
           Ipipe     prev,
           schar    bytes,
           ME_ULINT *mecM,

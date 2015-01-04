@@ -1,13 +1,13 @@
 # depslib dependency file v1.0
-1405179978 source:c:\users\lee\documents\github\medit\armaxrawmain.c
+1420126290 source:c:\users\lee\documents\github\medit\armaxrawmain.c
 	"ArmaxRawMain.h"
 
-1412278950 c:\users\lee\documents\github\medit\armaxrawmain.h
+1420291104 c:\users\lee\documents\github\medit\armaxrawmain.h
 	"_hack.h"
 
-1414408070 c:\users\lee\documents\github\medit\_hack.h
+1420291104 c:\users\lee\documents\github\medit\_hack.h
 	"hack.h"
-	<Ipipe.h>
+	<ipipe/main.h>
 
 1406191186 c:\users\lee\documents\github\ipipe\ipipe.h
 	"IpipeTypes.h"
@@ -843,12 +843,12 @@
 
 1371529718 c:\program files (x86)\windows kits\8.1\include\um\ime_cmodes.h
 
-1412283207 source:c:\users\lee\documents\github\medit\armaxraw.c
+1420291382 source:c:\users\lee\documents\github\medit\armaxraw.c
 	"ArmaxRawMain.h"
 
-1412279098 c:\users\lee\documents\github\medit\hack.h
+1420291410 c:\users\lee\documents\github\medit\hack.h
 	<float.h>
-	"c.h"
+	<ipipe/c.h>
 
 1414407985 c:\users\lee\documents\github\medit\c.h
 	<windef.h>
@@ -858,4 +858,23 @@
 
 1371531154 c:\program files (x86)\windows kits\8.1\include\shared\windowsx.h
 	<winapifamily.h>
+
+1419791476 c:\users\lee\documents\github\ipipe\ipipe\c.h
+	<climits>
+	<cstdint>
+	<cstdio>
+	<limits.h>
+	<stdint.h>
+	<stdio.h>
+	<windef.h>
+	<Windows.h>
+	<windowsx.h>
+	<linux/limits.h>
+
+1417180925 c:\users\lee\documents\github\ipipe\ipipe\main.h
+	"types.h"
+
+1415899895 c:\users\lee\documents\github\ipipe\ipipe\types.h
+	"c.h"
+	<float.h>
 
