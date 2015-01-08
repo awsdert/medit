@@ -18,7 +18,8 @@ OPEN_C
 
 typedef struct _ME_PIPE
 {
-  Ipipe pipe;
+  int   fd;
+  FILE *file;
   uchar buff[BUFSIZ];
 } ME_PIPE;
 
@@ -52,7 +53,7 @@ void  fQry( uchar   used,
           ME_PIPE  *mepI,
           ME_PIPE  *mepO,
           ME_PIPE  *mepP,
-          Ipipe     prev,
+          int       prev,
           schar    bytes,
           ME_LPN   *mecM,
           ME_LPN   *mecN );
@@ -60,7 +61,7 @@ void  iQry( uchar   used,
           ME_PIPE  *mepI,
           ME_PIPE  *mepO,
           ME_PIPE  *mepP,
-          Ipipe     prev,
+          int       prev,
           schar    bytes,
           ME_LINT  *mecM,
           ME_LINT  *mecN );
@@ -68,7 +69,7 @@ void  uQry( uchar   used,
           ME_PIPE  *mepI,
           ME_PIPE  *mepO,
           ME_PIPE  *mepP,
-          Ipipe     prev,
+          int       prev,
           schar    bytes,
           ME_ULINT *mecM,
           ME_ULINT *mecN );

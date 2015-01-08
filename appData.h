@@ -47,12 +47,14 @@ typedef struct _SESSION
 
 typedef struct _METHODS
 {
-  void (*OnDefPath)( char *path );
+  void (*OnDefPath)( char *path, uchar saveFile );
   void  (*OnDefExt)( char *path );
-  void    (*OnLoad)( Ipipe *file );
+  void    (*OnLoad)( int fd, FILE *file );
   void   (*OnReset)( void );
-  void    (*OnSave)( Ipipe *file );
+  void    (*OnSave)( int fd, FILE *file );
   void   (*OnApply)( void );
+  void     (*OnAdd)( int i );
+  void     (*OnRem)( void );
 } METHODS;
 
 extern SESSION appSession;

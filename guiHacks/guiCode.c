@@ -8,13 +8,13 @@ void guiCode_SetGUI( GUI_CODE *code, CODE *src, CODE *tmp )
 }
 void guiCode_OnLang( void )
 {
-  IupSetAttribute( guiCode->code.fset, IUP_TITLE, appLang->x[ LNG_CODE ] );
-  IupSetAttribute( guiCode->type, "1", appLang->x[ LNG_WRITE      ] );
-  IupSetAttribute( guiCode->type, "2", appLang->x[ LNG_COPY       ] );
-  IupSetAttribute( guiCode->type, "3", appLang->x[ LNG_ADD        ] );
-  IupSetAttribute( guiCode->type, "4", appLang->x[ LNG_REMOVE     ] );
-  IupSetAttribute( guiCode->type, "5", appLang->x[ LNG_COMPARISON ] );
-  IupSetAttribute( guiCode->type, "6", appLang->x[ LNG_JOKER      ] );
+  IupSetAttribute( guiCode->code.fset, IUP_TITLE, appLang->a[ LNG_CODE ].a );
+  IupSetAttribute( guiCode->type, "1", appLang->a[ LNG_WRITE      ].a );
+  IupSetAttribute( guiCode->type, "2", appLang->a[ LNG_COPY       ].a );
+  IupSetAttribute( guiCode->type, "3", appLang->a[ LNG_ADD        ].a );
+  IupSetAttribute( guiCode->type, "4", appLang->a[ LNG_REMOVE     ].a );
+  IupSetAttribute( guiCode->type, "5", appLang->a[ LNG_COMPARISON ].a );
+  IupSetAttribute( guiCode->type, "6", appLang->a[ LNG_JOKER      ].a );
   IupSetStrAttribute( guiCode->type, "7", "(M)" );
 }
 extern void guiCmp_OnInit( void );

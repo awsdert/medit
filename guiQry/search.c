@@ -1,19 +1,19 @@
 #include "qry.h"
 #define SEARCH( T, C ) \
-  ipSkPipe( &mepI.pipe, 0, FPOS_SOF ); \
+  ipFdSetPos( mepI.fd, 0, IP_S_SET ); \
   strcpy_s( szPath, 10, szNow ); \
   strcat_s( szPath, 10, T##Ex ); \
-  mepO.pipe = ipMkFile( szPath, 0666, 0, ACTION_OPEN_NEW, NULL ); \
+  ipFdOpenA( &mepO.fd, szPath, IP_O_FILE | IP_O_RW, IP_D_RW, IP_A_RW ); \
   if ( qNo ) \
   { \
-    if ( prev.pipe ) \
+    if ( prev ) \
     { \
-      ipShutPipe( &prev ); \
-      ipShutPipe( &mepP.pipe ); \
+      ipFdShut( prev ); \
+      ipFdShut( mepP.fd ); \
     } \
     strcpy_s( szPath, 10, szOld ); \
     strcat_s( szPath, 10, T##Ex ); \
-    prev = ipOpenFile( szPath, 0666, 0 ); \
+    ipFdOpenA( &prev, szPath, IP_O_RW, IP_D_RW, IP_A_RW ); \
   } \
   i = 0; \
   do \
@@ -22,11 +22,11 @@
     ++i; \
   } \
   while ( i < C ); \
-  ipShutPipe( &mepO.pipe );
+  ipFdShut( mepO.fd );
 
 void search( ushort used )
 {
-  Ipipe prev = {0};
+  int prev = 0;
   ME_PIPE   mepI   = {{0}}, mepO = {{0}}, mepP = {{0}};
   ME_LPN   fpMecM = {0}, fpMecN = {0};
   ME_LINT  siMecM = {0}, siMecN = {0};
@@ -52,7 +52,7 @@ void search( ushort used )
     fEx[] = ".mef",
     iEx[] = ".mes",
     uEx[] = ".meu";
-  mepI.pipe = ipOpenFile( "test.xps", 0666, SHARE_READ );
+  ipFdOpenA( &mepI.fd, "test.xps", IP_O_RW, IP_D_RW, IP_A_RW );
   _itoa_s( qNo, szDmp, 4, 10 );
   strcat_s( szNow, 10, DIR_SEP );
   strcpy_s( szOld, 10, szNow );
@@ -64,25 +64,25 @@ void search( ushort used )
   strcat_s( szOld, 10, szDmp );
   strcpy_s( szPath, 10, szNow );
   strcat_s( szPath, 10, ".dmp" );
-  mepO.pipe = ipMkFile( szPath, 0666, 0, ACTION_OPEN_NEW, NULL );
-  isEof = ipRdPipe( &mepI.pipe, mepI.buff, BUFSIZ );
+  ipFdOpenA( &mepO.fd, szPath, IP_O_MKFILE | IP_O_RW, IP_D_RW, IP_A_RW );
+  isEof = ipFdRdBuff( mepI.fd, mepI.buff, BUFSIZ );
   do
   {
-    ipWrPipe( &mepO.pipe, mepO.buff, BUFSIZ );
-    isEof = ipRdPipe( &mepI.pipe, mepI.buff, BUFSIZ );
+    ipFdWrBuff( mepO.fd, mepO.buff, BUFSIZ );
+    isEof = ipFdRdBuff( mepI.fd, mepI.buff, BUFSIZ );
   }
   while ( isEof );
-  ipShutPipe( &mepI.pipe );
-  ipShutPipe( &mepO.pipe );
-  mepI.pipe = ipOpenFile( szPath, 0666, 0 );
+  ipFdShut( mepI.fd );
+  ipFdShut( mepO.fd );
+  ipFdOpenA( &mepI.fd, szPath, IP_O_RW, IP_D_RW, IP_A_RW );
   SEARCH( f, 3 );
   SEARCH( i, 5 );
   SEARCH( u, 5 );
   /* Close Down Pipes */
-  if ( prev.pipe )
+  if ( prev )
   {
-    ipShutPipe( &prev );
-    ipShutPipe( &mepP.pipe );
+    ipFdShut( prev );
+    ipFdShut( mepP.fd );
   }
-  ipShutPipe( &mepI.pipe );
+  ipFdShut( mepI.fd );
 }

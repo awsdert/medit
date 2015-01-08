@@ -18,19 +18,19 @@ typedef enum _REGION_T
 
 typedef struct _HACKL
 {
-  char **names;
+  NAME  *names;
   HACKS *hacks;
 } HACKL;
 
 typedef struct _HACK_LIB_COM
 {
-  hack_t* (*ReSize)( HACKL *hl, hack_t *indexList, hack_t count );
+  void    (*ReSize)( HACKL *hl, hack_t **indexList, hack_t count );
   // File Handling
-  void    (*OnLoad)( Ipipe *file, char const *dataDir );
-  void    (*OnSave)( Ipipe *file, char const *dataDir );
+  void    (*OnLoad)(  FILE *file, char const *dataDir );
+  void    (*OnSave)(  FILE *file, char const *dataDir );
   // Replace with handler of _source when not loading/saving a file
-  uchar   (*RdLine)( char  *line, void *_source );
-  uchar   (*WrLine)( char  *line, void *_source );
+  uchar   (*RdLine)(  char *line, void *_source );
+  uchar   (*WrLine)(  char *line, void *_source );
   // 80 characters per line
   uchar   (*txt2raw)( HACK *hack, char *line, void *_source );
   uchar   (*raw2txt)( HACK *hack, char *line, void *_source );

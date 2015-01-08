@@ -11,11 +11,17 @@ int  guiMenu_OnValueChanged( Ihandle *ih );
 #define guiData_Apply 2
 #define guiData_Reset 3
 #define guiData_Save  4
+#define guiData_Add   5
+#define guiData_Ins   6
+#define guiData_Shl   7
+#define guiData_Shr   8
+#define guiData_Rem   9
 #define guiData_Count guiData_Save
+#define guiList_Count guiData_Rem
 #define guiMenu_Org   1
 #define guiMenu_Pfm   2
 #define guiMenu_Tar   3
-#define guiMenu_Pfl   4
+#define guiMenu_Pro   4
 #define guiMenu_Qry   5
 #define guiMenu_Res   6
 #define guiMenu_Med   7
@@ -29,28 +35,39 @@ void guiMenu_OnLang( void )
 {
   GUI_CODES *codes = guiCodes;
   CODES *srcC = srcCodes, *tmpC = tmpCodes;
-  IupSetAttribute( guiData, MSTR( guiData_Load  ), appLang->x[ LNG_LOAD         ] );
-  IupSetAttribute( guiData, MSTR( guiData_Apply ), appLang->x[ LNG_APPLY        ] );
-  IupSetAttribute( guiData, MSTR( guiData_Reset ), appLang->x[ LNG_RESET        ] );
-  IupSetAttribute( guiData, MSTR( guiData_Save  ), appLang->x[ LNG_SAVE         ] );
-  IupSetAttribute( guiMenu, MSTR( guiMenu_Org   ), appLang->x[ LNG_ORGANISATION ] );
-  IupSetAttribute( guiMenu, MSTR( guiMenu_Pfm   ), appLang->x[ LNG_PLATFORM     ] );
-  IupSetAttribute( guiMenu, MSTR( guiMenu_Tar   ), appLang->x[ LNG_TARGET       ] );
-  IupSetAttribute( guiMenu, MSTR( guiMenu_Pfl   ), appLang->x[ LNG_PROFILE      ] );
-  IupSetAttribute( guiMenu, MSTR( guiMenu_Qry   ), appLang->x[ LNG_SEARCH       ] );
-  IupSetAttribute( guiMenu, MSTR( guiMenu_Res   ), appLang->x[ LNG_RESULTS      ] );
-  IupSetAttribute( guiMenu, MSTR( guiMenu_Med   ), appLang->x[ LNG_EDITOR       ] );
-  IupSetAttribute( guiMenu, MSTR( guiMenu_Hacks ), appLang->x[ LNG_HACKS        ] );
-  IupSetAttribute( guiMenu, MSTR( guiMenu_Hack  ), appLang->x[ LNG_HACK         ] );
-  IupSetAttribute( guiMenu, MSTR( guiMenu_Codes ), appLang->x[ LNG_CODES        ] );
-  IupSetAttribute( guiMenu, MSTR( guiMenu_Code  ), appLang->x[ LNG_CODE         ] );
-  IupSetAttribute( guiMenu, MSTR( guiMenu_About ), appLang->x[ LNG_ABOUT        ] );
+  int i = IupGetInt( guiMenu, IUP_VALUE );
+  IupSetAttribute( guiData, MSTR( guiData_Load  ), appLang->a[ LNG_LOAD         ].a );
+  IupSetAttribute( guiData, MSTR( guiData_Apply ), appLang->a[ LNG_APPLY        ].a );
+  IupSetAttribute( guiData, MSTR( guiData_Reset ), appLang->a[ LNG_RESET        ].a );
+  IupSetAttribute( guiData, MSTR( guiData_Save  ), appLang->a[ LNG_SAVE         ].a );
+  if ( i == guiMenu_Hacks || i == guiMenu_Codes )
+  {
+    IupSetAttribute( guiData, MSTR( guiData_Add ), appLang->a[ LNG_ADD          ].a );
+    IupSetAttribute( guiData, MSTR( guiData_Ins ), appLang->a[ LNG_INSERT       ].a );
+    IupSetAttribute( guiData, MSTR( guiData_Shl ), appLang->a[ LNG_SHIFT_LEFT   ].a );
+    IupSetAttribute( guiData, MSTR( guiData_Shr ), appLang->a[ LNG_SHIFT_RIGHT  ].a );
+    IupSetAttribute( guiData, MSTR( guiData_Rem ), appLang->a[ LNG_REMOVE       ].a );
+  }
+  else
+    IupSetAttribute( guiData, MSTR( guiData_Add ), NULL );
+  IupSetAttribute( guiMenu, MSTR( guiMenu_Org   ), appLang->a[ LNG_ORGANISATION ].a );
+  IupSetAttribute( guiMenu, MSTR( guiMenu_Pfm   ), appLang->a[ LNG_PLATFORM     ].a );
+  IupSetAttribute( guiMenu, MSTR( guiMenu_Tar   ), appLang->a[ LNG_TARGET       ].a );
+  IupSetAttribute( guiMenu, MSTR( guiMenu_Pro   ), appLang->a[ LNG_PROFILE      ].a );
+  IupSetAttribute( guiMenu, MSTR( guiMenu_Qry   ), appLang->a[ LNG_SEARCH       ].a );
+  IupSetAttribute( guiMenu, MSTR( guiMenu_Res   ), appLang->a[ LNG_RESULTS      ].a );
+  IupSetAttribute( guiMenu, MSTR( guiMenu_Med   ), appLang->a[ LNG_EDITOR       ].a );
+  IupSetAttribute( guiMenu, MSTR( guiMenu_Hacks ), appLang->a[ LNG_HACKS        ].a );
+  IupSetAttribute( guiMenu, MSTR( guiMenu_Hack  ), appLang->a[ LNG_HACK         ].a );
+  IupSetAttribute( guiMenu, MSTR( guiMenu_Codes ), appLang->a[ LNG_CODES        ].a );
+  IupSetAttribute( guiMenu, MSTR( guiMenu_Code  ), appLang->a[ LNG_CODE         ].a );
+  IupSetAttribute( guiMenu, MSTR( guiMenu_About ), appLang->a[ LNG_ABOUT        ].a );
 #ifndef EMULATOR
   guiOrg_OnLang();
   guiPfm_OnLang();
   guiTar_OnLang();
 #endif
-  guiPfl_OnLang();
+  guiPro_OnLang();
   guiHacks_OnLang();
   guiHack_OnLang();
   guiCodes_SetGUI( &guiHack.codes, &srcHackCodes, &tmpHackCodes );
@@ -88,7 +105,7 @@ int  guiMenu_OnValueChanged( Ihandle *ih )
         guiPfm.main.fset,
         guiTar.main.fset,
 #endif
-        guiPfl.main.fset,
+        guiPro.main.fset,
         guiQry.main.fset,
         guiRes.main.fset,
                     NULL,
@@ -104,7 +121,7 @@ int  guiMenu_OnValueChanged( Ihandle *ih )
     guiPfm_OnShow,
     guiTar_OnShow,
 #endif
-    guiPfl_OnShow,
+    guiPro_OnShow,
     guiQry_OnShow,
     guiRes_OnShow,
              NULL,
@@ -136,6 +153,7 @@ int  guiMenu_OnValueChanged( Ihandle *ih )
     IupShow( fset[i] );
     cb[i]( fset[i] );
   }
+  guiMenu_OnLang();
   // Force Update GUI
   IupRefresh( guiDlg.vb );
   IupRedraw( guiDlg.vb, 1 );
@@ -144,28 +162,40 @@ int  guiMenu_OnValueChanged( Ihandle *ih )
 }
 void guiOpen( uchar saveFile )
 {
-
-  Ipipe file = {0};
+  int fd, op = _O_BINARY | _O_RDWR;
+  FILE *file;
   char path[ PATH_MAX ] = {0};
   void *buff = NULL;
-  ipGetLDataDirFromName( path, PATH_MAX );
+  strcpy_s( path, PATH_MAX, ipGetUsrDirA() );
+  strcat_s( path, PATH_MAX, ".medit" DIR_SEP "data" DIR_SEP );
   if ( !appMethods.OnDefPath || !appMethods.OnDefExt )
     return;
-  appMethods.OnDefPath( path );
-  appMethods.OnDefExt(  path );
-  file = ipOpenFile( path, 0666, SHARE_READ );
-  if ( !file.pipe )
+  appMethods.OnDefPath( path, saveFile );
+  if ( IupGetInt( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
+    op = _O_TEXT | _O_RDWR;
+  if ( !saveFile || IupGetInt( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
+    strcat_s( path, PATH_MAX, "*." );
+  if ( saveFile )
+    op |= _O_CREAT;
+  appMethods.OnDefExt( path );
+  if ( !saveFile || IupGetInt( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
+    IupGetFile( path );
+  ipFdOpenA( &fd, path, op, IP_D_RW, IP_A_RW );
+  file = ipFdOpenFileA( fd, "rw+" );
+  if ( !file )
     return;
   if ( saveFile )
   {
     appMethods.OnApply();
-    appMethods.OnSave( &file );
+    appMethods.OnSave( fd, file );
   }
   else
   {
-    appMethods.OnLoad( &file );
+    appMethods.OnLoad( fd, file );
     appMethods.OnReset();
   }
+  ipShut( file );
+  ipFdShut( fd );
 }
 int  guiData_OnValueChanged( Ihandle *ih )
 {
@@ -173,10 +203,16 @@ int  guiData_OnValueChanged( Ihandle *ih )
   {
   // Load
   case guiData_Load: guiOpen( 0 ); break;
-  case guiData_Apply: appMethods.OnApply(); break;
   case guiData_Reset: appMethods.OnReset(); break;
   // Save
   case guiData_Save: guiOpen( 1 ); break;
+  case guiData_Apply: appMethods.OnApply(); break;
+  // Modify List
+  case guiData_Add: appMethods.OnAdd( 1 ); break;
+  case guiData_Ins: appMethods.OnAdd( 0 ); break;
+  case guiData_Rem: appMethods.OnRem(); break;
+  default: return IUP_DEFAULT;
   }
+  IupSetInt( ih, IUP_VALUE, 0 );
   return IUP_DEFAULT;
 }

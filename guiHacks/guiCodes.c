@@ -38,18 +38,18 @@ uchar guiCodes_BuildTree( Ihandle *ih, uchar i, int p )
   {
   case CODE_CMP:
     attr = "APPENDBRANCH";
-    value = appLang->x[ LNG_COMPARISON ];
+    value = appLang->a[ LNG_COMPARISON ].a;
     break;
   case CODE_JOKER:
     attr = "APPENDBRANCH";
-    value = appLang->x[ LNG_JOKER ];
+    value = appLang->a[ LNG_JOKER ].a;
     break;
-  case CODE_W:      value = appLang->x[ LNG_WRITE  ]; break;
-  case CODE_CPY:    value = appLang->x[ LNG_COPY   ]; break;
-  case CODE_INC:    value = appLang->x[ LNG_ADD    ]; break;
-  case CODE_DEC:    value = appLang->x[ LNG_REMOVE ]; break;
-  case CODE_MASTER: value = appLang->x[ LNG__M_    ]; break;
-  default: value = appLang->x[ LNG_QQQ ];
+  case CODE_W:      value = appLang->a[ LNG_WRITE  ].a; break;
+  case CODE_CPY:    value = appLang->a[ LNG_COPY   ].a; break;
+  case CODE_INC:    value = appLang->a[ LNG_ADD    ].a; break;
+  case CODE_DEC:    value = appLang->a[ LNG_REMOVE ].a; break;
+  case CODE_MASTER: value = appLang->a[ LNG__M_    ].a; break;
+  default: value = appLang->a[ LNG_QQQ ].a;
   }
   IupSetStrAttributeId( ih, attr, p, value );
   if ( tmpCodes->a[i].type == CODE_CMP || tmpCodes->a[i].type == CODE_JOKER )

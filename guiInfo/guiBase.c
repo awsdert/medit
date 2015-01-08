@@ -2,8 +2,6 @@
 BASE *srcBase = NULL;
 BASE *tmpBase = NULL;
 GUI_BASE *guiBase = NULL;
-extern void guiTar_OnDefPath( char *path );
-extern void guiTar_OnDefExt(  char *path );
 uchar GetBase( char *name )
 {
   for ( uchar i = 0; i < tmpTar.bases.c; ++i )
@@ -13,17 +11,17 @@ uchar GetBase( char *name )
   }
   return BASES_COUNT;
 }
-void  guiBase_OnLoad(  Ipipe *file );
-void  guiBase_OnSave(  Ipipe *file );
+void  guiBase_OnLoad(  int fd, FILE *file );
+void  guiBase_OnSave(  int fd, FILE *file );
 void  guiBase_OnApply( void );
 void  guiBase_OnReset( void );
 void  guiBase_OnLang( void )
 {
-  IupSetAttribute( guiBase->main.fset,  IUP_TITLE, appLang->x[ LNG_MEMORY  ] );
-  IupSetAttribute( guiBase->name.fset,  IUP_TITLE, appLang->x[ LNG_NAME    ] );
-  IupSetAttribute( guiBase->addr.fset,  IUP_TITLE, appLang->x[ LNG_ADDRESS ] );
-  IupSetAttribute( guiBase->size.fset,  IUP_TITLE, appLang->x[ LNG_SIZE    ] );
-  IupSetAttribute( guiBase->depth.fset, IUP_TITLE, appLang->x[ LNG_DEPTH   ] );
+  IupSetAttribute( guiBase->main.fset,  IUP_TITLE, appLang->a[ LNG_MEMORY  ].a );
+  IupSetAttribute( guiBase->name.fset,  IUP_TITLE, appLang->a[ LNG_NAME    ].a );
+  IupSetAttribute( guiBase->addr.fset,  IUP_TITLE, appLang->a[ LNG_ADDRESS ].a );
+  IupSetAttribute( guiBase->size.fset,  IUP_TITLE, appLang->a[ LNG_SIZE    ].a );
+  IupSetAttribute( guiBase->depth.fset, IUP_TITLE, appLang->a[ LNG_DEPTH   ].a );
 }
 void guiBase_OnInit( void )
 {
@@ -42,7 +40,8 @@ void guiBase_OnInit( void )
     guiBase->depth.fset, NULL );
   guiBase->main.fset = IupFrame( guiBase->main.vb );
 }
-
+extern void guiTar_OnDefPath( char *path, uchar saveFile );
+extern void guiTar_OnDefExt(  char *path );
 int guiBase_OnShow( Ihandle *ih )
 {
   appMethods.OnDefPath = guiTar_OnDefPath;
@@ -55,18 +54,18 @@ int guiBase_OnShow( Ihandle *ih )
   IupShow( guiBase->size.fset );
   return IUP_DEFAULT;
 }
-void  guiBase_OnLoad( Ipipe *file )
+void  guiBase_OnLoad( int fd, FILE *file )
 {
   uchar i = GetBase( appSession.base );
-  ipSkPipe( file, (int)((uintptr_t)&srcTar.bases.a[i] - (uintptr_t)&srcTar), SEEK_SET );
-  ipRdPipe( file, &srcTar.bases.a[i], sizeof(BASE) );
+  ipFdSetPos( fd, (int)((uintptr_t)&srcTar.bases.a[i] - (uintptr_t)&srcTar), IP_S_SET );
+  ipFdRdBuff( fd, &srcTar.bases.a[i], sizeof(BASE) );
 }
 void  guiBase_OnReset( void ) { tmpTar = srcTar; }
-void  guiBase_OnSave( Ipipe *file )
+void  guiBase_OnSave( int fd, FILE *file )
 {
   uchar i = GetBase( appSession.base );
-  ipSkPipe( file, (int)((uintptr_t)&srcTar.bases.a[i] - (uintptr_t)&srcTar), SEEK_SET );
-  ipWrPipe( file, &srcTar.bases.a[i], sizeof(BASE) );
+  ipFdSetPos( fd, (int)((uintptr_t)&srcTar.bases.a[i] - (uintptr_t)&srcTar), SEEK_SET );
+  ipFdRdBuff( fd, &srcTar.bases.a[i], sizeof(BASE) );
 }
 void  guiBase_OnApply( void ) { srcTar = tmpTar; }
 /// FIXME: Implement Memory Event handlers

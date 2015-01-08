@@ -32,8 +32,8 @@ extern GUI_MAIN guiDlg;
 extern GUI appGui;
 extern Ihandle *guiMenu;
 extern Ihandle *guiData;
-hack_t* hacksReSize( HACKL     *hl, hack_t *indexList, hack_t count );
-uchar*  codesReSize( CODES **codes, uchar  *indexList, uchar  count );
+void hacksReSize( HACKL     *hl, void  **indexList, hack_t count );
+void codesReSize( CODES **codes, uchar **indexList, uchar  count );
 
 #ifdef HLIST
 Ihandle* IupHList( const char *action );

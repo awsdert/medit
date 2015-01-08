@@ -7,8 +7,8 @@ CODES srcHackCodes = {0};
 CODES tmpHackCodes = {0};
 void guiHack_OnLang( void )
 {
-  IupSetAttribute( guiHack.main.fset, IUP_TITLE, appLang->x[ LNG_HACK ] );
-  IupSetAttribute( guiHack.name.fset, IUP_TITLE, appLang->x[ LNG_NAME ] );
+  IupSetAttribute( guiHack.main.fset, IUP_TITLE, appLang->a[ LNG_HACK ].a );
+  IupSetAttribute( guiHack.name.fset, IUP_TITLE, appLang->a[ LNG_NAME ].a );
 }
 extern void guiCodes_OnInit( void );
 void guiHack_OnInit( void )

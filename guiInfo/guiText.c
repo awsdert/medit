@@ -1,7 +1,7 @@
 #include "guiText.h"
 void guiText_SendShowMsg( GUI_TEXT *guiText, char *text )
 {
-  IupSetAttribute( guiText->tb, IUP_VALUE, text );
+  IupSetStrAttribute( guiText->tb, IUP_VALUE, text );
   IupSetAttribute( guiText->fset, "FLOATING", IUP_NO );
   IupShow( guiText->fset );
 }
@@ -15,5 +15,5 @@ void guiText_OnInit( GUI_TEXT *guiText, Icallback OnKAny, Icallback OnValueChang
   if ( OnKAny )
     IupSetCallback( guiText->tb, "K_ANY", OnKAny );
   if ( OnValueChanged )
-    IupSetCallback( guiText->tb, "VALUECHANGED", OnValueChanged );
+    IupSetCallback( guiText->tb, "VALUECHANGED_CB", OnValueChanged );
 }

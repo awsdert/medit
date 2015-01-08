@@ -8,14 +8,14 @@ void guiQry_OnLang( void )
   const int len = NAME_MAX * 2;
   char atrue[NAME_MAX * 2] = {0}, afalse[NAME_MAX * 2] = {0};
   Ihandle *layout = IupGetChild( guiQry.hlQry, 0 );
-  strcat_s( atrue,  len, appLang->x[ LNG_ALWAYS ] );
+  strcat_s( atrue,  len, appLang->a[ LNG_ALWAYS ].a );
   strcat_s( atrue,  len, " " );
-  strcat_s( atrue,  len, appLang->x[ LNG_TRUE ] );
-  strcat_s( afalse, len, appLang->x[ LNG_ALWAYS ] );
+  strcat_s( atrue,  len, appLang->a[ LNG_TRUE ].a );
+  strcat_s( afalse, len, appLang->a[ LNG_ALWAYS ].a );
   strcat_s( afalse, len, " " );
-  strcat_s( afalse, len, appLang->x[ LNG_FALSE ] );
-  IupSetAttribute( guiQry.main.fset, IUP_TITLE, appLang->x[ LNG_SEARCH ] );
-  IupSetAttribute( guiQry.hlQry, "1", appLang->x[ LNG_SEARCH ] );
+  strcat_s( afalse, len, appLang->a[ LNG_FALSE ].a );
+  IupSetAttribute( guiQry.main.fset, IUP_TITLE, appLang->a[ LNG_SEARCH ].a );
+  IupSetAttribute( guiQry.hlQry, "1", appLang->a[ LNG_SEARCH ].a );
   IupSetStrAttribute( guiQry.hlQry, "2", atrue  );
   IupSetStrAttribute( guiQry.hlQry, "3", afalse );
 #ifndef GUI_SHARED

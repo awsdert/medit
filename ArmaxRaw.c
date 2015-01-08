@@ -3,12 +3,12 @@
 HACK_LIB_COM _hackCOM = {0};
 CODE_LIB_COM _codeCOM = {0};
 
-void  armaxRawHack_OnLoad( Ipipe *file, char const *dataDir )
+void  armaxRawHack_OnLoad( FILE *file, char const *dataDir )
 {
   hack_t hi = 0;
   uchar ci = 0;
   size_t len = 0;
-  Ipipe data = {0};
+  int data = 0;
   HACK *hack;
   CODE *code;
   char line[80] = {0};
@@ -38,7 +38,7 @@ void  armaxRawHack_OnLoad( Ipipe *file, char const *dataDir )
     --len;
     if ( line[len] == '"' || line[len] == '\'' )
       line[len] = 0;
-    strcpy_s( _hackCOM.hl.names[hi], NAME_MAX, line );
+    strcpy_s( _hackCOM.hl.names[hi].a, NAME_MAX, line );
     armaxRawHack_RdLine( line, file );
     armaxRawHack_Txt2Raw( hack, line, file );
     _codeCOM.ReSize( &_codeCOM.codes, NULL, 0 );
@@ -56,28 +56,27 @@ void  armaxRawHack_OnLoad( Ipipe *file, char const *dataDir )
     strcpy_s( path, PATH_MAX, dataDir );
     strcat_s( path, PATH_MAX, line );
     strcat_s( path, PATH_MAX, ".src-codes" );
-    data = ipMkFile( path, 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
-    ipWrPipe( &data, _codeCOM.codes, _codeCOM.codes->s + CODES_SIZE );
-    ipShutPipe( &data );
+    ipFdOpenA( &data, path, IP_O_MKTEMP | IP_O_FILE, IP_D_RW, IP_A_RW );
+    ipFdRdBuff( data, _codeCOM.codes, _codeCOM.codes->s + CODES_SIZE );
+    ipFdShut( data );
   }
   _hackCOM.hl.hacks->c = hi;
   _hackCOM.hl.hacks->i = --hi;
 }
-void  armaxRawHack_OnSave( Ipipe *file, char const *dataDir )
+void  armaxRawHack_OnSave( FILE *file, char const *dataDir )
 {
   // TODO: Implement Armax Raw Saver
 }
 uchar armaxRawHack_RdLine( char  *line, void *_source )
 {
   _strset_s( line, 80, 0 );
-  if ( !ipEof( (Ipipe*)_source ) &&
-    ipRdLine( (Ipipe*)_source, line, 80 ) )
+  if ( ipRdLineA( line, 80, (FILE*)_source ) )
     return 1;
   return 0;
 }
 uchar armaxRawHack_WrLine( char  *line, void *_source )
 {
- if ( ipWrLine( (Ipipe*)_source, line, 80, NULL ) )
+ if ( ipWrLineA( line, (FILE*)_source ) )
     return 1;
   return 0;
 }

@@ -11,10 +11,10 @@
 #define QCMP1( CMP_T ) res = ( iNum CMP_T pNum );
 #define QCMP2( CMP_T ) res = (( iNum CMP_T pNum ) != pNum);
 void iQry( uchar    used,
-          ME_PIPE   *mepI,
-          ME_PIPE   *mepO,
-          ME_PIPE   *mepP,
-          Ipipe     prev,
+          ME_PIPE  *mepI,
+          ME_PIPE  *mepO,
+          ME_PIPE  *mepP,
+          int       prev,
           schar    bytes,
           ME_LINT  *mecM,
           ME_LINT  *mecN )
@@ -31,19 +31,19 @@ void iQry( uchar    used,
   ulong i = 0, c = BUFSIZ - bytes;
   uchar res = 0;
   schar offset = -( bytes - 1 );
-  cbRead = ipRdPipe( &mepI->pipe, mepI->buff, BUFSIZ );
-  if ( !prev.pipe )
+  cbRead = ipFdRdBuff( mepI->fd, mepI->buff, BUFSIZ );
+  if ( !prev )
     memset( mepO->buff, UCHAR_MAX, BUFSIZ );
   do
   {
-    if ( !prev.pipe )
+    if ( !prev )
       goto iterate;
     if ( i )
     {
-      ipSkPipe( &mepI->pipe, offset, FPOS_CUR );
-      ipSkPipe( &mepP->pipe, offset, FPOS_CUR );
+      ipFdSetPos( mepI->fd, offset, IP_S_CUR );
+      ipFdSetPos( mepP->fd, offset, IP_S_CUR );
     }
-    ipRdPipe( &prev, mepO->buff, BUFSIZ );
+    ipFdRdBuff( prev, mepO->buff, BUFSIZ );
     if ( !mecM )
       goto old;
 old:
@@ -80,8 +80,8 @@ next:
     }
     while ( i < c );
 iterate:
-    cbRead = ipRdPipe( &mepI->pipe, mepI->buff, BUFSIZ );
-    ipWrPipe( &mepO->pipe, mepO->buff, BUFSIZ );
+    cbRead = ipFdRdBuff( mepI->fd, mepI->buff, BUFSIZ );
+    ipFdWrBuff( mepO->fd, mepO->buff, BUFSIZ );
   }
   while ( cbRead );
 }

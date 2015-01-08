@@ -1,30 +1,34 @@
 #include "guiTar.h"
 #ifndef EMULATOR
 GUI_TAR guiTar = {{NULL}};
-void guiTar_OnDefPath( char *path );
+void guiTar_OnDefPath( char *path, uchar saveFile );
 void guiTar_OnDefExt(  char *path );
-void guiTar_OnLoad( Ipipe *file );
+void guiTar_OnLoad( int fd, FILE *file );
 void guiTar_OnReset( void );
-void guiTar_OnSave( Ipipe *file );
+void guiTar_OnSave( int fd, FILE *file );
 void guiTar_OnApply( void );
 void guiTar_OnLang( void )
 {
-  IupSetAttribute( guiTar.main.fset, IUP_TITLE, appLang->x[ LNG_TARGET ] );
-  IupSetAttribute( guiTar.name.fset, IUP_TITLE, appLang->x[ LNG_NAME   ] );
-  IupSetAttribute( guiTar.file.fset, IUP_TITLE, appLang->x[ LNG_FILE   ] );
-  IupSetAttribute( guiTar.path.fset, IUP_TITLE, appLang->x[ LNG_PATH   ] );
-  IupSetAttribute( guiTar.targ.fset, IUP_TITLE, appLang->x[ LNG_TARGET ] );
-  IupSetAttribute( guiTar.indx.fset, IUP_TITLE, appLang->x[ LNG_MEMORY ] );
+  IupSetAttribute( guiTar.main.fset, IUP_TITLE, appLang->a[ LNG_TARGET ].a );
+  IupSetAttribute( guiTar.name.fset, IUP_TITLE, appLang->a[ LNG_NAME   ].a );
+  IupSetAttribute( guiTar.file.fset, IUP_TITLE, appLang->a[ LNG_FILE   ].a );
+  IupSetAttribute( guiTar.path.fset, IUP_TITLE, appLang->a[ LNG_PATH   ].a );
+  IupSetAttribute( guiTar.targ.fset, IUP_TITLE, appLang->a[ LNG_TARGET ].a );
+  IupSetAttribute( guiTar.indx.fset, IUP_TITLE, appLang->a[ LNG_MEMORY ].a );
   guiBase = &guiTar.base;
   guiBase_OnLang();
 }
 extern void  guiPfm_OnInit( void );
 extern void guiBase_OnInit( void );
+int guiPath_OnKAny( Ihandle *ih, int c );
+int guiTarg_OnKAny( Ihandle *ih, int c );
+int guiPath_OnValueChanged( Ihandle *ih );
+int guiTarg_OnValueChanged( Ihandle *ih );
 void  guiTar_OnInit( void )
 {
   guiPfm_OnInit();
-  guiText_OnInit( &guiTar.path, NULL, NULL );
-  guiText_OnInit( &guiTar.targ, NULL, NULL );
+  guiText_OnInit( &guiTar.path, (Icallback)guiPath_OnKAny, guiPath_OnValueChanged );
+  guiText_OnInit( &guiTar.targ, (Icallback)guiTarg_OnKAny, guiTarg_OnValueChanged );
   guiBase = &guiTar.base;
   guiBase_OnInit();
 #ifdef GUI_SHARED
@@ -74,19 +78,49 @@ int guiTar_OnShow( Ihandle *ih )
   guiTar_OnLang();
   return IUP_DEFAULT;
 }
-void guiTar_OnLoad( Ipipe *file ) { ipRdPipe( file, &srcTar, sizeof(DATA_TAR) ); }
+void guiTar_OnLoad( int fd, FILE *file ) { ipFdRdBuff( fd, &srcTar, sizeof(DATA_TAR) ); }
 void guiTar_OnReset( void ) { tmpTar = srcTar; }
-void guiTar_OnSave( Ipipe *file ) { ipWrPipe( file, &srcTar, sizeof(DATA_TAR) ); }
+void guiTar_OnSave( int fd, FILE *file ) { ipFdWrBuff( fd, &srcTar, sizeof(DATA_TAR) ); }
 void guiTar_OnApply( void ) { srcTar = tmpTar; }
-extern void guiPfm_OnDefPath( char *path );
-void guiTar_OnDefPath( char *path )
+extern void guiPfm_OnDefPath( char *path, uchar saveFile );
+void guiTar_OnDefPath( char *path, uchar saveFile )
 {
-  guiPfm_OnDefPath( path );
+  guiPfm_OnDefPath( path, 1 );
+  if ( !saveFile )
+    return;
   strcat_s( path, PATH_MAX, DIR_SEP );
-  strcat_s( path, PATH_MAX, appSession.tar );
+  strcat_s( path, PATH_MAX, srcTar.file );
 }
 void guiTar_OnDefExt( char *path )
 {
   strcat_s( path, PATH_MAX, "m-tar" );
+}
+int guiTarg_OnKAny( Ihandle *ih, int c )
+{
+  c ^= 0xF0000000;
+  if ( c < ' ' )
+    return IUP_DEFAULT;
+  else if ( strlen( tmpTar.targ ) == NAME_MAX )
+    return IUP_CLOSE;
+  return IUP_DEFAULT;
+}
+int guiTarg_OnValueChanged( Ihandle *ih )
+{
+  strcpy_s( tmpTar.targ, NAME_MAX, IupGetAttribute( ih, IUP_VALUE ) );
+  return IUP_DEFAULT;
+}
+int guiPath_OnKAny( Ihandle *ih, int c )
+{
+  c ^= 0xF0000000;
+  if ( c < ' ' )
+    return IUP_DEFAULT;
+  else if ( strlen( tmpTar.path ) == PATH_MAX )
+    return IUP_CLOSE;
+  return IUP_DEFAULT;
+}
+int guiPath_OnValueChanged( Ihandle *ih )
+{
+  strcpy_s( tmpTar.path, PATH_MAX, IupGetAttribute( ih, IUP_VALUE ) );
+  return IUP_DEFAULT;
 }
 #endif

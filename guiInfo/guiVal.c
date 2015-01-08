@@ -3,8 +3,8 @@ GUI_VAL *guiVal = NULL;
 void guiVal_SetGUI( GUI_VAL *val ) { guiVal = val; }
 void guiVal_OnLang( void )
 {
-  IupSetAttribute( guiVal->value.fset, IUP_TITLE, appLang->x[ LNG_VALUE ] );
-  IupSetAttribute( guiVal->hlType,   IUP_TITLE, appLang->x[ LNG_TYPE  ] );
+  IupSetAttribute( guiVal->value.fset, IUP_TITLE, appLang->a[ LNG_VALUE ].a );
+  IupSetAttribute( guiVal->hlType,     IUP_TITLE, appLang->a[ LNG_TYPE  ].a );
 }
 void guiVal_OnInit( void )
 {

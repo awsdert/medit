@@ -53,6 +53,9 @@ typedef enum _LNG_T
   LNG_NEXT,
   LNG_FINAL,
   LNG_NEW,
+  LNG_INSERT,
+  LNG_SHIFT_LEFT,
+  LNG_SHIFT_RIGHT,
   LNG_DELETE,
   LNG_MOVE,
   LNG_APPLY,
@@ -63,7 +66,7 @@ typedef enum _LNG_T
 } LNG_T;
 typedef struct _LANG
 {
-  char x[LNG_T_COUNT][NAME_MAX];
+  NAME a[LNG_T_COUNT];
 } LANG;
 extern LANG const *appLang;
 /**

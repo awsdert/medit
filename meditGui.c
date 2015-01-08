@@ -33,7 +33,7 @@ int main( int argc, char *argv[] )
 {
   int    ret = 0;
   long   i = 0, p = 0, j = 0, k = 0, c = 0, l = 0, lines = 100;
-  Ipipe pipe = {0};
+  int pipe;
   char
     text[100][20] = {{0}},
     szSep[] = "\\/",
@@ -43,18 +43,16 @@ int main( int argc, char *argv[] )
   HACK_LIB_COM* hfunc = NULL;
   CODE_LIB_COM* cfunc = NULL;
   DWORD   size = 0;
-  char **lngx = (char**)appLang->x;
+  char **lngx = (char**)appLang;
   /* Initialise IUP */
   if ( IupOpen(&argc, &argv) == IUP_ERROR )
   {
     fprintf( stderr, "Error Opening IUP." );
     return -1;
   }
-  ipInitPiping( PP_TXT( WORKSPACE_NAME ), PP_TXT( TARGET_NAME ) );
   _appInitCwd( argv, "medit" );
   // Capture default font
   szTok = NULL;
-  memset( szLine, 0, PATH_MAX );
   szTmp = IupGetAttribute( NULL, "DEFAULTFONT" );
   strcpy_s( szLine, PATH_MAX, szTmp );
   szTmp = strtok_s( szLine, ", ", &szTok );
@@ -62,10 +60,11 @@ int main( int argc, char *argv[] )
   szTmp = strtok_s( NULL, ", ", &szTok );
   strcat_s( appGui.fontSize, 5, szTmp );
   // Prep directories in case they don't exist
-  pipe = ipMkDir( "", 0666, SHARE_READ | SHARE_WRITE, ACTION_OPEN_NEW );
-  ipShutPipe( &pipe );
-  pipe = ipMkDir( "lang", 0666, SHARE_READ | SHARE_WRITE, ACTION_OPEN_NEW );
-  ipShutPipe( &pipe );
+  strcpy_s( szLine, PATH_MAX, ipGetUsrDirA() );
+  strcat_s( szLine, PATH_MAX, DIR_SEP ".medit" );
+  ipMkDirA( szLine );
+  strcat_s( szLine, PATH_MAX, DIR_SEP "lang" );
+  ipMkDirA( szLine );
   // Just force a NULL character
   appSession.lang[6] = 0;
   appLoadLang( appSession.lang );
@@ -89,16 +88,18 @@ int main( int argc, char *argv[] )
   guiDlg.vb = IupVbox( NULL );
   guiDlg.fset = IupDialog( guiDlg.vb );
   guiMenu_OnInit();
-  IupSetAttribute( guiDlg.fset, IUP_TITLE,   "Medit" );
-  IupSetAttribute( guiDlg.fset, IUP_SIZE,    "320x320"  );
+  IupSetAttribute( guiDlg.fset, IUP_TITLE, "Medit" );
+  IupSetAttribute( guiDlg.fset, IUP_SIZE,  "320x320"  );
   /* Show all */
   IupRefresh( guiDlg.fset );
   IupFlush();
   IupShow( guiDlg.fset );
   ret = IupMainLoop();
-  pipe = ipMkFile("default.m-session", 0666, SHARE_READ, ACTION_OPEN_NEW, NULL );
-  ipWrPipe( &pipe, &appSession, sizeof( SESSION ) );
-  ipShutPipe( &pipe );
+  strcpy_s( szLine, PATH_MAX, ipGetUsrDirA() );
+  strcat_s( szLine, PATH_MAX, DIR_SEP ".medit" DIR_SEP "default.m-session" );
+  ipFdOpenA( &pipe, szLine, IP_O_MKFILE | IP_O_RW, IP_D_RW, IP_A_RW );
+  ipFdWrBuff( pipe, &appSession, sizeof( SESSION ) );
+  ipFdShut( pipe );
 #ifdef TEST_HL_LIB
   lib = appFreeLib( lib );
 #endif

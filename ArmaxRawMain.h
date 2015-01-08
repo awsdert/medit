@@ -24,10 +24,10 @@ OPEN_C
 ARMAX_RAW_EXP HACK_LIB_COM* GetHackFuncs( void );
 ARMAX_RAW_EXP CODE_LIB_COM* GetCodeFuncs( void );
 
-void  armaxRawHack_OnLoad( Ipipe *file, char const *dataDir );
-void  armaxRawHack_OnSave( Ipipe *file, char const *dataDir );
-uchar armaxRawHack_RdLine( char  *line, void *_source );
-uchar armaxRawHack_WrLine( char  *line, void *_source );
+void  armaxRawHack_OnLoad(  FILE *file, char const *dataDir );
+void  armaxRawHack_OnSave(  FILE *file, char const *dataDir );
+uchar armaxRawHack_RdLine(  char *line, void *_source );
+uchar armaxRawHack_WrLine(  char *line, void *_source );
 uchar armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source );
 uchar armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source );
 uchar armaxRawCode_Txt2Raw( CODE *code, char *line, void *_source );

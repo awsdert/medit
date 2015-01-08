@@ -138,14 +138,14 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="guiInfo/guiOrg.h" />
-		<Unit filename="guiInfo/guiPfl.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="guiInfo/guiPfl.h" />
 		<Unit filename="guiInfo/guiPfm.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="guiInfo/guiPfm.h" />
+		<Unit filename="guiInfo/guiPro.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="guiInfo/guiPro.h" />
 		<Unit filename="guiInfo/guiSpin.c">
 			<Option compilerVar="CC" />
 		</Unit>

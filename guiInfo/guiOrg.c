@@ -4,9 +4,9 @@
 GUI_ORG guiOrg = {{NULL}};
 void  guiOrg_OnLang( void )
 {
-  IupSetAttribute( guiOrg.main.fset, IUP_TITLE, appLang->x[ LNG_ORGANISATION ] );
-  IupSetAttribute( guiOrg.name.fset, IUP_TITLE, appLang->x[ LNG_NAME         ] );
-  IupSetAttribute( guiOrg.file.fset, IUP_TITLE, appLang->x[ LNG_FILE         ] );
+  IupSetAttribute( guiOrg.main.fset, IUP_TITLE, appLang->a[ LNG_ORGANISATION ].a );
+  IupSetAttribute( guiOrg.name.fset, IUP_TITLE, appLang->a[ LNG_NAME         ].a );
+  IupSetAttribute( guiOrg.file.fset, IUP_TITLE, appLang->a[ LNG_FILE         ].a );
 }
 void  guiOrg_OnInit( void )
 {
@@ -20,11 +20,11 @@ void  guiOrg_OnInit( void )
   IupSetAttribute( guiOrg.main.fset, "FLOATING", IUP_YES );
   guiOrg_OnLang();
 }
-void  guiOrg_OnDefPath( char *path );
+void  guiOrg_OnDefPath( char *path, uchar saveFile );
 void  guiOrg_OnDefExt(  char *path );
-void  guiOrg_OnLoad( Ipipe *file );
+void  guiOrg_OnLoad( int fd, FILE *file );
 void  guiOrg_OnReset( void );
-void  guiOrg_OnSave( Ipipe *file );
+void  guiOrg_OnSave( int fd, FILE *file );
 void  guiOrg_OnApply( void );
 int   guiOrg_OnShow( Ihandle *ih )
 {
@@ -44,17 +44,20 @@ int   guiOrg_OnShow( Ihandle *ih )
   guiOrg_OnLang();
   return IUP_DEFAULT;
 }
-void guiOrg_OnDefPath( char *path )
+void guiOrg_OnDefPath( char *path, uchar saveFile )
 {
   strcat_s( path, PATH_MAX, "org" );
-  strcat_s( path, PATH_MAX, appSession.org );
+  if ( !saveFile )
+    return;
+  strcat_s( path, PATH_MAX, DIR_SEP );
+  strcat_s( path, PATH_MAX, srcOrg.file );
 }
 void guiOrg_OnDefExt( char *path )
 {
   strcat_s( path, PATH_MAX, "m-org" );
 }
-void  guiOrg_OnLoad( Ipipe *file ) { ipRdPipe( file, &srcOrg, sizeof(DATA_ORG) ); }
+void  guiOrg_OnLoad( int fd, FILE *file ) { ipFdRdBuff( fd, &srcOrg, sizeof(DATA_ORG) ); }
 void  guiOrg_OnReset( void ) { tmpOrg = srcOrg; }
-void  guiOrg_OnSave( Ipipe *file ) { ipWrPipe( file, &srcOrg, sizeof(DATA_ORG) ); }
+void  guiOrg_OnSave( int fd, FILE *file ) { ipFdWrBuff( fd, &srcOrg, sizeof(DATA_ORG) ); }
 void  guiOrg_OnApply( void ) { srcOrg = tmpOrg; }
 #endif

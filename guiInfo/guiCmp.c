@@ -4,10 +4,10 @@ void guiCmp_SetGUI( GUI_CMP *cmp ) { guiCmp = cmp; }
 void guiCmp_OnLang( void )
 {
   Ihandle *layout = IupGetChild( guiCmp->listCmp, 0 );
-  IupSetAttribute( guiCmp->listCmp, IUP_TITLE, appLang->x[ LNG_COMPARISON ] );
-  IupSetAttribute(    guiCmp->listCmp,  "1", appLang->x[ LNG_DUMP ] );
-  IupSetAttribute(    guiCmp->listCmp, "12", appLang->x[ LNG_UNDO ] );
-  IupSetAttribute(    guiCmp->listCmp, "13", appLang->x[ LNG_REDO ] );
+  IupSetAttribute( guiCmp->listCmp, IUP_TITLE, appLang->a[ LNG_COMPARISON ].a );
+  IupSetAttribute(    guiCmp->listCmp,  "1", appLang->a[ LNG_DUMP ].a );
+  IupSetAttribute(    guiCmp->listCmp, "12", appLang->a[ LNG_UNDO ].a );
+  IupSetAttribute(    guiCmp->listCmp, "13", appLang->a[ LNG_REDO ].a );
 }
 void guiCmp_OnInit( void )
 {
@@ -16,7 +16,7 @@ void guiCmp_OnInit( void )
   int i = 0, c;
   Ihandle *child, *kid;
   guiCmp->listCmp = IupHList(NULL);
-  IupSetAttribute(    guiCmp->listCmp,  "1", appLang->x[ LNG_DUMP ] );
+  IupSetAttribute(    guiCmp->listCmp,  "1", appLang->a[ LNG_DUMP ].a );
   IupSetStrAttribute( guiCmp->listCmp,  "2", "==" );
   IupSetStrAttribute( guiCmp->listCmp,  "3", "!=" );
   IupSetStrAttribute( guiCmp->listCmp,  "4",  ">" );
@@ -27,8 +27,8 @@ void guiCmp_OnInit( void )
   IupSetStrAttribute( guiCmp->listCmp,  "9", "!^" );
   IupSetStrAttribute( guiCmp->listCmp, "10",  "~" );
   IupSetStrAttribute( guiCmp->listCmp, "11", "!~" );
-  IupSetAttribute(    guiCmp->listCmp, "12", appLang->x[ LNG_UNDO ] );
-  IupSetAttribute(    guiCmp->listCmp, "13", appLang->x[ LNG_REDO ] );
+  IupSetAttribute(    guiCmp->listCmp, "12", appLang->a[ LNG_UNDO ].a );
+  IupSetAttribute(    guiCmp->listCmp, "13", appLang->a[ LNG_REDO ].a );
   layout = IupGetChild( guiCmp->listCmp, 0 );
   for
   (
