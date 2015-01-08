@@ -1,34 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="msw-x86-d-vc" />
-	<File name="appCwd.c" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="guiQry\search.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1276" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="guiInfo\guiSpin.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="144" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="guiQry\fQry.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="92" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="appData.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1098" topLine="43" />
-		</Cursor>
-	</File>
-	<File name="guiInfo\guiTar.c" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="896" topLine="10" />
-		</Cursor>
-	</File>
-	<File name="guiQry\guiQry.c" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="835" topLine="0" />
+			<Cursor1 position="16" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="appLang.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -41,9 +16,9 @@
 			<Cursor1 position="311" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="guiQry\guiQry.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="guiQry\uQry.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="57" topLine="0" />
+			<Cursor1 position="16" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="appLib.c" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -56,9 +31,9 @@
 			<Cursor1 position="314" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="guiQry\guiRes.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="hack.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="33" topLine="0" />
+			<Cursor1 position="2997" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="appLng.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -71,9 +46,9 @@
 			<Cursor1 position="184" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="guiQry\guiRes.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="meditGui.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="259" topLine="0" />
+			<Cursor1 position="379" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="ftoa.c" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -86,11 +61,6 @@
 			<Cursor1 position="250" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="guiQry\iQry.c" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="842" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="guiHacks\guiCode.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="347" topLine="0" />
@@ -101,29 +71,14 @@
 			<Cursor1 position="40" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="guiQry\qry.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1509" topLine="35" />
-		</Cursor>
-	</File>
 	<File name="guiHacks\guiCode.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="355" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="..\Ipipe\ipipe\c.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4427" topLine="187" />
-		</Cursor>
-	</File>
 	<File name="guiMain.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="72" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="guiQry\search.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="16" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="guiHacks\guiCodes.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -133,12 +88,7 @@
 	</File>
 	<File name="guiMenu.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="7211" topLine="175" />
-		</Cursor>
-	</File>
-	<File name="guiQry\uQry.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="16" topLine="0" />
+			<Cursor1 position="7288" topLine="206" />
 		</Cursor>
 	</File>
 	<File name="guiHacks\guiCodes.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -151,19 +101,9 @@
 			<Cursor1 position="16" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="hack.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2997" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="guiHacks\guiHack.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="407" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="meditGui.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="379" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="guiHacks\guiHack.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -173,7 +113,7 @@
 	</File>
 	<File name="guiHacks\guiHacks.c" open="1" top="1" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="866" topLine="30" />
+			<Cursor1 position="7010" topLine="236" />
 		</Cursor>
 	</File>
 	<File name="guiHacks\guiHacks.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -226,9 +166,24 @@
 			<Cursor1 position="274" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="..\Ipipe\ipipe\c.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4427" topLine="187" />
+		</Cursor>
+	</File>
+	<File name="guiQry\fQry.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="92" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="guiInfo\guiPfm.c" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="739" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="guiQry\guiQry.c" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="835" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="guiInfo\guiPfm.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -236,14 +191,29 @@
 			<Cursor1 position="35" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="guiQry\guiQry.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="57" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="guiInfo\guiPro.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1034" topLine="2" />
 		</Cursor>
 	</File>
+	<File name="guiQry\guiRes.c" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="33" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="_guiMain.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="646" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="guiQry\guiRes.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="259" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="_hack.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -254,6 +224,36 @@
 	<File name="guiInfo\guiSpin.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="22" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="guiQry\iQry.c" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="842" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="appCwd.c" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1276" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="guiInfo\guiSpin.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="144" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="guiQry\qry.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1509" topLine="35" />
+		</Cursor>
+	</File>
+	<File name="appData.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1098" topLine="43" />
+		</Cursor>
+	</File>
+	<File name="guiInfo\guiTar.c" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="896" topLine="10" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
