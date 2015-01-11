@@ -129,19 +129,23 @@ typedef uchar hack_t;
 #define HACK_T_MAX UCHAR_MAX
 typedef struct _HACK
 {
-  uchar   use : 1;
+  uchar  use : 1;
   // Is Radio List
-  uchar   irl : 1;
+  uchar  irl : 1;
   // ID (codelist file usage only)
-  ulong   id;
+  ulong  id;
   // Current Index
-  hack_t _ci;
-  // Parent Index
-  hack_t _pi;
+  hack_t ci;
+  // UI Index
+  hack_t ui;
+  // Owner Index
+  hack_t oi;
   // 1st Child Index
-  hack_t _fi;
+  hack_t fi;
   // Next Sibling Index
-  hack_t _ni;
+  hack_t ni;
+  // Prev Sibling Index
+  hack_t pi;
 } HACK;
 static size_t const HACKS_SIZE = (sizeof(size_t) + (3 * sizeof(hack_t)));
 typedef struct _HACKS

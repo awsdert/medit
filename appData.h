@@ -53,8 +53,9 @@ typedef struct _METHODS
   void   (*OnReset)( void );
   void    (*OnSave)( int fd, FILE *file );
   void   (*OnApply)( void );
-  void     (*OnAdd)( int i );
+  void     (*OnAdd)( uchar insert );
   void     (*OnRem)( void );
+  void     (*OnMov)( schar x, schar y );
 } METHODS;
 
 extern SESSION appSession;

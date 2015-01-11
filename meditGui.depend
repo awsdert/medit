@@ -899,7 +899,7 @@
 1416092227 source:c:\users\lee\documents\github\medit\rdtxthacks.c
 	"guiMain.h"
 
-1420291410 c:\users\lee\documents\github\medit\hack.h
+1420928562 c:\users\lee\documents\github\medit\hack.h
 	<float.h>
 	<ipipe/c.h>
 
@@ -948,10 +948,10 @@
 1415089376 source:c:\users\lee\documents\github\medit\guilist.c
 	"_guiMain.h"
 
-1420733320 source:c:\users\lee\documents\github\medit\guimenu.c
+1420931802 source:c:\users\lee\documents\github\medit\guimenu.c
 	"guiMain.h"
 
-1420627601 c:\users\lee\documents\github\medit\applng.h
+1420931802 c:\users\lee\documents\github\medit\applng.h
 	<ipipe/main.h>
 
 1418923922 c:\users\lee\documents\github\medit\appcfg.h
@@ -1030,7 +1030,7 @@
 1420627667 source:c:\users\lee\documents\github\medit\guihacks\guicodes.c
 	"guiCodes.h"
 
-1420739734 source:c:\users\lee\documents\github\medit\guihacks\guihacks.c
+1420998525 source:c:\users\lee\documents\github\medit\guihacks\guihacks.c
 	"guiHacks.h"
 
 1416354117 source:c:\users\lee\documents\github\medit\guihacks\rdtxthacks.c
@@ -1096,7 +1096,7 @@
 1420627446 source:c:\users\lee\documents\github\medit\meditgui.c
 	"guiMain.h"
 
-1420627631 source:c:\users\lee\documents\github\medit\applang.c
+1420931802 source:c:\users\lee\documents\github\medit\applang.c
 	"appLng.h"
 
 1420281600 c:\users\lee\documents\github\medit\guihacks\guicode.h
@@ -1166,7 +1166,7 @@
 1420557095 source:c:\users\lee\documents\github\medit\guiinfo\guipfl.c
 	"guiPro.h"
 
-1420560029 c:\users\lee\documents\github\medit\appdata.h
+1420926137 c:\users\lee\documents\github\medit\appdata.h
 	"_hack.h"
 
 1420556129 c:\users\lee\documents\github\medit\guiinfo\guipro.h

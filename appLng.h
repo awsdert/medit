@@ -54,6 +54,10 @@ typedef enum _LNG_T
   LNG_FINAL,
   LNG_NEW,
   LNG_INSERT,
+  LNG_SHIFT_UP,
+  LNG_SHIFT_UP__NB_,
+  LNG_SHIFT_DOWN,
+  LNG_SHIFT_DOWN__NB_,
   LNG_SHIFT_LEFT,
   LNG_SHIFT_RIGHT,
   LNG_DELETE,
@@ -69,11 +73,6 @@ typedef struct _LANG
   NAME a[LNG_T_COUNT];
 } LANG;
 extern LANG const *appLang;
-/**
-  Default Language is English (GB), used only for making translations
-  by another app that will be developed
-**/
-char const* appGetText( LNG_T text );
 
 /**
   \brief loads "~/APPDATA/APPNAME/lang/*.applang"

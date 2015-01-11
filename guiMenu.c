@@ -13,9 +13,13 @@ int  guiMenu_OnValueChanged ( Ihandle *ih );
 #define guiData_Save  4
 #define guiData_Add   5
 #define guiData_Ins   6
-#define guiData_Shl   7
-#define guiData_Shr   8
-#define guiData_Rem   9
+#define guiData_Shu   7
+#define guiData_ShuNB 8
+#define guiData_Shd   9
+#define guiData_ShdNB 10
+#define guiData_Shl   11
+#define guiData_Shr   12
+#define guiData_Rem   13
 #define guiData_Count guiData_Save
 #define guiList_Count guiData_Rem
 #define guiMenu_Org   1
@@ -44,6 +48,10 @@ void guiMenu_OnLang ( void )
   {
     IupSetAttribute ( guiData, MSTR ( guiData_Add ), appLang->a[ LNG_ADD          ].a );
     IupSetAttribute ( guiData, MSTR ( guiData_Ins ), appLang->a[ LNG_INSERT       ].a );
+    IupSetAttribute ( guiData, MSTR ( guiData_Shu ), appLang->a[ LNG_SHIFT_UP     ].a );
+    IupSetAttribute ( guiData, MSTR ( guiData_ShuNB ), appLang->a[ LNG_SHIFT_UP__NB_     ].a );
+    IupSetAttribute ( guiData, MSTR ( guiData_Shd ), appLang->a[ LNG_SHIFT_DOWN   ].a );
+    IupSetAttribute ( guiData, MSTR ( guiData_ShdNB ), appLang->a[ LNG_SHIFT_DOWN__NB_   ].a );
     IupSetAttribute ( guiData, MSTR ( guiData_Shl ), appLang->a[ LNG_SHIFT_LEFT   ].a );
     IupSetAttribute ( guiData, MSTR ( guiData_Shr ), appLang->a[ LNG_SHIFT_RIGHT  ].a );
     IupSetAttribute ( guiData, MSTR ( guiData_Rem ), appLang->a[ LNG_REMOVE       ].a );
@@ -233,10 +241,28 @@ int  guiData_OnValueChanged ( Ihandle *ih )
     break;
   // Modify List
   case guiData_Add:
-    appMethods.OnAdd ( 1 );
+    appMethods.OnAdd ( 0 );
     break;
   case guiData_Ins:
-    appMethods.OnAdd ( 0 );
+    appMethods.OnAdd ( 1 );
+    break;
+  case guiData_Shu:
+    appMethods.OnMov ( 1, 1 );
+    break;
+  case guiData_ShuNB:
+    appMethods.OnMov ( 0, 1 );
+    break;
+  case guiData_Shd:
+    appMethods.OnMov ( 1, -1 );
+    break;
+  case guiData_ShdNB:
+    appMethods.OnMov ( 0, -1 );
+    break;
+  case guiData_Shl:
+    appMethods.OnMov ( -1, 0 );
+    break;
+  case guiData_Shr:
+    appMethods.OnMov ( 1, 0 );
     break;
   case guiData_Rem:
     appMethods.OnRem();

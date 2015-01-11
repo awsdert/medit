@@ -41,17 +41,19 @@ void hacksReSize ( HACKL *hl, hack_t **indexList, hack_t count )
   {
     hl->hacks->c = count;
     if ( hl->hacks->i > count )
+    {
       hl->hacks->i = count;
+    }
     if ( count >= c )
     {
       return;
     }
     c -= count;
-    (void)memset ( &hl->names[count], 0, c * NAME_MAX );
-    (void)memset ( &hl->hacks->a[count], 0, c * sizeof ( HACK ) );
+    ( void ) memset ( &hl->names[count], 0, c * NAME_MAX );
+    ( void ) memset ( &hl->hacks->a[count], 0, c * sizeof ( HACK ) );
     if ( indexList )
     {
-      (void)memset ( &(*indexList)[count], 0, c * sizeof ( hack_t ) );
+      ( void ) memset ( & ( *indexList ) [count], 0, c * sizeof ( hack_t ) );
     }
     return;
   }
@@ -64,15 +66,15 @@ void hacksReSize ( HACKL *hl, hack_t **indexList, hack_t count )
   hl->hacks = realloc ( hl->hacks, sizeof ( HACKS ) + s );
   hl->names = realloc ( hl->names, n * NAME_MAX );
   hl->hacks->_c = n;
-  hl->hacks->s  = s + sizeof(HACK);
+  hl->hacks->s  = s + sizeof ( HACK );
   hack_t i = hl->hacks->c;
   c = n - i;
-  (void)memset ( &hl->names[i], 0, c * NAME_MAX );
-  (void)memset ( &hl->hacks->a[i], 0, c * sizeof ( HACK ) );
+  ( void ) memset ( &hl->names[i], 0, c * NAME_MAX );
+  ( void ) memset ( &hl->hacks->a[i], 0, c * sizeof ( HACK ) );
   if ( indexList )
   {
     *indexList = realloc ( *indexList, n * sizeof ( hack_t ) );
-    (void)memset ( & ( *indexList ) [i], 0, c * sizeof ( hack_t ) );
+    ( void ) memset ( & ( *indexList ) [i], 0, c * sizeof ( hack_t ) );
   }
   hl->hacks->c = count;
 }
@@ -80,7 +82,14 @@ int guiHacks_OnSelection ( Ihandle *ih, int id, int status )
 {
   if ( tmpIndex )
   {
-    tmpHacks.hacks->i = ( id < 0 ) ? 0 : ( hack_t ) id;
+    if ( status )
+    {
+      tmpHacks.hacks->i = ( id < 0 ) ? 0 : ( hack_t ) id;
+    }
+    else
+    {
+      tmpHacks.hacks->i = 0;
+    }
   }
   return IUP_DEFAULT;
 }
@@ -108,36 +117,42 @@ void guiHacks_OnInit ( void )
   guiHacks.main.fset = IupFrame ( guiHacks.main.vb );
 #endif
 }
-void guiHacks_BuildTree ( Ihandle *ih, int i )
+hack_t guiHacks_BuildTree ( Ihandle *ih, hack_t i, hack_t ui )
 {
   HACK *hack = &tmpHacks.hacks->a[i];
   char *name = tmpHacks.names[i].a;
+  int p = hack->pi ? tmpHacks.hacks->a[hack->pi].ui : tmpHacks.hacks->a[hack->oi].ui;
+  hack->ui = ui;
+  if ( i == 0 )
+  {
+    p = -1;
+  }
   if ( strcmp ( name, appLang->a[ LNG_NEW ].a ) >= 0 )
   {
     char no[5] = {0};
-    _itoa_s ( hack->_ci, no, 5, 16 );
+    _itoa_s ( hack->ci, no, 5, 16 );
     strcpy_s ( name, NAME_MAX, appLang->a[ LNG_NEW ].a );
     strcat_s ( name, NAME_MAX, " (x" );
     strcat_s ( name, NAME_MAX, no );
     strcat_s ( name, NAME_MAX, ")" );
   }
-  if ( hack->_fi > 0 )
+  if ( hack->fi > 0 )
   {
-    hack->use = 1;
-    IupSetStrAttributeId ( ih, "ADDBRANCH", i - 1, name );
-    IupSetAttributeId ( ih, "TOGGLEVISIBLE", i, IUP_NO );
-    guiHacks_BuildTree ( ih, hack->_fi );
+    IupSetStrAttributeId ( ih, hack->pi ? "INSERTBRANCH" : "ADDBRANCH", p, name );
+    IupSetAttributeId ( ih, "TOGGLEVISIBLE", ui, IUP_NO );
+    ui = guiHacks_BuildTree ( ih, hack->fi, ++ui );
   }
   else
   {
-    IupSetStrAttributeId ( ih, "ADDLEAF", i - 1, name );
-    IupSetAttributeId ( ih, "TOGGLEVISIBLE", i, IUP_YES );
-    IupSetAttributeId ( ih, "TOGGLEVALUE", i, hack->use ? IUP_ON : IUP_OFF );
+    IupSetStrAttributeId ( ih, hack->pi ? "INSERTLEAF" : "ADDLEAF", p, name );
+    IupSetAttributeId ( ih, "TOGGLEVISIBLE", ui, IUP_YES );
+    IupSetAttributeId ( ih, "TOGGLEVALUE", ui, hack->use ? IUP_ON : IUP_OFF );
   }
-  if ( hack->_ni > 0 )
+  if ( hack->ni > 0 )
   {
-    guiHacks_BuildTree ( ih, hack->_ni );
+    ui = guiHacks_BuildTree ( ih, hack->ni, ++ui );
   }
+  return ui;
 }
 extern void guiPro_OnDefPath ( char *path, uchar saveFile );
 void guiHacks_OnDefPath ( char *path, uchar saveFile )
@@ -159,84 +174,85 @@ void guiHacks_OnApply ( void )
     tmpIndex[i] = i;
   }
 }
-hack_t guiHacks_OnAddUpdate ( hack_t i )
+void guiHacks_OnAdd ( uchar insert )
 {
-  HACK *next = &tmpHacks.hacks->a[i];
-  next->_ci = i;
-  if ( next->_fi )
-  {
-    i = guiHacks_OnAddUpdate ( ++next->_fi );
-  }
-  if ( next->_ni )
-  {
-    return guiHacks_OnAddUpdate ( ++next->_ni );
-  }
-  return i;
-}
-void guiHacks_OnAdd ( int i )
-{
-  i = IupGetInt ( guiHacks.treeHacks, IUP_VALUE ) + i;
+  hack_t c = 0, i = 0;
   if ( tmpIndex )
   {
-    tmpHacks.hacks->a[0]._fi = 1;
-    tmpHacks.hacks->a[0]._ni = 0;
-    if ( i < 1 )
+    i = tmpHacks.hacks->i;
+    tmpHacks.hacks->a[0].fi = 1;
+    tmpHacks.hacks->a[0].ni = 0;
+    if ( !i )
     {
-      i = tmpHacks.hacks->c;
+      i = tmpHacks.hacks->a[0].fi;
+      if ( i )
+      {
+        while ( tmpHacks.hacks->a[i].ni )
+        {
+          i = tmpHacks.hacks->a[i].ni;
+        }
+      }
     }
-    hacksReSize ( &tmpHacks, &tmpIndex, tmpHacks.hacks->c + 1 );
+    for ( c = 1; c < tmpHacks.hacks->c; ++c )
+    {
+      if ( tmpHacks.names[c].a[0] == 0 )
+      {
+        break;
+      }
+    }
+    if ( c == tmpHacks.hacks->c )
+    {
+      hacksReSize ( &tmpHacks, &tmpIndex, c + 1 );
+    }
   }
   else
   {
-    i = 0;
-    hacksReSize ( &tmpHacks, &tmpIndex, 1 );
+    // Prep initial buffer
+    hacksReSize ( &tmpHacks, &tmpIndex, 5 );
+    tmpHacks.hacks->c = 1;
   }
-  int p = ( i - 1 );
-  hack_t c = tmpHacks.hacks->c - 1, n = ( hack_t ) ( i + 1 );
-  char *name = tmpHacks.names[i].a;
-  HACK *hack = &tmpHacks.hacks->a[i];
-  HACK *prev = ( p >= 0 ) ? &tmpHacks.hacks->a[p] : NULL;
-  HACK *next = ( n <= c ) ? &tmpHacks.hacks->a[n] : NULL;
+  char *name = tmpHacks.names[c].a;
+  HACK *hack = &tmpHacks.hacks->a[c];
+  HACK *ownr = &tmpHacks.hacks->a[0];
   memset ( hack, 0, sizeof ( HACK ) );
-  hack->_ci = ( hack_t ) i;
-  if ( prev )
+  if ( i && i != c )
   {
-    if ( hack->_ci == prev->_fi )
+    HACK *prev = &tmpHacks.hacks->a[i];
+    HACK *next = &tmpHacks.hacks->a[i];
+    if ( insert )
     {
-      hack->_pi = prev->_ci;
+      ownr = &tmpHacks.hacks->a[next->oi];
+      if ( next->pi )
+      {
+        tmpHacks.hacks->a[next->pi].ni = c;
+      }
+      else
+      {
+        ownr->fi = c;
+      }
+      hack->ni = next->ci;
+      hack->pi = next->pi;
+      next->pi = c;
     }
     else
     {
-      prev->_ni = hack->_ci;
-      hack->_pi = prev->_pi;
+      ownr = &tmpHacks.hacks->a[prev->oi];
+      if ( prev->ni )
+      {
+        tmpHacks.hacks->a[prev->ni].pi = c;
+      }
+      hack->pi = prev->ci;
+      hack->ni = prev->ni;
+      prev->ni = c;
     }
   }
-  if ( next )
+  else
   {
-    c -= ( hack_t ) i;
-    memmove ( &tmpIndex[n], &tmpIndex[i], c * sizeof ( hack_t ) );
-    memmove ( name + NAME_MAX, name, c * NAME_MAX );
-    memmove ( next, hack, c * sizeof ( HACK ) );
-    if ( hack->_pi != next->_pi )
-    {
-      tmpHacks.hacks->a[hack->_pi]._ni = n;
-      hack->_ni = 0;
-    }
-    else
-    {
-      hack->_ni = n;
-    }
-    for ( n = guiHacks_OnAddUpdate ( n ) + 1;
-          n < tmpHacks.hacks->c; ++n )
-    {
-      next->_ni = n;
-      next = &tmpHacks.hacks->a[n];
-      next->_pi = hack->_pi;
-      next->_ci = n;
-      next->_ni = 0;
-    }
+    ownr->fi = c;
   }
-  if ( !prev )
+  hack->ci = c;
+  hack->oi = ownr->ci;
+  if ( !c )
   {
     strcpy_s ( name, NAME_MAX, appLang->a[ LNG__M_ ].a );
   }
@@ -246,18 +262,20 @@ void guiHacks_OnAdd ( int i )
   }
   guiHacks_OnShow ( guiHacks.main.fset );
 }
-void guiHacks_OnRemUpdate ( hack_t i, hack_t c, hack_t r )
+void guiHacks_OnRemUpdate ( hack_t i )
 {
   HACK *hack = &tmpHacks.hacks->a[i];
-  hack->_ci = i;
-  if ( hack->_fi )
+  if ( hack->fi )
   {
-    guiHacks_OnRemUpdate ( hack->_fi > r ? hack->_fi -= c : hack->_fi, c, r );
+    guiHacks_OnRemUpdate ( hack->fi );
   }
-  if ( hack->_ni )
+  if ( hack->ni )
   {
-    guiHacks_OnRemUpdate ( hack->_ni > r ? hack->_ni -= c : hack->_ni, c, r );
+    guiHacks_OnRemUpdate ( hack->ni );
   }
+  memset ( hack, 0, sizeof ( HACK ) );
+  _strset_s ( tmpHacks.names[i].a, NAME_MAX, 0 );
+  tmpIndex[i] = 0;
 }
 void guiHacks_OnRem ( void )
 {
@@ -265,40 +283,203 @@ void guiHacks_OnRem ( void )
   {
     return;
   }
-  hack_t i = tmpHacks.hacks->i, c = tmpHacks.hacks->c;
-  HACK *hack = &tmpHacks.hacks->a[i];
+  hack_t i = tmpHacks.hacks->i;
   char *name = tmpHacks.names[i].a;
-  HACK *ownr = &tmpHacks.hacks->a[hack->_pi];
-  HACK *prev = &tmpHacks.hacks->a[i - 1];
-  hack_t n = hack->_ni ? hack->_ni : ownr->_ni;
-  HACK *next = n ? &tmpHacks.hacks->a[n] : NULL;
-  if ( !hack->_ni )
+  HACK *hack = &tmpHacks.hacks->a[i];
+  HACK *ownr = &tmpHacks.hacks->a[hack->oi];
+  HACK *prev = &tmpHacks.hacks->a[hack->pi];
+  HACK *next = &tmpHacks.hacks->a[hack->ni];
+  if ( hack->fi )
   {
-    if ( prev == ownr )
+    guiHacks_OnRemUpdate ( hack->fi );
+  }
+  if ( hack->pi )
+  {
+    if ( hack->ni )
     {
-      ownr->_fi = 0;
+      next->pi = prev->ci;
+      prev->ni = next->ci;
     }
     else
     {
-      prev->_ni = 0;
+      prev->ni = 0;
     }
   }
-  if ( next )
+  else if ( hack->ni )
   {
-    c -= n;
-    memmove ( &tmpIndex[i], &tmpIndex[n], c * sizeof ( hack_t ) );
-    memmove ( name, tmpHacks.names[n].a, c * NAME_MAX );
-    memmove ( hack, next, c * sizeof ( HACK ) );
-    n -= i;
-    c = tmpHacks.hacks->c - n;
+    ownr->fi = next->ci;
+    next->pi = 0;
   }
   else
   {
-    n = 1;
-    c = i;
+    ownr->fi = 0;
   }
-  guiHacks_OnRemUpdate ( 0, n, i );
-  hacksReSize ( &tmpHacks, &tmpIndex, c );
+  memset ( hack, 0, sizeof ( HACK ) );
+  _strset_s ( name, NAME_MAX, 0 );
+  tmpIndex[i] = 0;
+  guiHacks_OnShow ( guiHacks.main.fset );
+}
+void guiHacks_OnMov ( schar x, schar y )
+{
+  if ( !tmpIndex )
+  {
+    return;
+  }
+  hack_t i = tmpHacks.hacks->i;
+  if ( !i )
+  {
+    return;
+  }
+  HACK *hack = &tmpHacks.hacks->a[i];
+  HACK *ownr = &tmpHacks.hacks->a[hack->oi];
+  HACK *prev = &tmpHacks.hacks->a[hack->pi];
+  HACK *next = &tmpHacks.hacks->a[hack->ni];
+  if ( y != 0 )
+  {
+    if ( y > 0 )
+    {
+      if ( !hack->pi )
+      {
+        if ( !hack->oi )
+        {
+          return;
+        }
+        ownr->fi = hack->ni;
+        hack->ni = hack->oi;
+        hack->oi = ownr->oi;
+        if ( hack->ni )
+        {
+          next->pi = 0;
+        }
+        hack->pi = ownr->pi;
+        ownr->pi = i;
+      }
+      else
+      {
+        prev->ni = hack->ni;
+        if ( hack->ni )
+        {
+          next->pi = hack->pi;
+        }
+        if ( prev->fi && x > 0 )
+        {
+          hack->pi = 0;
+          hack->ni = prev->fi;
+          while ( hack->ni )
+          {
+            hack->pi = hack->ni;
+            hack->ni = tmpHacks.hacks->a[hack->ni].ni;
+          }
+        }
+        else
+        {
+          hack->ni = hack->pi;
+          hack->pi = prev->pi;
+          prev->pi = i;
+        }
+      }
+    }
+    else if ( hack->ni )
+    {
+      next->pi = hack->pi;
+      if ( hack->pi )
+      {
+        prev->ni = hack->ni;
+      }
+      else
+      {
+        ownr->fi = hack->ni;
+      }
+      if ( next->fi && x > 0 )
+      {
+        hack->oi = hack->ni;
+        hack->ni = next->fi;
+        next->fi = i;
+        hack->pi = 0;
+      }
+      else
+      {
+        hack->pi = hack->ni;
+        hack->ni = next->ni;
+        next->ni = i;
+      }
+    }
+    else if ( hack->oi )
+    {
+      if ( hack->pi )
+      {
+        prev->ni = 0;
+      }
+      else
+      {
+        ownr->fi = 0;
+      }
+      hack->pi = hack->oi;
+      hack->oi = ownr->oi;
+      hack->ni = ownr->ni;
+    }
+    else
+    {
+      return;
+    }
+  }
+  else if ( x != 0 )
+  {
+    if ( x > 0 )
+    {
+      if ( !hack->pi )
+      {
+        return;
+      }
+      hack->oi = hack->pi;
+      if ( hack->ni )
+      {
+        next->pi = hack->pi;
+      }
+      hack->pi = 0;
+      prev->ni = hack->ni;
+      hack->ni = prev->fi;
+      while ( hack->ni )
+      {
+        hack->pi = hack->ni;
+        hack->ni = tmpHacks.hacks->a[ hack->ni ].ni;
+      }
+    }
+    else if ( hack->oi )
+    {
+      if ( !hack->pi )
+      {
+        ownr->fi = hack->ni;
+      }
+      if ( hack->ni )
+      {
+        next->pi = hack->pi;
+      }
+      hack->ni = ownr->ni;
+      hack->pi = hack->oi;
+      hack->oi = ownr->oi;
+    }
+    else
+    {
+      return;
+    }
+  }
+  else
+  {
+    return;
+  }
+  if ( hack->pi )
+  {
+    tmpHacks.hacks->a[hack->pi].ni = i;
+  }
+  else
+  {
+    tmpHacks.hacks->a[hack->oi].fi = i;
+  }
+  if ( hack->ni )
+  {
+    tmpHacks.hacks->a[hack->ni].pi = i;
+  }
   guiHacks_OnShow ( guiHacks.main.fset );
 }
 void guiHacks_OnReset ( void )
@@ -343,11 +524,13 @@ int guiHacks_OnShow ( Ihandle *ih )
   appMethods.OnApply   = guiHacks_OnApply;
   appMethods.OnAdd     = guiHacks_OnAdd;
   appMethods.OnRem     = guiHacks_OnRem;
+  appMethods.OnMov     = guiHacks_OnMov;
   IupSetAttribute ( guiHacks.treeHacks, "DELNODE0", "ALL" );
   if ( tmpIndex && tmpHacks.hacks->c )
   {
-    guiHacks_BuildTree ( guiHacks.treeHacks, 0 );
-    IupSetInt ( guiHacks.treeHacks, IUP_VALUE, tmpHacks.hacks->i );
+    ( void ) guiHacks_BuildTree ( guiHacks.treeHacks, 0, 0 );
+    //IupSetAttributeId( guiHacks.treeHacks, "MARKED", 0, IUP_NO );
+    IupSetAttributeId ( guiHacks.treeHacks, "MARKED", tmpHacks.hacks->a[tmpHacks.hacks->i].ui, IUP_YES );
   }
   guiHacks_OnLang();
   IupShow ( guiHacks.ddFormat );
