@@ -98,6 +98,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="appLng.h" />
+		<Unit filename="endian.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="ftoa.c">
 			<Option compilerVar="CC" />
 		</Unit>

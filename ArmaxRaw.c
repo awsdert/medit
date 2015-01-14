@@ -56,7 +56,7 @@ void  armaxRawHack_OnLoad( FILE *file, char const *dataDir )
     strcpy_s( path, PATH_MAX, dataDir );
     strcat_s( path, PATH_MAX, line );
     strcat_s( path, PATH_MAX, ".src-codes" );
-    ipFdOpenA( &data, path, IP_O_MKTEMP | IP_O_FILE, IP_D_RW, IP_A_RW );
+    ipFdOpen( &data, path, IP_O_MKTEMP | IP_O_FILE, IP_D_RW, IP_A_RW );
     ipFdRdBuff( data, _codeCOM.codes, _codeCOM.codes->s + CODES_SIZE );
     ipFdShut( data );
   }
@@ -118,7 +118,7 @@ uchar armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source )
   {
     if ( _hackCOM.hl.hacks->a[j].id == pid )
     {
-      hack->_pi = j;
+      hack->oi = j;
       return 1;
     }
   }
@@ -146,12 +146,12 @@ uchar armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source )
   // Region
   line[10] = ( _hackCOM.region == REGION_US || !_hackCOM.region ) ? '0' : '1';
   // List Type
-  line[11] = hack->_fi ? hack->irl + '1' : '0';
+  line[11] = hack->fi ? hack->irl + '1' : '0';
   // Parent ID
-  if ( hack->_ci )
+  if ( hack->ci )
   {
     _strset_s( temp, 6, 0 );
-    _ultoa_s( _hackCOM.hl.hacks->a[hack->_pi].id, temp, 6, 16 );
+    _ultoa_s( _hackCOM.hl.hacks->a[hack->oi].id, temp, 6, 16 );
     i = 5;
     while ( i > -1 && !temp[i] ) --i;
   }

@@ -22,6 +22,7 @@ int  guiMenu_OnValueChanged ( Ihandle *ih );
 #define guiData_Rem   13
 #define guiData_Count guiData_Save
 #define guiList_Count guiData_Rem
+#ifndef EMULATOR
 #define guiMenu_Org   1
 #define guiMenu_Pfm   2
 #define guiMenu_Tar   3
@@ -34,6 +35,17 @@ int  guiMenu_OnValueChanged ( Ihandle *ih );
 #define guiMenu_Codes 10
 #define guiMenu_Code  11
 #define guiMenu_About 12
+#else
+#define guiMenu_Pro   1
+#define guiMenu_Qry   2
+#define guiMenu_Res   3
+#define guiMenu_Med   4
+#define guiMenu_Hacks 5
+#define guiMenu_Hack  6
+#define guiMenu_Codes 7
+#define guiMenu_Code  8
+#define guiMenu_About 9
+#endif
 #define guiMenu_Count guiMenu_About
 void guiMenu_OnLang ( void )
 {
@@ -60,9 +72,11 @@ void guiMenu_OnLang ( void )
   {
     IupSetAttribute ( guiData, MSTR ( guiData_Add ), NULL );
   }
+#ifndef EMULATOR
   IupSetAttribute ( guiMenu, MSTR ( guiMenu_Org ), appLang->a[ LNG_ORGANISATION ].a );
   IupSetAttribute ( guiMenu, MSTR ( guiMenu_Pfm ), appLang->a[ LNG_PLATFORM     ].a );
   IupSetAttribute ( guiMenu, MSTR ( guiMenu_Tar ), appLang->a[ LNG_TARGET       ].a );
+#endif
   IupSetAttribute ( guiMenu, MSTR ( guiMenu_Pro ), appLang->a[ LNG_PROFILE      ].a );
   IupSetAttribute ( guiMenu, MSTR ( guiMenu_Qry ), appLang->a[ LNG_SEARCH       ].a );
   IupSetAttribute ( guiMenu, MSTR ( guiMenu_Res ), appLang->a[ LNG_RESULTS      ].a );
@@ -72,21 +86,6 @@ void guiMenu_OnLang ( void )
   IupSetAttribute ( guiMenu, MSTR ( guiMenu_Codes ), appLang->a[ LNG_CODES        ].a );
   IupSetAttribute ( guiMenu, MSTR ( guiMenu_Code ), appLang->a[ LNG_CODE         ].a );
   IupSetAttribute ( guiMenu, MSTR ( guiMenu_About ), appLang->a[ LNG_ABOUT        ].a );
-#ifndef EMULATOR
-  guiOrg_OnLang();
-  guiPfm_OnLang();
-  guiTar_OnLang();
-#endif
-  guiPro_OnLang();
-  guiHacks_OnLang();
-  guiHack_OnLang();
-  guiCodes_SetGUI ( &guiHack.codes, &srcHackCodes, &tmpHackCodes );
-  guiCodes_OnLang();
-  guiCode_OnLang();
-  guiCodes_SetGUI ( &guiRes.codes, &resCodes, &resCodes );
-  guiCodes_OnLang();
-  guiCode_OnLang();
-  guiCodes_SetGUI ( codes, srcC, tmpC );
 }
 extern void guiHacks_OnInit ( void );
 void guiMenu_OnInit ( void )
@@ -174,43 +173,51 @@ int  guiMenu_OnValueChanged ( Ihandle *ih )
 }
 void guiOpen ( uchar saveFile )
 {
-  int fd, op = _O_BINARY | _O_RDWR;
+  int fd, op = _O_BINARY | _O_RDWR | (saveFile ? _O_CREAT : 0);
   FILE *file;
   char path[ PATH_MAX ] = {0};
+  char opath[ PATH_MAX ] = {0};
   void *buff = NULL;
-  strcpy_s ( path, PATH_MAX, ipGetUsrDirA() );
-  strcat_s ( path, PATH_MAX, ".medit" DIR_SEP "data" DIR_SEP );
   if ( !appMethods.OnDefPath || !appMethods.OnDefExt )
   {
     return;
   }
-  appMethods.OnDefPath ( path, saveFile );
-  if ( IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
-  {
-    op = _O_TEXT | _O_RDWR;
-  }
-  if ( !saveFile || IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
-  {
-    strcat_s ( path, PATH_MAX, "*." );
-  }
+  strcpy_s ( path, PATH_MAX, ipGetUsrDir() );
+  strcat_s ( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "data" );
+  strcpy_s ( opath, PATH_MAX, path );
+  appMethods.OnDefPath ( opath );
   if ( saveFile )
   {
-    op |= _O_CREAT;
+    appMethods.OnApply();
+  }
+  appMethods.OnDefPath ( path );
+  if ( IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
+  {
+    op = _O_TEXT | _O_RDWR | (saveFile ? _O_CREAT : 0);
+    strcat_s ( path, PATH_MAX, "*." );
+  }
+  else if ( saveFile )
+  {
+    strcat_s ( path, PATH_MAX, "." );
   }
   appMethods.OnDefExt ( path );
-  if ( !saveFile || IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
+  appMethods.OnDefExt ( opath );
+  if ( _access( opath, 0 ) == 0 && strcmpi( opath, path ) != 0 )
+    rename( opath, path );
+  if ( IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
   {
     IupGetFile ( path );
   }
-  ipFdOpenA ( &fd, path, op, IP_D_RW, IP_A_RW );
-  file = ipFdOpenFileA ( fd, "rw+" );
+  ipFdOpen ( &fd, path, op, IP_D_RW, IP_A_RW );
+  if ( !fd )
+    return;
+  file = ipFdOpenFile ( fd, "rw+" );
   if ( !file )
   {
     return;
   }
   if ( saveFile )
   {
-    appMethods.OnApply();
     appMethods.OnSave ( fd, file );
   }
   else

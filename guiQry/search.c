@@ -3,7 +3,7 @@
   ipFdSetPos( mepI.fd, 0, IP_S_SET ); \
   strcpy_s( szPath, 10, szNow ); \
   strcat_s( szPath, 10, T##Ex ); \
-  ipFdOpenA( &mepO.fd, szPath, IP_O_FILE | IP_O_RW, IP_D_RW, IP_A_RW ); \
+  ipFdOpen( &mepO.fd, szPath, IP_O_FILE | IP_O_RW, IP_D_RW, IP_A_RW ); \
   if ( qNo ) \
   { \
     if ( prev ) \
@@ -13,7 +13,7 @@
     } \
     strcpy_s( szPath, 10, szOld ); \
     strcat_s( szPath, 10, T##Ex ); \
-    ipFdOpenA( &prev, szPath, IP_O_RW, IP_D_RW, IP_A_RW ); \
+    ipFdOpen( &prev, szPath, IP_O_RW, IP_D_RW, IP_A_RW ); \
   } \
   i = 0; \
   do \
@@ -52,7 +52,7 @@ void search( ushort used )
     fEx[] = ".mef",
     iEx[] = ".mes",
     uEx[] = ".meu";
-  ipFdOpenA( &mepI.fd, "test.xps", IP_O_RW, IP_D_RW, IP_A_RW );
+  ipFdOpen( &mepI.fd, "test.xps", IP_O_RW, IP_D_RW, IP_A_RW );
   _itoa_s( qNo, szDmp, 4, 10 );
   strcat_s( szNow, 10, DIR_SEP );
   strcpy_s( szOld, 10, szNow );
@@ -64,7 +64,7 @@ void search( ushort used )
   strcat_s( szOld, 10, szDmp );
   strcpy_s( szPath, 10, szNow );
   strcat_s( szPath, 10, ".dmp" );
-  ipFdOpenA( &mepO.fd, szPath, IP_O_MKFILE | IP_O_RW, IP_D_RW, IP_A_RW );
+  ipFdOpen( &mepO.fd, szPath, IP_O_MKFILE | IP_O_RW, IP_D_RW, IP_A_RW );
   isEof = ipFdRdBuff( mepI.fd, mepI.buff, BUFSIZ );
   do
   {
@@ -74,7 +74,7 @@ void search( ushort used )
   while ( isEof );
   ipFdShut( mepI.fd );
   ipFdShut( mepO.fd );
-  ipFdOpenA( &mepI.fd, szPath, IP_O_RW, IP_D_RW, IP_A_RW );
+  ipFdOpen( &mepI.fd, szPath, IP_O_RW, IP_D_RW, IP_A_RW );
   SEARCH( f, 3 );
   SEARCH( i, 5 );
   SEARCH( u, 5 );

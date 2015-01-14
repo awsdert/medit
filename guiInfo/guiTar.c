@@ -78,16 +78,23 @@ int guiTar_OnShow( Ihandle *ih )
   guiTar_OnLang();
   return IUP_DEFAULT;
 }
-void guiTar_OnLoad( int fd, FILE *file ) { ipFdRdBuff( fd, &srcTar, sizeof(DATA_TAR) ); }
-void guiTar_OnReset( void ) { tmpTar = srcTar; }
-void guiTar_OnSave( int fd, FILE *file ) { ipFdWrBuff( fd, &srcTar, sizeof(DATA_TAR) ); }
-void guiTar_OnApply( void ) { srcTar = tmpTar; }
-extern void guiPfm_OnDefPath( char *path, uchar saveFile );
-void guiTar_OnDefPath( char *path, uchar saveFile )
+void guiTar_OnLoad( int fd, FILE *file )
 {
-  guiPfm_OnDefPath( path, 1 );
-  if ( !saveFile )
-    return;
+  ipFdRdBuff( fd, &srcTar, sizeof(DATA_TAR) );
+  changeEndian( &srcTar.bases, sizeof(BASES), 'L', getEndian() );
+}
+void guiTar_OnReset( void ) { tmpTar = srcTar; }
+void guiTar_OnSave( int fd, FILE *file )
+{
+  changeEndian( &srcTar.bases, sizeof(BASES), getEndian(), 'L' );
+  ipFdWrBuff( fd, &srcTar, sizeof(DATA_TAR) );
+}
+void guiTar_OnApply( void ) { srcTar = tmpTar; }
+extern void guiPfm_OnDefPath( char *path );
+void guiTar_OnDefPath( char *path )
+{
+  guiPfm_OnDefPath( path );
+  mkdir( path );
   strcat_s( path, PATH_MAX, DIR_SEP );
   strcat_s( path, PATH_MAX, srcTar.file );
 }

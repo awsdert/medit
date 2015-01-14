@@ -20,12 +20,20 @@ void  guiOrg_OnInit( void )
   IupSetAttribute( guiOrg.main.fset, "FLOATING", IUP_YES );
   guiOrg_OnLang();
 }
-void  guiOrg_OnDefPath( char *path, uchar saveFile );
-void  guiOrg_OnDefExt(  char *path );
-void  guiOrg_OnLoad( int fd, FILE *file );
-void  guiOrg_OnReset( void );
-void  guiOrg_OnSave( int fd, FILE *file );
-void  guiOrg_OnApply( void );
+void guiOrg_OnDefPath( char *path )
+{
+  mkdir( path );
+  strcat_s( path, PATH_MAX, DIR_SEP );
+  strcat_s( path, PATH_MAX, srcOrg.file );
+}
+void guiOrg_OnDefExt( char *path )
+{
+  strcat_s( path, PATH_MAX, "m-org" );
+}
+void  guiOrg_OnLoad( int fd, FILE *file ) { ipFdRdBuff( fd, &srcOrg, sizeof(DATA_ORG) ); }
+void  guiOrg_OnReset( void ) { tmpOrg = srcOrg; }
+void  guiOrg_OnSave( int fd, FILE *file ) { ipFdWrBuff( fd, &srcOrg, sizeof(DATA_ORG) ); }
+void  guiOrg_OnApply( void ) { srcOrg = tmpOrg; }
 int   guiOrg_OnShow( Ihandle *ih )
 {
   srcName = srcOrg.name;
@@ -44,20 +52,4 @@ int   guiOrg_OnShow( Ihandle *ih )
   guiOrg_OnLang();
   return IUP_DEFAULT;
 }
-void guiOrg_OnDefPath( char *path, uchar saveFile )
-{
-  strcat_s( path, PATH_MAX, "org" );
-  if ( !saveFile )
-    return;
-  strcat_s( path, PATH_MAX, DIR_SEP );
-  strcat_s( path, PATH_MAX, srcOrg.file );
-}
-void guiOrg_OnDefExt( char *path )
-{
-  strcat_s( path, PATH_MAX, "m-org" );
-}
-void  guiOrg_OnLoad( int fd, FILE *file ) { ipFdRdBuff( fd, &srcOrg, sizeof(DATA_ORG) ); }
-void  guiOrg_OnReset( void ) { tmpOrg = srcOrg; }
-void  guiOrg_OnSave( int fd, FILE *file ) { ipFdWrBuff( fd, &srcOrg, sizeof(DATA_ORG) ); }
-void  guiOrg_OnApply( void ) { srcOrg = tmpOrg; }
 #endif

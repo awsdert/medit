@@ -7,6 +7,7 @@ OPEN_C
 typedef struct _GUI_HACKS
 {
   GUI_MAIN   main;
+  Ihandle *fsetFormat;
   Ihandle *ddFormat;
   Ihandle *treeHacks;
 } GUI_HACKS;

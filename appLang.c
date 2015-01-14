@@ -41,6 +41,7 @@ LANG const _appDefLang =
   {"Remove"},
   {"Comparison"},
   {"Joker"},
+  {"Format"},
   {"(M)"},
   {"???"},
   {"Value"},
@@ -71,27 +72,27 @@ LANG const _appDefLang =
 LANG _appLang = {{{0}}};
 LANG const *appLang = &_appLang;
 
-void appLoadLang( char *name )
+void appLoadLang ( char *name )
 {
   int fd;
   char fname[ PATH_MAX ] = {0};
-  int  r = (name && name[0]) ? _strcmpi( name, "en" ) : 0;
+  int  r = ( name && name[0] ) ? _strcmpi ( name, "en" ) : 0;
   if ( r != 0 )
   {
-    memset(   fname, 0, PATH_MAX );
-    strcat_s( fname,    PATH_MAX, "lang"   );
-    strcat_s( fname,    PATH_MAX, DIR_SEP  );
-    strcat_s( fname,    PATH_MAX, name );
-    strcat_s( fname,    PATH_MAX, ".applang" );
-    ipFdOpenA( &fd, fname, IP_O_FILE, IP_D_W, IP_A_R );
-    ipFdRdBuff( fd, &_appLang, sizeof(LANG) );
-    ipFdShut( fd );
+    memset ( fname, 0, PATH_MAX );
+    strcat_s ( fname,    PATH_MAX, "lang" );
+    strcat_s ( fname,    PATH_MAX, DIR_SEP );
+    strcat_s ( fname,    PATH_MAX, name );
+    strcat_s ( fname,    PATH_MAX, ".applang" );
+    ipFdOpen ( &fd, fname, IP_O_FILE, IP_D_W, IP_A_R );
+    ipFdRdBuff ( fd, &_appLang, sizeof ( LANG ) );
+    ipFdShut ( fd );
   }
   else
   {
-    memset( name, 0, strlen( name ) );
+    memset ( name, 0, strlen ( name ) );
     name[0] = 'e';
     name[1] = 'n';
-    memcpy( &_appLang, &_appDefLang, sizeof(LANG) );
+    memcpy ( &_appLang, &_appDefLang, sizeof ( LANG ) );
   }
 }

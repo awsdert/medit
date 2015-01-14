@@ -47,7 +47,7 @@ typedef struct _SESSION
 
 typedef struct _METHODS
 {
-  void (*OnDefPath)( char *path, uchar saveFile );
+  void (*OnDefPath)( char *path );
   void  (*OnDefExt)( char *path );
   void    (*OnLoad)( int fd, FILE *file );
   void   (*OnReset)( void );

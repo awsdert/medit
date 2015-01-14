@@ -25,9 +25,48 @@ GUI_HACKS guiHacks = {{NULL}};
 hack_t *tmpIndex = NULL;
 // Syncs name with hack
 HACKL tmpHacks = {0};
+extern void guiTar_OnDefPath ( char *path );
+extern void guiPro_OnDefPath ( char *path );
 void guiHacks_OnLang ( void )
 {
-  IupSetAttribute ( guiHacks.main.fset, IUP_TITLE, appLang->a[ LNG_HACKS ].a );
+  int i = IupGetInt( guiHacks.ddFormat, IUP_VALUE );
+  uchar c = 0;
+  char name[ NAME_MAX ] = {0};
+  char path[ PATH_MAX ] = {0};
+  IupSetAttribute ( guiHacks.main.fset,  IUP_TITLE, appLang->a[ LNG_HACKS  ].a );
+  IupSetAttribute ( guiHacks.fsetFormat, IUP_TITLE, appLang->a[ LNG_FORMAT ].a );
+  strcpy_s( path, PATH_MAX, ipGetUsrDir() );
+  strcat_s( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP );
+  guiTar_OnDefPath( path );
+  strcat_s( path, PATH_MAX, DIR_SEP "*." LIB_EXT );
+  if ( i > 0 )
+    strcpy_s( name, NAME_MAX, IupGetAttributeId( guiHacks.ddFormat, IUP_TITLE, i ) );
+  IupSetInt ( guiHacks.ddFormat, IUP_VALUE, 0 );
+  IupSetAttribute ( guiHacks.ddFormat, "1", NULL );
+  dentI entry;
+  intptr_t hDir = ipDir1stEntI( path, &entry );
+  if ( hDir > 0 )
+  {
+    i = 0;
+    do
+    {
+      ++i;
+      IupSetStrAttributeId( guiHacks.ddFormat, IUP_TITLE, i, entry.name );
+      if ( strcmp( name, entry.name ) == 0 )
+      {
+        IupSetInt( guiHacks.ddFormat, IUP_VALUE, i );
+        c = 1;
+      }
+    }
+    while ( ipDirNxtEntI( hDir, &entry ) == 0 );
+    ipDirShutHandle( hDir );
+  }
+  /*
+  if ( !c )
+  {
+    appLoadLib( NULL, &hCOM, &cCOM );
+  }
+  //*/
 }
 extern void  guiPro_OnInit ( void );
 extern void guiHack_OnInit ( void );
@@ -82,9 +121,9 @@ int guiHacks_OnSelection ( Ihandle *ih, int id, int status )
 {
   if ( tmpIndex )
   {
-    if ( status )
+    if ( status != 0 )
     {
-      tmpHacks.hacks->i = ( id < 0 ) ? 0 : ( hack_t ) id;
+      tmpHacks.hacks->i = ( id < 1 ) ? 0 : ( hack_t )IupGetAttributeId( ih, "USERDATA", id );
     }
     else
     {
@@ -100,22 +139,25 @@ void guiHacks_OnInit ( void )
   guiHacks.ddFormat = IupList ( NULL );
   IupSetAttribute ( guiHacks.ddFormat, IUP_DROPDOWN, IUP_YES );
   IupSetAttribute ( guiHacks.ddFormat, IUP_EXPAND, IUP_HORIZONTAL );
-  IupSetAttribute ( guiHacks.ddFormat, "FLOATING", IUP_YES );
+  guiHacks.fsetFormat = IupFrame( guiHacks.ddFormat );
+  IupSetAttribute ( guiHacks.fsetFormat, IUP_EXPAND, IUP_HORIZONTAL );
+  IupSetAttribute ( guiHacks.fsetFormat, "FLOATING", IUP_YES );
   guiHacks.treeHacks = IupTree();
   IupSetAttribute ( guiHacks.treeHacks, "ADDROOT", IUP_NO );
   IupSetAttribute ( guiHacks.treeHacks, IUP_EXPAND, IUP_YES );
   IupSetAttribute ( guiHacks.treeHacks, "FLOATING", IUP_YES );
   IupSetCallback ( guiHacks.treeHacks, "SELECTION_CB", ( Icallback ) guiHacks_OnSelection );
 #ifdef GUI_SHARED
-  guiHacks.main      = guiOrg.main;
-  IupAppend ( guiHacks.main.vb, guiHacks.ddFormat );
-  IupMap ( guiHacks.ddFormat );
+  guiHacks.main = guiOrg.main;
+  IupAppend ( guiHacks.main.vb, guiHacks.fsetFormat );
+  IupMap ( guiHacks.fsetFormat );
   IupAppend ( guiHacks.main.vb, guiHacks.treeHacks );
   IupMap ( guiHacks.treeHacks );
 #else
-  guiHacks.main.vb = IupVbox ( guiHacks.ddFormat, guiHacks.treeHacks, NULL );
+  guiHacks.main.vb = IupVbox ( guiHacks.fsetFormat, guiHacks.treeHacks, NULL );
   guiHacks.main.fset = IupFrame ( guiHacks.main.vb );
 #endif
+  guiHacks_OnLang();
 }
 hack_t guiHacks_BuildTree ( Ihandle *ih, hack_t i, hack_t ui )
 {
@@ -127,19 +169,17 @@ hack_t guiHacks_BuildTree ( Ihandle *ih, hack_t i, hack_t ui )
   {
     p = -1;
   }
-  if ( strcmp ( name, appLang->a[ LNG_NEW ].a ) >= 0 )
+  if ( strcmp ( name, appLang->a[ LNG_NEW ].a ) == 0 )
   {
-    char no[5] = {0};
-    _itoa_s ( hack->ci, no, 5, 16 );
-    strcpy_s ( name, NAME_MAX, appLang->a[ LNG_NEW ].a );
-    strcat_s ( name, NAME_MAX, " (x" );
+    char no[10] = {0};
+    sprintf_s( no, 10, " (0x%02X)", hack->ci );
     strcat_s ( name, NAME_MAX, no );
-    strcat_s ( name, NAME_MAX, ")" );
   }
   if ( hack->fi > 0 )
   {
     IupSetStrAttributeId ( ih, hack->pi ? "INSERTBRANCH" : "ADDBRANCH", p, name );
     IupSetAttributeId ( ih, "TOGGLEVISIBLE", ui, IUP_NO );
+    IupSetAttributeId( ih, "USERDATA", ui, (char*)i );
     ui = guiHacks_BuildTree ( ih, hack->fi, ++ui );
   }
   else
@@ -147,6 +187,7 @@ hack_t guiHacks_BuildTree ( Ihandle *ih, hack_t i, hack_t ui )
     IupSetStrAttributeId ( ih, hack->pi ? "INSERTLEAF" : "ADDLEAF", p, name );
     IupSetAttributeId ( ih, "TOGGLEVISIBLE", ui, IUP_YES );
     IupSetAttributeId ( ih, "TOGGLEVALUE", ui, hack->use ? IUP_ON : IUP_OFF );
+    IupSetAttributeId( ih, "USERDATA", ui, (char*)i );
   }
   if ( hack->ni > 0 )
   {
@@ -154,34 +195,12 @@ hack_t guiHacks_BuildTree ( Ihandle *ih, hack_t i, hack_t ui )
   }
   return ui;
 }
-extern void guiPro_OnDefPath ( char *path, uchar saveFile );
-void guiHacks_OnDefPath ( char *path, uchar saveFile )
-{
-  guiPro_OnDefPath ( path, 1 );
-  strcat_s ( path, PATH_MAX, DIR_SEP );
-}
-void guiHacks_OnDefExt ( char *path )
-{
-  strcat_s ( path, PATH_MAX, "txt" );
-}
-void guiHacks_OnApply ( void )
-{
-  hacksReSize ( &hCOM->hl, NULL, tmpHacks.hacks->_c );
-  memcpy ( hCOM->hl.names, tmpHacks.names, tmpHacks.hacks->_c * NAME_MAX );
-  memcpy ( hCOM->hl.hacks->a, tmpHacks.hacks->a, tmpHacks.hacks->s );
-  for ( hack_t i = 0; i < tmpHacks.hacks->_c; ++i )
-  {
-    tmpIndex[i] = i;
-  }
-}
 void guiHacks_OnAdd ( uchar insert )
 {
   hack_t c = 0, i = 0;
   if ( tmpIndex )
   {
     i = tmpHacks.hacks->i;
-    tmpHacks.hacks->a[0].fi = 1;
-    tmpHacks.hacks->a[0].ni = 0;
     if ( !i )
     {
       i = tmpHacks.hacks->a[0].fi;
@@ -215,35 +234,33 @@ void guiHacks_OnAdd ( uchar insert )
   HACK *hack = &tmpHacks.hacks->a[c];
   HACK *ownr = &tmpHacks.hacks->a[0];
   memset ( hack, 0, sizeof ( HACK ) );
-  if ( i && i != c )
+  if ( i )
   {
-    HACK *prev = &tmpHacks.hacks->a[i];
-    HACK *next = &tmpHacks.hacks->a[i];
+    HACK *indx = &tmpHacks.hacks->a[i];
+    ownr = &tmpHacks.hacks->a[indx->oi];
     if ( insert )
     {
-      ownr = &tmpHacks.hacks->a[next->oi];
-      if ( next->pi )
+      if ( indx->pi )
       {
-        tmpHacks.hacks->a[next->pi].ni = c;
+        tmpHacks.hacks->a[indx->pi].ni = c;
       }
       else
       {
         ownr->fi = c;
       }
-      hack->ni = next->ci;
-      hack->pi = next->pi;
-      next->pi = c;
+      hack->pi = indx->pi;
+      indx->pi = c;
+      hack->ni = i;
     }
     else
     {
-      ownr = &tmpHacks.hacks->a[prev->oi];
-      if ( prev->ni )
+      if ( indx->ni )
       {
-        tmpHacks.hacks->a[prev->ni].pi = c;
+        tmpHacks.hacks->a[indx->ni].pi = c;
       }
-      hack->pi = prev->ci;
-      hack->ni = prev->ni;
-      prev->ni = c;
+      hack->ni = indx->ni;
+      indx->ni = c;
+      hack->pi = i;
     }
   }
   else
@@ -279,7 +296,7 @@ void guiHacks_OnRemUpdate ( hack_t i )
 }
 void guiHacks_OnRem ( void )
 {
-  if ( !tmpIndex || tmpHacks.hacks->i < 1 || tmpHacks.hacks->c <= 1 )
+  if ( !tmpIndex || !tmpHacks.hacks->i || tmpHacks.hacks->c < 2 )
   {
     return;
   }
@@ -297,8 +314,8 @@ void guiHacks_OnRem ( void )
   {
     if ( hack->ni )
     {
-      next->pi = prev->ci;
-      prev->ni = next->ci;
+      next->pi = hack->pi;
+      prev->ni = hack->ni;
     }
     else
     {
@@ -307,7 +324,7 @@ void guiHacks_OnRem ( void )
   }
   else if ( hack->ni )
   {
-    ownr->fi = next->ci;
+    ownr->fi = hack->ni;
     next->pi = 0;
   }
   else
@@ -365,6 +382,7 @@ void guiHacks_OnMov ( schar x, schar y )
         {
           hack->pi = 0;
           hack->ni = prev->fi;
+          hack->oi = prev->ci;
           while ( hack->ni )
           {
             hack->pi = hack->ni;
@@ -451,6 +469,10 @@ void guiHacks_OnMov ( schar x, schar y )
       {
         ownr->fi = hack->ni;
       }
+      else
+      {
+        prev->ni = hack->ni;
+      }
       if ( hack->ni )
       {
         next->pi = hack->pi;
@@ -482,6 +504,26 @@ void guiHacks_OnMov ( schar x, schar y )
   }
   guiHacks_OnShow ( guiHacks.main.fset );
 }
+void guiHacks_OnDefPath ( char *path )
+{
+  guiPro_OnDefPath( path );
+  mkdir( path );
+  strcat_s ( path, PATH_MAX, DIR_SEP );
+}
+void guiHacks_OnDefExt ( char *path )
+{
+  strcat_s ( path, PATH_MAX, "txt" );
+}
+void guiHacks_OnApply ( void )
+{
+  hacksReSize ( &hCOM->hl, NULL, tmpHacks.hacks->_c );
+  memcpy ( hCOM->hl.names, tmpHacks.names, tmpHacks.hacks->_c * NAME_MAX );
+  memcpy ( hCOM->hl.hacks->a, tmpHacks.hacks->a, tmpHacks.hacks->s );
+  for ( hack_t i = 0; i < tmpHacks.hacks->_c; ++i )
+  {
+    tmpIndex[i] = i;
+  }
+}
 void guiHacks_OnReset ( void )
 {
   hacksReSize ( &tmpHacks, NULL, ( hCOM && hCOM->hl.hacks ) ? hCOM->hl.hacks->_c : 0 );
@@ -498,24 +540,24 @@ void guiHacks_OnReset ( void )
 void guiHacks_OnLoad ( int fd, FILE *file )
 {
   char path[ PATH_MAX ] = {0};
-  strcpy_s ( path, PATH_MAX, ipGetUsrDirA() );
+  strcpy_s ( path, PATH_MAX, ipGetUsrDir() );
   strcat_s ( path, PATH_MAX, ".medit" DIR_SEP "temp" DIR_SEP );
-  guiHacks_OnDefPath ( path, 1 );
+  guiHacks_OnDefPath ( path );
   hCOM->OnLoad ( file, path );
 }
 void guiHacks_OnSave ( int fd, FILE *file )
 {
   char path[ PATH_MAX ] = {0};
-  strcpy_s ( path, PATH_MAX, ipGetUsrDirA() );
+  strcpy_s ( path, PATH_MAX, ipGetUsrDir() );
   strcat_s ( path, PATH_MAX, ".medit" DIR_SEP "temp" DIR_SEP );
-  guiHacks_OnDefPath ( path, 1 );
+  guiHacks_OnDefPath ( path );
   hCOM->OnSave ( file, path );
 }
 int guiHacks_OnShow ( Ihandle *ih )
 {
-  IupSetAttribute ( guiHacks.main.fset, "FLOATING", IUP_NO );
-  IupSetAttribute ( guiHacks.ddFormat,  "FLOATING", IUP_NO );
-  IupSetAttribute ( guiHacks.treeHacks, "FLOATING", IUP_NO );
+  IupSetAttribute ( guiHacks.main.fset,  "FLOATING", IUP_NO );
+  IupSetAttribute ( guiHacks.fsetFormat, "FLOATING", IUP_NO );
+  IupSetAttribute ( guiHacks.treeHacks,  "FLOATING", IUP_NO );
   appMethods.OnDefPath = guiHacks_OnDefPath;
   appMethods.OnDefExt  = guiHacks_OnDefExt;
   appMethods.OnLoad    = guiHacks_OnLoad;
@@ -533,7 +575,7 @@ int guiHacks_OnShow ( Ihandle *ih )
     IupSetAttributeId ( guiHacks.treeHacks, "MARKED", tmpHacks.hacks->a[tmpHacks.hacks->i].ui, IUP_YES );
   }
   guiHacks_OnLang();
-  IupShow ( guiHacks.ddFormat );
+  IupShow ( guiHacks.fsetFormat );
   IupShow ( guiHacks.treeHacks );
   return IUP_DEFAULT;
 }

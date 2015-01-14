@@ -22,12 +22,11 @@ void guiPro_OnInit( void )
 #endif
   guiPro_OnLang();
 }
-extern void guiTar_OnDefPath( char *path, uchar saveFile );
-void guiPro_OnDefPath( char *path, uchar saveFile )
+extern void guiTar_OnDefPath( char *path );
+void guiPro_OnDefPath( char *path )
 {
-  guiTar_OnDefPath( path, 1 );
-  if ( !saveFile )
-    return;
+  guiTar_OnDefPath( path );
+  mkdir( path );
   strcat_s( path, PATH_MAX, DIR_SEP );
   strcat_s( path, PATH_MAX, srcPro.file );
 }

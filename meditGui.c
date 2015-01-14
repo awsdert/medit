@@ -60,11 +60,11 @@ int main( int argc, char *argv[] )
   szTmp = strtok_s( NULL, ", ", &szTok );
   strcat_s( appGui.fontSize, 5, szTmp );
   // Prep directories in case they don't exist
-  strcpy_s( szLine, PATH_MAX, ipGetUsrDirA() );
+  strcpy_s( szLine, PATH_MAX, ipGetUsrDir() );
   strcat_s( szLine, PATH_MAX, DIR_SEP ".medit" );
-  ipMkDirA( szLine );
+  ipMkDir( szLine );
   strcat_s( szLine, PATH_MAX, DIR_SEP "lang" );
-  ipMkDirA( szLine );
+  ipMkDir( szLine );
   // Just force a NULL character
   appSession.lang[6] = 0;
   appLoadLang( appSession.lang );
@@ -95,9 +95,9 @@ int main( int argc, char *argv[] )
   IupFlush();
   IupShow( guiDlg.fset );
   ret = IupMainLoop();
-  strcpy_s( szLine, PATH_MAX, ipGetUsrDirA() );
+  strcpy_s( szLine, PATH_MAX, ipGetUsrDir() );
   strcat_s( szLine, PATH_MAX, DIR_SEP ".medit" DIR_SEP "default.m-session" );
-  ipFdOpenA( &pipe, szLine, IP_O_MKFILE | IP_O_RW, IP_D_RW, IP_A_RW );
+  ipFdOpen( &pipe, szLine, IP_O_MKFILE | IP_O_RW, IP_D_RW, IP_A_RW );
   ipFdWrBuff( pipe, &appSession, sizeof( SESSION ) );
   ipFdShut( pipe );
 #ifdef TEST_HL_LIB

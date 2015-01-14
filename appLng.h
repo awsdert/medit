@@ -42,6 +42,7 @@ typedef enum _LNG_T
   LNG_REMOVE,
   LNG_COMPARISON,
   LNG_JOKER,
+  LNG_FORMAT,
   LNG__M_, // (M)
   LNG_QQQ, // ???
   LNG_VALUE,

@@ -32,6 +32,8 @@ extern GUI_MAIN guiDlg;
 extern GUI appGui;
 extern Ihandle *guiMenu;
 extern Ihandle *guiData;
+char getEndian( void );
+char changeEndian( void* source, size_t size, char curEndian, char nxtEndian );
 void hacksReSize( HACKL     *hl, void  **indexList, hack_t count );
 void codesReSize( CODES **codes, uchar **indexList, uchar  count );
 
@@ -43,8 +45,18 @@ Ihandle* IupHList( const char *action );
 
 #ifdef _WIN
 typedef HMODULE HLIB;
+#define libOpen(   path )        LoadLibraryA(   path )
+#define libOpenEx( path, flags ) LoadLibraryExA( path, NULL, flags )
+#define libAddr GetProcAddress
+#define libShut FreeLibrary
+#define RTLD_LAZY 0
+#define RTLD_NOW  0
 #else
 typedef void*   HLIB;
+#define libOpen(   path )        dlopen( path, RTLD_NOW )
+#define libOpenEx( path, flags ) dlopen( path, flags    )
+#define libAddr dlsym
+#define libShut dlcose
 #endif
 extern HACK_LIB_COM *hCOM;
 extern CODE_LIB_COM *cCOM;

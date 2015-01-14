@@ -39,12 +39,22 @@ void  guiPfm_OnInit( void )
 #endif
   guiPfm_OnLang();
 }
-void  guiPfm_OnDefPath( char *path, uchar saveFile );
-void  guiPfm_OnDefExt(  char *path );
-void  guiPfm_OnLoad( int fd, FILE *file );
-void  guiPfm_OnReset( void );
-void  guiPfm_OnSave( int fd, FILE *file );
-void  guiPfm_OnApply( void );
+extern void guiOrg_OnDefPath( char *path );
+void guiPfm_OnDefPath( char *path )
+{
+  guiOrg_OnDefPath( path );
+  mkdir( path );
+  strcat_s( path, PATH_MAX, DIR_SEP );
+  strcat_s( path, PATH_MAX, srcPfm.file );
+}
+void guiPfm_OnDefExt( char *path )
+{
+  strcat_s( path, PATH_MAX, "m-pfm" );
+}
+void guiPfm_OnLoad( int fd, FILE *file ) { ipFdRdBuff( fd, &srcPfm, sizeof(DATA_PFM) ); }
+void guiPfm_OnApply( void ) { srcPfm = tmpPfm; }
+void guiPfm_OnSave( int fd, FILE *file ) { ipFdWrBuff( fd, &srcPfm, sizeof(DATA_PFM) ); }
+void guiPfm_OnReset( void ) { tmpPfm = srcPfm; }
 int   guiPfm_OnShow( Ihandle *ih )
 {
   srcName = srcPfm.name;
@@ -66,23 +76,6 @@ int   guiPfm_OnShow( Ihandle *ih )
   guiPfm_OnLang();
   return IUP_DEFAULT;
 }
-extern void guiOrg_OnDefPath( char *path, uchar saveFile );
-void guiPfm_OnDefPath( char *path, uchar saveFile )
-{
-  guiOrg_OnDefPath( path, 1 );
-  if ( !saveFile )
-    return;
-  strcat_s( path, PATH_MAX, DIR_SEP );
-  strcat_s( path, PATH_MAX, srcPfm.file );
-}
-void guiPfm_OnDefExt( char *path )
-{
-  strcat_s( path, PATH_MAX, "m-pfm" );
-}
-void guiPfm_OnLoad( int fd, FILE *file ) { ipFdRdBuff( fd, &srcPfm, sizeof(DATA_PFM) ); }
-void guiPfm_OnApply( void ) { srcPfm = tmpPfm; }
-void guiPfm_OnSave( int fd, FILE *file ) { ipFdWrBuff( fd, &srcPfm, sizeof(DATA_PFM) ); }
-void guiPfm_OnReset( void ) { tmpPfm = srcPfm; }
 int guiEndian_OnValueChanged( Ihandle *ih )
 {
   tmpPfm.endian = IupGetInt( ih, IUP_VALUE );
