@@ -49,9 +49,9 @@ typedef struct _METHODS
 {
   void (*OnDefPath)( char *path );
   void  (*OnDefExt)( char *path );
-  void    (*OnLoad)( int fd, FILE *file );
+  void    (*OnLoad)( int fd );
   void   (*OnReset)( void );
-  void    (*OnSave)( int fd, FILE *file );
+  void    (*OnSave)( int fd );
   void   (*OnApply)( void );
   void     (*OnAdd)( uchar insert );
   void     (*OnRem)( void );

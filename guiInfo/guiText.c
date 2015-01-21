@@ -11,7 +11,6 @@ void guiText_OnInit( GUI_TEXT *guiText, Icallback OnKAny, Icallback OnValueChang
   guiText->fset = IupFrame( guiText->tb );
   IupSetAttribute( guiText->tb,   IUP_EXPAND, IUP_HORIZONTAL );
   IupSetAttribute( guiText->fset, IUP_EXPAND, IUP_HORIZONTAL );
-  IupSetAttribute( guiText->fset, "FLOATING", IUP_YES );
   if ( OnKAny )
     IupSetCallback( guiText->tb, "K_ANY", OnKAny );
   if ( OnValueChanged )

@@ -16,8 +16,6 @@ void  guiOrg_OnInit( void )
   guiOrg.main.fset = IupFrame( guiOrg.main.vb );
   IupAppend( guiDlg.vb, guiOrg.main.fset );
   IupMap( guiOrg.main.fset );
-  IupSetAttribute( guiOrg.main.fset, IUP_EXPAND, IUP_YES );
-  IupSetAttribute( guiOrg.main.fset, "FLOATING", IUP_YES );
   guiOrg_OnLang();
 }
 void guiOrg_OnDefPath( char *path )
@@ -30,24 +28,24 @@ void guiOrg_OnDefExt( char *path )
 {
   strcat_s( path, PATH_MAX, "m-org" );
 }
-void  guiOrg_OnLoad( int fd, FILE *file ) { ipFdRdBuff( fd, &srcOrg, sizeof(DATA_ORG) ); }
+void  guiOrg_OnLoad( int fd ) { ipFdRdBuff( fd, &srcOrg, sizeof(DATA_ORG) ); }
 void  guiOrg_OnReset( void ) { tmpOrg = srcOrg; }
-void  guiOrg_OnSave( int fd, FILE *file ) { ipFdWrBuff( fd, &srcOrg, sizeof(DATA_ORG) ); }
+void  guiOrg_OnSave( int fd ) { ipFdWrBuff( fd, &srcOrg, sizeof(DATA_ORG) ); }
 void  guiOrg_OnApply( void ) { srcOrg = tmpOrg; }
 int   guiOrg_OnShow( Ihandle *ih )
 {
-  srcName = srcOrg.name;
-  srcFile = srcOrg.file;
-  tmpName = tmpOrg.name;
-  tmpFile = tmpOrg.file;
+  IupSetAttribute( guiOrg.name.tb, "MEDIT_SRC_NAME", srcOrg.name );
+  IupSetAttribute( guiOrg.name.tb, "MEDIT_TMP_NAME", tmpOrg.name );
+  IupSetAttribute( guiOrg.file.tb, "MEDIT_SRC_FILE", srcOrg.file );
+  IupSetAttribute( guiOrg.file.tb, "MEDIT_TMP_FILE", tmpOrg.file );
   appMethods.OnDefPath = guiOrg_OnDefPath;
   appMethods.OnDefExt  = guiOrg_OnDefExt;
   appMethods.OnLoad    = guiOrg_OnLoad;
   appMethods.OnReset   = guiOrg_OnReset;
   appMethods.OnSave    = guiOrg_OnSave;
   appMethods.OnApply   = guiOrg_OnApply;
-  guiText_SendShowMsg( &guiOrg.name, tmpName );
-  guiText_SendShowMsg( &guiOrg.file, tmpFile );
+  guiText_SendShowMsg( &guiOrg.name, tmpOrg.name );
+  guiText_SendShowMsg( &guiOrg.file, tmpOrg.file );
   IupSetAttribute( guiOrg.main.fset, "FLOATING", IUP_NO );
   guiOrg_OnLang();
   return IUP_DEFAULT;

@@ -34,7 +34,7 @@ void guiPro_OnDefExt( char *path )
 {
   strcat_s( path, PATH_MAX, "m-pro" );
 }
-void guiPro_OnSave( int fd, FILE *file )
+void guiPro_OnSave( int fd )
 {
   ipFdWrBuff( fd, &srcPro, sizeof(DATA_PRO) );
 }
@@ -42,7 +42,7 @@ void guiPro_OnApply( void )
 {
   srcPro = tmpPro;
 }
-void guiPro_OnLoad( int fd, FILE *file )
+void guiPro_OnLoad( int fd )
 {
   ipFdRdBuff( fd, &srcPro, sizeof(DATA_PRO) );
 }
@@ -52,13 +52,18 @@ void guiPro_OnReset( void )
 }
 int guiPro_OnShow( Ihandle *ih )
 {
-  srcName = srcPro.name;
-  srcFile = srcPro.file;
-  tmpName = tmpPro.name;
-  tmpFile = tmpPro.file;
+  IupSetAttribute( guiPro.name.tb, "MEDIT_SRC_NAME", srcPro.name );
+  IupSetAttribute( guiPro.name.tb, "MEDIT_TMP_NAME", tmpPro.name );
+  IupSetAttribute( guiPro.file.tb, "MEDIT_SRC_FILE", srcPro.file );
+  IupSetAttribute( guiPro.file.tb, "MEDIT_TMP_FILE", tmpPro.file );
   appMethods.OnDefPath = guiPro_OnDefPath;
-  guiText_SendShowMsg( &guiPro.name, tmpName );
-  guiText_SendShowMsg( &guiPro.file, tmpFile );
+  appMethods.OnDefExt  = guiPro_OnDefExt;
+  appMethods.OnLoad    = guiPro_OnLoad;
+  appMethods.OnReset   = guiPro_OnReset;
+  appMethods.OnSave    = guiPro_OnSave;
+  appMethods.OnApply   = guiPro_OnApply;
+  guiText_SendShowMsg( &guiPro.name, tmpPro.name );
+  guiText_SendShowMsg( &guiPro.file, tmpPro.file );
   IupSetAttribute( guiPro.main.fset, "FLOATING", IUP_NO );
   guiPro_OnLang();
   return IUP_DEFAULT;

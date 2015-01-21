@@ -51,24 +51,24 @@ void guiPfm_OnDefExt( char *path )
 {
   strcat_s( path, PATH_MAX, "m-pfm" );
 }
-void guiPfm_OnLoad( int fd, FILE *file ) { ipFdRdBuff( fd, &srcPfm, sizeof(DATA_PFM) ); }
+void guiPfm_OnLoad( int fd ) { ipFdRdBuff( fd, &srcPfm, sizeof(DATA_PFM) ); }
 void guiPfm_OnApply( void ) { srcPfm = tmpPfm; }
-void guiPfm_OnSave( int fd, FILE *file ) { ipFdWrBuff( fd, &srcPfm, sizeof(DATA_PFM) ); }
+void guiPfm_OnSave( int fd ) { ipFdWrBuff( fd, &srcPfm, sizeof(DATA_PFM) ); }
 void guiPfm_OnReset( void ) { tmpPfm = srcPfm; }
 int   guiPfm_OnShow( Ihandle *ih )
 {
-  srcName = srcPfm.name;
-  srcFile = srcPfm.file;
-  tmpName = tmpPfm.name;
-  tmpFile = tmpPfm.file;
+  IupSetAttribute( guiPfm.name.tb, "MEDIT_SRC_NAME", srcPfm.name );
+  IupSetAttribute( guiPfm.name.tb, "MEDIT_TMP_NAME", tmpPfm.name );
+  IupSetAttribute( guiPfm.file.tb, "MEDIT_SRC_FILE", srcPfm.file );
+  IupSetAttribute( guiPfm.file.tb, "MEDIT_TMP_FILE", tmpPfm.file );
   appMethods.OnDefPath = guiPfm_OnDefPath;
   appMethods.OnDefExt  = guiPfm_OnDefExt;
   appMethods.OnLoad    = guiPfm_OnLoad;
   appMethods.OnReset   = guiPfm_OnReset;
   appMethods.OnSave    = guiPfm_OnSave;
   appMethods.OnApply   = guiPfm_OnApply;
-  guiText_SendShowMsg( &guiPfm.name, tmpName );
-  guiText_SendShowMsg( &guiPfm.file, tmpFile );
+  guiText_SendShowMsg( &guiPfm.name, tmpPfm.name );
+  guiText_SendShowMsg( &guiPfm.file, tmpPfm.file );
   IupSetInt( guiPfm.hlEndian, IUP_VALUE, tmpPfm.endian );
   IupSetAttribute( guiPfm.main.fset, "FLOATING", IUP_NO );
   IupSetAttribute( guiPfm.hlEndian, "FLOATING", IUP_NO );

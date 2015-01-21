@@ -94,6 +94,9 @@ int main( int argc, char *argv[] )
   IupRefresh( guiDlg.fset );
   IupFlush();
   IupShow( guiDlg.fset );
+  IupSetInt ( guiMenu, IUP_VALUE, 1 );
+  (void)guiMenu_OnValueChanged( guiMenu );
+  IupSetInt ( guiData, IUP_VALUE, 0 );
   ret = IupMainLoop();
   strcpy_s( szLine, PATH_MAX, ipGetUsrDir() );
   strcat_s( szLine, PATH_MAX, DIR_SEP ".medit" DIR_SEP "default.m-session" );

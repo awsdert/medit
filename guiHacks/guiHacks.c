@@ -277,7 +277,7 @@ void guiHacks_OnAdd ( uchar insert )
   {
     strcpy_s ( name, NAME_MAX, appLang->a[ LNG_NEW ].a );
   }
-  guiHacks_OnShow ( guiHacks.main.fset );
+  //guiHacks_OnShow ( guiHacks.main.fset );
 }
 void guiHacks_OnRemUpdate ( hack_t i )
 {
@@ -334,7 +334,7 @@ void guiHacks_OnRem ( void )
   memset ( hack, 0, sizeof ( HACK ) );
   _strset_s ( name, NAME_MAX, 0 );
   tmpIndex[i] = 0;
-  guiHacks_OnShow ( guiHacks.main.fset );
+  //guiHacks_OnShow ( guiHacks.main.fset );
 }
 void guiHacks_OnMov ( schar x, schar y )
 {
@@ -502,7 +502,7 @@ void guiHacks_OnMov ( schar x, schar y )
   {
     tmpHacks.hacks->a[hack->ni].pi = i;
   }
-  guiHacks_OnShow ( guiHacks.main.fset );
+  //guiHacks_OnShow ( guiHacks.main.fset );
 }
 void guiHacks_OnDefPath ( char *path )
 {
@@ -537,21 +537,25 @@ void guiHacks_OnReset ( void )
     }
   }
 }
-void guiHacks_OnLoad ( int fd, FILE *file )
+void guiHacks_OnLoad ( int fd )
 {
   char path[ PATH_MAX ] = {0};
   strcpy_s ( path, PATH_MAX, ipGetUsrDir() );
   strcat_s ( path, PATH_MAX, ".medit" DIR_SEP "temp" DIR_SEP );
   guiHacks_OnDefPath ( path );
+  FILE *file  = ipFdOpenFile( fd, "rw" );
   hCOM->OnLoad ( file, path );
+  ipShut( file );
 }
-void guiHacks_OnSave ( int fd, FILE *file )
+void guiHacks_OnSave ( int fd )
 {
   char path[ PATH_MAX ] = {0};
   strcpy_s ( path, PATH_MAX, ipGetUsrDir() );
   strcat_s ( path, PATH_MAX, ".medit" DIR_SEP "temp" DIR_SEP );
   guiHacks_OnDefPath ( path );
+  FILE *file  = ipFdOpenFile( fd, "rw" );
   hCOM->OnSave ( file, path );
+  ipShut( file );
 }
 int guiHacks_OnShow ( Ihandle *ih )
 {

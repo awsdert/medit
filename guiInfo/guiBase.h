@@ -8,9 +8,9 @@ typedef struct _GUI_BASE
 {
   GUI_MAIN  main;
   GUI_TEXT  name;
-  GUI_SPIN  addr;
-  GUI_SPIN  size;
-  GUI_SPIN depth;
+  GUI_TEXT  addr;
+  GUI_TEXT  size;
+  GUI_TEXT depth;
 } GUI_BASE;
 
 extern BASE     *srcBase;

@@ -102,8 +102,6 @@ void guiMenu_OnInit ( void )
   IupSetCallback ( guiMenu, "VALUECHANGED_CB", guiMenu_OnValueChanged );
   IupSetCallback ( guiData, "VALUECHANGED_CB", guiData_OnValueChanged );
   guiMenu_OnLang();
-  IupSetInt ( guiMenu, IUP_VALUE, 1 );
-  IupSetInt ( guiData, IUP_VALUE, 0 );
 }
 
 int  guiMenu_OnValueChanged ( Ihandle *ih )
@@ -173,8 +171,7 @@ int  guiMenu_OnValueChanged ( Ihandle *ih )
 }
 void guiOpen ( uchar saveFile )
 {
-  int fd, op = _O_BINARY | _O_RDWR | (saveFile ? _O_CREAT : 0);
-  FILE *file;
+  int fd, op = _O_RDWR | (saveFile ? _O_CREAT : 0);
   char path[ PATH_MAX ] = {0};
   char opath[ PATH_MAX ] = {0};
   void *buff = NULL;
@@ -191,41 +188,40 @@ void guiOpen ( uchar saveFile )
     appMethods.OnApply();
   }
   appMethods.OnDefPath ( path );
-  if ( IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
+  op |= (IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks) ? _O_TEXT : _O_BINARY;
+  if ( !saveFile || IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
   {
-    op = _O_TEXT | _O_RDWR | (saveFile ? _O_CREAT : 0);
     strcat_s ( path, PATH_MAX, "*." );
   }
-  else if ( saveFile )
+  else
   {
     strcat_s ( path, PATH_MAX, "." );
   }
-  appMethods.OnDefExt ( path );
-  appMethods.OnDefExt ( opath );
+  // Rename Directory
   if ( _access( opath, 0 ) == 0 && strcmpi( opath, path ) != 0 )
     rename( opath, path );
-  if ( IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
+  appMethods.OnDefExt ( path );
+  appMethods.OnDefExt ( opath );
+  // Rename File
+  if ( _access( opath, 0 ) == 0 && strcmpi( opath, path ) != 0 )
+    rename( opath, path );
+  if ( !saveFile || IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
   {
-    IupGetFile ( path );
+    if ( IupGetFile ( path ) == IUP_NO )
+      return;
   }
   ipFdOpen ( &fd, path, op, IP_D_RW, IP_A_RW );
   if ( !fd )
     return;
-  file = ipFdOpenFile ( fd, "rw+" );
-  if ( !file )
-  {
-    return;
-  }
   if ( saveFile )
   {
-    appMethods.OnSave ( fd, file );
+    appMethods.OnSave ( fd );
   }
   else
   {
-    appMethods.OnLoad ( fd, file );
+    appMethods.OnLoad ( fd );
     appMethods.OnReset();
   }
-  ipShut ( file );
   ipFdShut ( fd );
 }
 int  guiData_OnValueChanged ( Ihandle *ih )
@@ -278,5 +274,6 @@ int  guiData_OnValueChanged ( Ihandle *ih )
     return IUP_DEFAULT;
   }
   IupSetInt ( ih, IUP_VALUE, 0 );
+  guiMenu_OnValueChanged( guiMenu );
   return IUP_DEFAULT;
 }
