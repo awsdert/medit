@@ -25,7 +25,7 @@ GUI_HACKS guiHacks = {{NULL}};
 hack_t *tmpIndex = NULL;
 // Syncs name with hack
 HACKL tmpHacks = {0};
-extern void guiTar_OnDefPath ( char *path );
+extern void guiPfm_OnDefPath ( char *path );
 extern void guiPro_OnDefPath ( char *path );
 void guiHacks_OnLang ( void )
 {
@@ -36,8 +36,8 @@ void guiHacks_OnLang ( void )
   IupSetAttribute ( guiHacks.main.fset,  IUP_TITLE, appLang->a[ LNG_HACKS  ].a );
   IupSetAttribute ( guiHacks.fsetFormat, IUP_TITLE, appLang->a[ LNG_FORMAT ].a );
   strcpy_s( path, PATH_MAX, ipGetUsrDir() );
-  strcat_s( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP );
-  guiTar_OnDefPath( path );
+  strcat_s( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "data" DIR_SEP );
+  guiPfm_OnDefPath( path );
   strcat_s( path, PATH_MAX, DIR_SEP "*." LIB_EXT );
   if ( i > 0 )
     strcpy_s( name, NAME_MAX, IupGetAttributeId( guiHacks.ddFormat, IUP_TITLE, i ) );
@@ -51,8 +51,8 @@ void guiHacks_OnLang ( void )
     do
     {
       ++i;
-      IupSetStrAttributeId( guiHacks.ddFormat, IUP_TITLE, i, entry.name );
-      if ( strcmp( name, entry.name ) == 0 )
+      IupSetStrAttribute( guiHacks.ddFormat, "APPENDITEM", entry.name );
+      if ( name[0] && strcmp( name, entry.name ) == 0 )
       {
         IupSetInt( guiHacks.ddFormat, IUP_VALUE, i );
         c = 1;
@@ -60,11 +60,17 @@ void guiHacks_OnLang ( void )
     }
     while ( ipDirNxtEntI( hDir, &entry ) == 0 );
     ipDirShutHandle( hDir );
+    if ( !c )
+    {
+      strcpy_s( name, NAME_MAX, IupGetAttribute( guiHacks.ddFormat, "1" ) );
+      IupSetInt( guiHacks.ddFormat, IUP_VALUE, 1 );
+    }
+    c = 1;
   }
   /*
   if ( !c )
   {
-    appLoadLib( NULL, &hCOM, &cCOM );
+    appLoadLib( name, &hCOM, &cCOM );
   }
   //*/
 }

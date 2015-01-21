@@ -189,25 +189,27 @@ void guiOpen ( uchar saveFile )
   }
   appMethods.OnDefPath ( path );
   op |= (IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks) ? _O_TEXT : _O_BINARY;
+  // Rename Directory
+  if ( saveFile && _access( opath, 0 ) == 0 && strcmpi( opath, path ) != 0 )
+    rename( opath, path );
   if ( !saveFile || IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
   {
+    strcat_s ( opath, PATH_MAX, "*." );
     strcat_s ( path, PATH_MAX, "*." );
   }
   else
   {
+    strcat_s ( opath, PATH_MAX, "." );
     strcat_s ( path, PATH_MAX, "." );
   }
-  // Rename Directory
-  if ( _access( opath, 0 ) == 0 && strcmpi( opath, path ) != 0 )
-    rename( opath, path );
   appMethods.OnDefExt ( path );
   appMethods.OnDefExt ( opath );
   // Rename File
-  if ( _access( opath, 0 ) == 0 && strcmpi( opath, path ) != 0 )
+  if ( saveFile && IupGetInt ( guiMenu, IUP_VALUE ) < guiMenu_Hacks && _access( opath, 0 ) == 0 && strcmpi( opath, path ) != 0 )
     rename( opath, path );
   if ( !saveFile || IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
   {
-    if ( IupGetFile ( path ) == IUP_NO )
+    if ( IupGetFile ( path ) == -1 )
       return;
   }
   ipFdOpen ( &fd, path, op, IP_D_RW, IP_A_RW );
