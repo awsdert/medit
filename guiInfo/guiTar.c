@@ -63,10 +63,7 @@ void guiTar_OnLoad ( int fd )
   ipFdRdBuff ( fd, &srcTar, sizeof ( DATA_TAR ) );
   changeEndian ( &srcTar.bases, sizeof ( BASES ), 'L', getEndian() );
 }
-void guiTar_OnReset ( void )
-{
-  tmpTar = srcTar;
-}
+
 void guiTar_OnSave ( int fd )
 {
   changeEndian ( &srcTar.bases, sizeof ( BASES ), getEndian(), 'L' );
@@ -75,6 +72,12 @@ void guiTar_OnSave ( int fd )
 void guiTar_OnApply ( void )
 {
   srcTar = tmpTar;
+  strcpy_s ( appSession.tar, NAME_MAX, tmpTar.file );
+}
+void guiTar_OnReset ( void )
+{
+  tmpTar = srcTar;
+  strcpy_s ( appSession.tar, NAME_MAX, srcTar.file );
 }
 extern void guiPfm_OnDefPath ( char *path );
 void guiTar_OnDefPath ( char *path )
@@ -82,7 +85,7 @@ void guiTar_OnDefPath ( char *path )
   guiPfm_OnDefPath ( path );
   mkdir ( path );
   strcat_s ( path, PATH_MAX, DIR_SEP );
-  strcat_s ( path, PATH_MAX, srcTar.file );
+  strcat_s ( path, PATH_MAX, appSession.tar );
 }
 void guiTar_OnDefExt ( char *path )
 {
@@ -92,16 +95,18 @@ extern char *srcBaseName;
 extern char *tmpBaseName;
 int guiTar_OnShow ( Ihandle *ih )
 {
-  IupSetAttribute( guiTar.name.tb, "MEDIT_SRC_NAME", srcTar.name );
-  IupSetAttribute( guiTar.name.tb, "MEDIT_TMP_NAME", tmpTar.name );
-  IupSetAttribute( guiTar.file.tb, "MEDIT_SRC_FILE", srcTar.file );
-  IupSetAttribute( guiTar.file.tb, "MEDIT_TMP_FILE", tmpTar.file );
   appMethods.OnDefPath = guiTar_OnDefPath;
   appMethods.OnDefExt  = guiTar_OnDefExt;
   appMethods.OnLoad    = guiTar_OnLoad;
   appMethods.OnReset   = guiTar_OnReset;
   appMethods.OnSave    = guiTar_OnSave;
   appMethods.OnApply   = guiTar_OnApply;
+  if ( !ih )
+    return IUP_DEFAULT;
+  IupSetAttribute ( guiTar.name.tb, "MEDIT_SRC_NAME", srcTar.name );
+  IupSetAttribute ( guiTar.name.tb, "MEDIT_TMP_NAME", tmpTar.name );
+  IupSetAttribute ( guiTar.file.tb, "MEDIT_SRC_FILE", srcTar.file );
+  IupSetAttribute ( guiTar.file.tb, "MEDIT_TMP_FILE", tmpTar.file );
   IupSetAttribute ( guiTar.main.fset, "FLOATING", IUP_NO );
   IupSetAttribute ( guiTar.indx.fset, "FLOATING", IUP_NO );
   guiText_SendShowMsg ( &guiTar.name, tmpTar.name );
@@ -122,7 +127,7 @@ int guiTar_OnShow ( Ihandle *ih )
     guiBase_OnShow ( guiBase->main.fset );
   }
   guiTar_OnLang();
-  IupRefresh( guiTar.main.fset );
+  IupRefresh ( guiTar.main.fset );
   return IUP_DEFAULT;
 }
 int guiTarg_OnKAny ( Ihandle *ih, int c )

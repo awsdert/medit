@@ -9,7 +9,7 @@ typedef struct _GUI_CODE
   GUI_MAIN main;
   GUI_MAIN code;
   GUI_CMP   cmp;
-  GUI_SPIN indx;
+  GUI_TEXT indx;
   GUI_VAL   val;
   Ihandle *type;
 } GUI_CODE;

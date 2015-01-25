@@ -1,6 +1,5 @@
 #include "guiHack.h"
 GUI_HACK guiHack = {{NULL}};
-HACK_LIB_COM *hCOM = NULL;
 HACK *srcHack = NULL;
 HACK *tmpHack = NULL;
 CODES srcHackCodes = {0};

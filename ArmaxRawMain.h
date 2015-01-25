@@ -1,36 +1,23 @@
 #pragma once
 #include "_hack.h"
 
-#ifdef _WIN
-
 #ifdef BUILD_ARMAX_RAW_DLL
-    #define ARMAX_RAW_EXP __declspec(dllexport)
+    #define ARMAX_RAW_EXP LIB_EXP
 #else
-    #define ARMAX_RAW_EXP __declspec(dllimport)
-#endif
-
-#else
-
-#ifdef BUILD_ARMAX_RAW_DLL
-#define ARMAX_RAW_EXP static
-#else
-#define ARMAX_RAW_EXP extern
-#endif
-
+    #define ARMAX_RAW_EXP LIB_IMP
 #endif
 
 OPEN_C
 
-ARMAX_RAW_EXP HACK_LIB_COM* GetHackFuncs( void );
-ARMAX_RAW_EXP CODE_LIB_COM* GetCodeFuncs( void );
+ARMAX_RAW_EXP HACK_COM* GetHackCOM( void );
 
-void  armaxRawHack_OnLoad(  FILE *file, char const *dataDir );
-void  armaxRawHack_OnSave(  FILE *file, char const *dataDir );
-uchar armaxRawHack_RdLine(  char *line, void *_source );
-uchar armaxRawHack_WrLine(  char *line, void *_source );
-uchar armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source );
-uchar armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source );
-uchar armaxRawCode_Txt2Raw( CODE *code, char *line, void *_source );
-uchar armaxRawCode_Raw2Txt( CODE *code, char *line, void *_source );
+void  ARMAX_RAW_EXP armaxRawHack_OnLoad(  FILE *file, char const *dataDir );
+void  ARMAX_RAW_EXP armaxRawHack_OnSave(  FILE *file, char const *dataDir );
+uchar ARMAX_RAW_EXP armaxRawHack_RdLine(  char *line, void *_source );
+uchar ARMAX_RAW_EXP armaxRawHack_WrLine(  char *line, void *_source );
+uchar ARMAX_RAW_EXP armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source );
+uchar ARMAX_RAW_EXP armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source );
+uchar ARMAX_RAW_EXP armaxRawCode_Txt2Raw( CODE *code, char *line, void *_source );
+uchar ARMAX_RAW_EXP armaxRawCode_Raw2Txt( CODE *code, char *line, void *_source );
 
 SHUT_C

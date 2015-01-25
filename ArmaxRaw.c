@@ -1,9 +1,8 @@
 #include "ArmaxRawMain.h"
 
-HACK_LIB_COM _hackCOM = {0};
-CODE_LIB_COM _codeCOM = {0};
+HACK_COM _armaxRawCOM = {0};
 
-void  armaxRawHack_OnLoad( FILE *file, char const *dataDir )
+void  ARMAX_RAW_EXP armaxRawHack_OnLoad( FILE *file, char const *dataDir )
 {
   hack_t hi = 0;
   uchar ci = 0;
@@ -13,21 +12,21 @@ void  armaxRawHack_OnLoad( FILE *file, char const *dataDir )
   CODE *code;
   char line[80] = {0};
   char path[PATH_MAX] = {0};
-  _hackCOM.RdLine = armaxRawHack_RdLine;
-  _hackCOM.WrLine = armaxRawHack_WrLine;
-  _hackCOM.ReSize( &_hackCOM.hl, NULL, 0 );
+  _armaxRawCOM.RdLine = armaxRawHack_RdLine;
+  _armaxRawCOM.WrLine = armaxRawHack_WrLine;
+  _armaxRawCOM.ResizeHacks( &_armaxRawCOM.hl, NULL, 0 );
   for ( ; !ipEof( file ); ++hi )
   {
-    if ( hi == _hackCOM.hl.hacks->_c )
-      _hackCOM.ReSize( &_hackCOM.hl, NULL, hi + 10 );
-    hack = &_hackCOM.hl.hacks->a[hi];
+    if ( hi == _armaxRawCOM.hl.hacks->_c )
+      _armaxRawCOM.ResizeHacks( &_armaxRawCOM.hl, NULL, hi + 10 );
+    hack = &_armaxRawCOM.hl.hacks->a[hi];
     while ( !line[0] || line[0] == ';' || line[0] == '\n' || line[0] == '\r' )
     {
       if ( ipEof( file ) )
       {
-        _hackCOM.hl.hacks->c = hi;
-        _hackCOM.hl.hacks->c = --hi;
-        _codeCOM.codes->c = 0;
+        _armaxRawCOM.hl.hacks->c = hi;
+        _armaxRawCOM.hl.hacks->c = --hi;
+        _armaxRawCOM.cl->c = 0;
         return;
       }
       armaxRawHack_RdLine( line, file );
@@ -38,15 +37,15 @@ void  armaxRawHack_OnLoad( FILE *file, char const *dataDir )
     --len;
     if ( line[len] == '"' || line[len] == '\'' )
       line[len] = 0;
-    strcpy_s( _hackCOM.hl.names[hi].a, NAME_MAX, line );
+    strcpy_s( _armaxRawCOM.hl.names[hi].a, NAME_MAX, line );
     armaxRawHack_RdLine( line, file );
     armaxRawHack_Txt2Raw( hack, line, file );
-    _codeCOM.ReSize( &_codeCOM.codes, NULL, 0 );
+    _armaxRawCOM.ResizeCodes( &_armaxRawCOM.cl, NULL, 0 );
     for ( ci = 0; !ipEof( file ); ++ci )
     {
-      if ( ci == _codeCOM.codes->_c )
-        _codeCOM.ReSize( &_codeCOM.codes, NULL, ci + 10 );
-      code = &_codeCOM.codes->a[ci];
+      if ( ci == _armaxRawCOM.cl->_c )
+        _armaxRawCOM.ResizeCodes( &_armaxRawCOM.cl, NULL, ci + 10 );
+      code = &_armaxRawCOM.cl->a[ci];
       armaxRawHack_RdLine( line, file );
       armaxRawCode_Txt2Raw( code, line, file );
     }
@@ -57,31 +56,31 @@ void  armaxRawHack_OnLoad( FILE *file, char const *dataDir )
     strcat_s( path, PATH_MAX, line );
     strcat_s( path, PATH_MAX, ".src-codes" );
     ipFdOpen( &data, path, IP_O_MKTEMP | IP_O_FILE, IP_D_RW, IP_A_RW );
-    ipFdRdBuff( data, _codeCOM.codes, _codeCOM.codes->s + CODES_SIZE );
+    ipFdRdBuff( data, _armaxRawCOM.cl, _armaxRawCOM.cl->s + CODES_SIZE );
     ipFdShut( data );
   }
-  _hackCOM.hl.hacks->c = hi;
-  _hackCOM.hl.hacks->i = --hi;
+  _armaxRawCOM.hl.hacks->c = hi;
+  _armaxRawCOM.hl.hacks->i = --hi;
 }
-void  armaxRawHack_OnSave( FILE *file, char const *dataDir )
+void  ARMAX_RAW_EXP armaxRawHack_OnSave( FILE *file, char const *dataDir )
 {
   // TODO: Implement Armax Raw Saver
 }
-uchar armaxRawHack_RdLine( char  *line, void *_source )
+uchar ARMAX_RAW_EXP armaxRawHack_RdLine( char  *line, void *_source )
 {
   _strset_s( line, 80, 0 );
   if ( ipRdLineA( line, 80, (FILE*)_source ) )
     return 1;
   return 0;
 }
-uchar armaxRawHack_WrLine( char  *line, void *_source )
+uchar ARMAX_RAW_EXP armaxRawHack_WrLine( char  *line, void *_source )
 {
  if ( ipWrLineA( line, (FILE*)_source ) )
     return 1;
   return 0;
 }
 
-uchar armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source )
+uchar ARMAX_RAW_EXP armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source )
 {
   ulint info = strtoull( line, NULL, 16 );
   char temp[6] = {0};
@@ -91,9 +90,9 @@ uchar armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source )
   // GameID
   for ( j = 0; j < 4; ++j, ++i )
     temp[j] = line[i];
-  if ( !_hackCOM.gid )
-    _hackCOM.gid = strtol( temp, NULL, 16 );
-  else if ( _hackCOM.gid != strtol( temp, NULL, 16 ) )
+  if ( !_armaxRawCOM.gid )
+    _armaxRawCOM.gid = (ushort)strtoul( temp, NULL, 16 );
+  else if ( _armaxRawCOM.gid != strtol( temp, NULL, 16 ) )
     return 0;
   // HackID
   _strset_s( temp, 6, 0 );
@@ -106,17 +105,17 @@ uchar armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source )
   }
   hack->id = strtoul( temp, NULL, 16 );
   // Region
-  if ( !_hackCOM.region )
-    _hackCOM.region = (line[i] == '1') ? REGION_EU :REGION_US;
+  if ( !_armaxRawCOM.reg )
+    _armaxRawCOM.reg = (line[i] == '1') ? REGION_EU :REGION_US;
   ++i;
   // List Type
   hack->irl = (line[i] == '2') ? 1 : 0;
   ++i;
   // Parent ID
   pid = strtoul( &line[i], NULL, 16 );
-  for ( j = 0; j < _hackCOM.hl.hacks->c; ++j )
+  for ( j = 0; j < _armaxRawCOM.hl.hacks->c; ++j )
   {
-    if ( _hackCOM.hl.hacks->a[j].id == pid )
+    if ( _armaxRawCOM.hl.hacks->a[j].id == pid )
     {
       hack->oi = j;
       return 1;
@@ -125,12 +124,12 @@ uchar armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source )
   // Let Parent ID be defined elsewhere
   return 1;
 }
-uchar armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source )
+uchar ARMAX_RAW_EXP armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source )
 {
   schar i = 4, j = 4;
   char temp[6] = {0};
   // We start with GameID anyway so just shove it straight on
-  _ultoa_s( _hackCOM.gid, temp, 6, 16 );
+  _ultoa_s( _armaxRawCOM.gid, temp, 6, 16 );
   while ( i > -1 && !temp[i] ) --i;
   for ( ; j > -1; --j, --i )
     line[j] = (i > -1) ? temp[i] : '0';
@@ -144,14 +143,14 @@ uchar armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source )
   line[9] = line[8];
   line[8] = ' ';
   // Region
-  line[10] = ( _hackCOM.region == REGION_US || !_hackCOM.region ) ? '0' : '1';
+  line[10] = ( _armaxRawCOM.reg == REGION_US || !_armaxRawCOM.reg ) ? '0' : '1';
   // List Type
   line[11] = hack->fi ? hack->irl + '1' : '0';
   // Parent ID
   if ( hack->ci )
   {
     _strset_s( temp, 6, 0 );
-    _ultoa_s( _hackCOM.hl.hacks->a[hack->oi].id, temp, 6, 16 );
+    _ultoa_s( _armaxRawCOM.hl.hacks->a[hack->oi].id, temp, 6, 16 );
     i = 5;
     while ( i > -1 && !temp[i] ) --i;
   }
@@ -163,7 +162,7 @@ uchar armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source )
 uchar  _armaxRawCode_Txt2RawRd( char *line, void *_source, ulint *info, ulong *p1, ulong *p2 )
 {
   uchar r = 1;
-  if ( _hackCOM.RdLine( line, _source ) )
+  if ( _armaxRawCOM.RdLine( line, _source ) )
     *info = strtoull( line, NULL, 16 );
   else
   {
@@ -177,7 +176,7 @@ uchar  _armaxRawCode_Txt2RawRd( char *line, void *_source, ulint *info, ulong *p
 void _armaxRawCode_Txt2RawMaster( CODE *code, char *line, void *_source, ulint *info, ulong *p1, ulong *p2 )
 {
   code->type = CODE_MASTER;
-  _hackCOM.region = ( *p2 & 0xFF ) ? REGION_EU : REGION_US;
+  _armaxRawCOM.reg = ( *p2 & 0xFF ) ? REGION_EU : REGION_US;
   *p2 >>= 8;
   code->loop = *p2 & 0xFF;
   *p2 >>= 8;
@@ -274,7 +273,7 @@ void _armaxRawCode_Txt2RawLoop( CODE *code, char *line, void *_source, ulint *in
   code->loop = (*p2 >> 16) & 0xFF;
   code->addr[1] = *p2 & 0xFFFFF;
 }
-uchar armaxRawCode_Txt2Raw( CODE *code, char *line, void *_source )
+uchar ARMAX_RAW_EXP armaxRawCode_Txt2Raw( CODE *code, char *line, void *_source )
 {
   ulint info = strtoull( line, NULL, 16 );
   ulong p1 = (ulong)(info >> 32), p2 = (ulong)info;
@@ -328,7 +327,7 @@ uchar _armaxRawCode_Raw2TxtWr( char *line, void *_source, ulong *p1, ulong *p2 )
   while ( i > -1 && !temp[i] ) --i;
   for ( j = 16; j > 8; --j, --i )
     line[j] = (i > -1) ? temp[i] : '0';
-  if ( _hackCOM.WrLine( line, _source ) )
+  if ( _armaxRawCOM.WrLine( line, _source ) )
     return 1;
   return 0;
 }
@@ -377,7 +376,7 @@ uchar _armaxRawCode_Raw2TxtCmp( CODE *code, char *line, void *_source, ulong *p1
   // TODO: Implement _armaxRawCode_Raw2TxtCmp()
   return 0;
 }
-uchar armaxRawCode_Raw2Txt( CODE *code, char *line, void *_source )
+uchar ARMAX_RAW_EXP armaxRawCode_Raw2Txt( CODE *code, char *line, void *_source )
 {
   ulong p1 = 0, p2 = 0;
   if ( code->addr[0] > 0x1ffffff )
@@ -407,5 +406,16 @@ uchar armaxRawCode_Raw2Txt( CODE *code, char *line, void *_source )
   return 1;
 }
 
-ARMAX_RAW_EXP HACK_LIB_COM* GetHackFuncs( void ) { return &_hackCOM; }
-ARMAX_RAW_EXP CODE_LIB_COM* GetCodeFuncs( void ) { return &_codeCOM; }
+ARMAX_RAW_EXP HACK_COM* GetHackCOM( void )
+{
+  HACK_COM* com = &_armaxRawCOM;
+  com->OnLoad  = armaxRawHack_OnLoad;
+  com->RdLine  = armaxRawHack_RdLine;
+  com->OnSave  = armaxRawHack_OnSave;
+  com->WrLine  = armaxRawHack_WrLine;
+  com->H2T     = armaxRawHack_Raw2Txt;
+  com->T2H     = armaxRawHack_Txt2Raw;
+  com->C2T     = armaxRawCode_Raw2Txt;
+  com->T2C     = armaxRawCode_Txt2Raw;
+  return &_armaxRawCOM;
+}

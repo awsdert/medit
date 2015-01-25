@@ -171,7 +171,8 @@ int  guiMenu_OnValueChanged ( Ihandle *ih )
 }
 void guiOpen ( uchar saveFile )
 {
-  int fd, op = _O_RDWR | (saveFile ? _O_CREAT : 0);
+  int fd, i = (guiMenu ? IupGetInt ( guiMenu, IUP_VALUE ) : guiMenu_Org),
+    op = _O_RDWR | ((saveFile == 1) ? _O_CREAT : 0) | ( (i >= guiMenu_Hacks) ? _O_TEXT : _O_BINARY );
   char path[ PATH_MAX ] = {0};
   char opath[ PATH_MAX ] = {0};
   void *buff = NULL;
@@ -183,16 +184,15 @@ void guiOpen ( uchar saveFile )
   strcat_s ( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "data" );
   strcpy_s ( opath, PATH_MAX, path );
   appMethods.OnDefPath ( opath );
-  if ( saveFile )
+  if ( saveFile == 1 )
   {
     appMethods.OnApply();
   }
   appMethods.OnDefPath ( path );
-  op |= (IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks) ? _O_TEXT : _O_BINARY;
   // Rename Directory
-  if ( saveFile && _access( opath, 0 ) == 0 && strcmpi( opath, path ) != 0 )
+  if ( saveFile == 1 && _access( opath, 0 ) == 0 && strcmpi( opath, path ) != 0 )
     rename( opath, path );
-  if ( !saveFile || IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
+  if ( !saveFile || i >= guiMenu_Hacks )
   {
     strcat_s ( opath, PATH_MAX, "*." );
     strcat_s ( path, PATH_MAX, "*." );
@@ -205,17 +205,17 @@ void guiOpen ( uchar saveFile )
   appMethods.OnDefExt ( path );
   appMethods.OnDefExt ( opath );
   // Rename File
-  if ( saveFile && IupGetInt ( guiMenu, IUP_VALUE ) < guiMenu_Hacks && _access( opath, 0 ) == 0 && strcmpi( opath, path ) != 0 )
+  if ( saveFile == 1 && i < guiMenu_Hacks && _access( opath, 0 ) == 0 && strcmpi( opath, path ) != 0 )
     rename( opath, path );
-  if ( !saveFile || IupGetInt ( guiMenu, IUP_VALUE ) >= guiMenu_Hacks )
+  if ( !saveFile || i >= guiMenu_Hacks )
   {
     if ( IupGetFile ( path ) == -1 )
       return;
   }
   ipFdOpen ( &fd, path, op, IP_D_RW, IP_A_RW );
-  if ( !fd )
+  if ( fd < 1 )
     return;
-  if ( saveFile )
+  if ( saveFile == 1 )
   {
     appMethods.OnSave ( fd );
   }

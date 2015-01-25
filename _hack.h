@@ -22,34 +22,36 @@ typedef struct _HACKL
   HACKS *hacks;
 } HACKL;
 
-typedef struct _HACK_LIB_COM
+typedef uchar (*_HACK_COM_HACK_FUNC)( HACK *hack, char* line, void *_source );
+typedef uchar (*_HACK_COM_CODE_FUNC)( CODE *code, char* line, void *_source );
+typedef uchar (*_HACK_COM_LINE_FUNC)( char *line, void *_source );
+typedef void  (*_HACK_COM_FILE_FUNC)( FILE *file, char const *dataDir );
+typedef uchar (*_HACK_COM_GETBASE)  ( char *name );
+typedef void  (*_HACK_COM_RESIZEHL) ( HACKL  *hl, hack_t **indexList, hack_t count );
+typedef void  (*_HACK_COM_RESIZECL) ( CODES **cl, hack_t **indexList, hack_t count );
+
+typedef struct _HACK_COM
 {
-  void    (*ReSize)( HACKL *hl, hack_t **indexList, hack_t count );
+  _HACK_COM_GETBASE   GetBase;
+  _HACK_COM_RESIZEHL  ResizeHacks;
+  _HACK_COM_RESIZECL  ResizeCodes;
   // File Handling
-  void    (*OnLoad)(  FILE *file, char const *dataDir );
-  void    (*OnSave)(  FILE *file, char const *dataDir );
+  _HACK_COM_FILE_FUNC OnLoad;
+  _HACK_COM_FILE_FUNC OnSave;
   // Replace with handler of _source when not loading/saving a file
-  uchar   (*RdLine)(  char *line, void *_source );
-  uchar   (*WrLine)(  char *line, void *_source );
+  _HACK_COM_LINE_FUNC RdLine;
+  _HACK_COM_LINE_FUNC WrLine;
   // 80 characters per line
-  uchar   (*txt2raw)( HACK *hack, char *line, void *_source );
-  uchar   (*raw2txt)( HACK *hack, char *line, void *_source );
+  _HACK_COM_HACK_FUNC T2H;
+  _HACK_COM_HACK_FUNC H2T;
+  _HACK_COM_CODE_FUNC T2C;
+  _HACK_COM_CODE_FUNC C2T;
+  REGION_T reg;
+  ushort   gid;
   HACKL    hl;
-  REGION_T region;
-  ulong gid;
-} HACK_LIB_COM;
+  CODES   *cl;
+} HACK_COM;
 
-typedef struct _CODE_LIB_COM
-{
-  uchar  (*GetBase)( char *name );
-  uchar* (*ReSize)( CODES **codes, uchar *indexList, uchar count );
-  // 80 characters per line
-  uchar  (*txt2raw)( CODE *code, char *line, void *_source );
-  uchar  (*raw2txt)( CODE *code, char *line, void *_source );
-  CODES  *codes;
-} CODE_LIB_COM;
-
-typedef HACK_LIB_COM* (*HACKLIBCOM)( void );
-typedef CODE_LIB_COM* (*CODELIBCOM)( void );
+typedef HACK_COM* (*_GETHACKCOM)( void );
 
 SHUT_C

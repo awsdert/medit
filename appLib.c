@@ -1,49 +1,50 @@
 #include "_guiMain.h"
-extern void guiTar_OnDefPath ( char *path, uchar saveFile );
-HLIB appLoadLib( char* name, HACK_LIB_COM **hfunc, CODE_LIB_COM **cfunc )
+extern void guiPfm_OnDefPath ( char *path );
+HACK_COM *hCOM = NULL;
+HLIB lib = NULL;
+void appLoadLib( char* name )
 {
-  HLIB lib = NULL;
   char path[ PATH_MAX ] = {0};
-  HACKLIBCOM gethacks = NULL;
-  CODELIBCOM getcodes = NULL;
+  //char ext[5] = "." LIB_EXT;
+  _GETHACKCOM gethackcom = NULL;
+  if( lib )
+    libShut( lib );
+  lib  = NULL;
+  hCOM = NULL;
   if ( !name )
   {
-    (*hfunc) = NULL;
-    (*cfunc) = NULL;
-    return NULL;
+    return;
   }
-  strcpy_s( path, PATH_MAX, ipGetCwd() );
-  strcat_s( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP );
-  guiTar_OnDefPath( path, 1 );
+  strcpy_s( path, PATH_MAX, ipGetUsrDir() );
+  strcat_s( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "data" );
+  guiPfm_OnDefPath( path );
+  strcat_s( path, PATH_MAX, DIR_SEP );
   strcat_s( path, PATH_MAX, name );
-  strcat_s( path, PATH_MAX, "." LIB_EXT );
+  /*
+  if ( strcmpi( path, ext ) < 0 )
+    strcat_s( path, PATH_MAX, "." LIB_EXT );
+  */
   lib = libOpen( path );
   if ( !lib )
   {
     IupMessage( "Failure to load Library", name );
-    return NULL;
+    return;
   }
-  gethacks = (HACKLIBCOM)libAddr( lib, "GetHackFuncs");
-  getcodes = (CODELIBCOM)libAddr( lib, "GetCodeFuncs");
-  if ( !gethacks )
+  gethackcom = (_GETHACKCOM)libAddr( lib, "GetHackCOM");
+  if ( !gethackcom )
   {
-    IupMessage( "Failure to load hack functions", name );
+    IupMessage( "Failure to load hack COM", name );
     libShut( lib );
-    return NULL;
+    return;
   }
-  if ( !getcodes )
-  {
-    IupMessage( "Failure to load code functions", name );
-    libShut( lib );
-    return NULL;
-  }
-  (*hfunc) = gethacks();
-  (*cfunc) = getcodes();
-  (*cfunc)->GetBase = GetBase;
-  return lib;
+  hCOM = gethackcom();
+  hCOM->GetBase     = GetBase;
+  hCOM->ResizeHacks = hacksReSize;
+  hCOM->ResizeCodes = codesReSize;
 }
-HLIB appFreeLib( HLIB lib )
+void appFreeLib( void )
 {
-  libShut( lib );
-  return NULL;
+  if( lib )
+    libShut( lib );
+  lib = NULL;
 }

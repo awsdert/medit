@@ -2,6 +2,48 @@
 GUI_CODES *guiCodes = NULL;
 CODES *srcCodes = NULL;
 CODES *tmpCodes = NULL;
+void codesReSize( CODES **cl, uchar **indexList, uchar count )
+{
+  if ( !cl )
+    return;
+  if ( !(*cl) )
+  {
+    (*cl) = malloc( sizeof(CODES) );
+    memset( *cl, 0, sizeof(CODES) );
+    (*cl)->_c = 1;
+    (*cl)->s  = sizeof(CODE);
+    if ( indexList )
+    {
+      (*indexList) = malloc(1);
+      (*indexList)[0] = 0;
+    }
+  }
+  if ( count <= (*cl)->_c )
+  {
+    if ( count >= (*cl)->c )
+    {
+      goto updateCount;
+    }
+    (*cl)->c = count;
+  }
+  else
+  {
+    size_t s = (count - 1) * sizeof(CODE);
+    (*cl) = realloc( *cl, sizeof(CODES) + s );
+    (*cl)->_c = count;
+    (*cl)->s = s + sizeof(CODE);
+  }
+  uchar i = (*cl)->c;
+  uchar c = (*cl)->_c - i;
+  if ( c )
+  {
+    memset( &((*cl)->a[i]), 0, c * sizeof(CODE) );
+    if ( indexList )
+      memset( &(*indexList)[i], 0, c );
+  }
+updateCount:
+  (*cl)->c = count;
+}
 void guiCodes_SetGUI( GUI_CODES *codes, CODES *src, CODES *tmp )
 {
   guiCodes = codes;

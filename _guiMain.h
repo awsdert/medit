@@ -34,8 +34,8 @@ extern Ihandle *guiMenu;
 extern Ihandle *guiData;
 char getEndian( void );
 char changeEndian( void* source, size_t size, char curEndian, char nxtEndian );
-void hacksReSize( HACKL     *hl, void  **indexList, hack_t count );
-void codesReSize( CODES **codes, uchar **indexList, uchar  count );
+void hacksReSize( HACKL  *hl, hack_t **indexList, hack_t count );
+void codesReSize( CODES **cl, uchar  **indexList, uchar  count );
 
 #ifdef HLIST
 Ihandle* IupHList( const char *action );
@@ -58,24 +58,20 @@ typedef void*   HLIB;
 #define libAddr dlsym
 #define libShut dlcose
 #endif
-extern HACK_LIB_COM *hCOM;
-extern CODE_LIB_COM *cCOM;
 /**
   \brief Loads *.dll, *.so, etc
   \param name 1st part of library filename, version and extension is appended to this
   \param hfunc Pointer to pointer that will receive hack communication objects pointer
   \param cfunc Pointer to pointer that will receive code communication objects pointer
-  \return Reference to library loaded
   Loads a library and acquires the objects needed for communicating with it,
   also sets the pointers on the object needed by library to query required info.
  **/
-HLIB appLoadLib( char* name, HACK_LIB_COM **hfunc, CODE_LIB_COM **cfunc );
+void appLoadLib( char* name );
 /** \brief Frees *.dll, *.so, etc
   \param lib reference to library to free
-  \return NULL or 0
   Frees Library and returns NULL for simple cleaning of variable holding reference
 **/
-HLIB appFreeLib( HLIB lib );
+void appFreeLib( void );
 /** \brief Converts number to text
   \param value Number to convert
   \param dst buffer that will hold text (assumed to be at least _CVTBUFSIZE length)
