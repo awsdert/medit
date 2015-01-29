@@ -32,12 +32,12 @@ void  HACK_LIB_EXP armaxRawHack_OnLoad( FILE *file, char const *dataDir )
       armaxRawHack_RdLine( line, file );
     }
     if ( line[0] == '"' || line[0] == '\'' )
-      strcpy_s( line, 80, &line[1] );
+      strncpy( line, &line[1], 80 );
     len = strlen( line );
     --len;
     if ( line[len] == '"' || line[len] == '\'' )
       line[len] = 0;
-    strcpy_s( _armaxRawCOM.hl.names[hi].a, NAME_MAX, line );
+    strncpy( _armaxRawCOM.hl.names[hi].a, line, NAME_MAX );
     armaxRawHack_RdLine( line, file );
     armaxRawHack_Txt2Raw( hack, line, file );
     _armaxRawCOM.ResizeCodes( &_armaxRawCOM.cl, NULL, 0 );
@@ -49,13 +49,15 @@ void  HACK_LIB_EXP armaxRawHack_OnLoad( FILE *file, char const *dataDir )
       armaxRawHack_RdLine( line, file );
       armaxRawCode_Txt2Raw( code, line, file );
     }
-    _strset_s( line, 80, 0 );
-    _ultoa_s( hi, line, 80, 16 );
-    _strset_s( path, PATH_MAX, 0 );
-    strcpy_s( path, PATH_MAX, dataDir );
-    strcat_s( path, PATH_MAX, line );
-    strcat_s( path, PATH_MAX, ".src-codes" );
-    ipFdOpen( &data, path, IP_O_MKTEMP | IP_O_FILE, IP_D_RW, IP_A_RW );
+    strnset( line, 0, 80 );
+    snprintf( line, 80, "%X", hi );
+    strnset( path, 0, PATH_MAX );
+    strncpy( path, dataDir, PATH_MAX );
+    strncat( path, line, PATH_MAX );
+    strncat( path, ".src-codes", PATH_MAX );
+    if ( _access( path, 0 ) != 0 )
+      _creat( path, _S_IREAD | _S_IWRITE );
+    ipFdOpen( data, path, IP_O_MKTEMP | IP_O_FILE, IP_D_RW );
     ipFdRdBuff( data, _armaxRawCOM.cl, _armaxRawCOM.cl->s + CODES_SIZE );
     ipFdShut( data );
   }
@@ -68,7 +70,7 @@ void  HACK_LIB_EXP armaxRawHack_OnSave( FILE *file, char const *dataDir )
 }
 uchar HACK_LIB_EXP armaxRawHack_RdLine( char  *line, void *_source )
 {
-  _strset_s( line, 80, 0 );
+  strnset( line, 0, 80 );
   if ( ipRdLineA( line, 79, (FILE*)_source ) )
     return 1;
   return 0;
@@ -82,7 +84,6 @@ uchar HACK_LIB_EXP armaxRawHack_WrLine( char  *line, void *_source )
 
 uchar HACK_LIB_EXP armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source )
 {
-  ulint info = strtoull( line, NULL, 16 );
   char temp[6] = {0};
   uchar j = 0;
   ulong pid;
@@ -95,7 +96,7 @@ uchar HACK_LIB_EXP armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source )
   else if ( _armaxRawCOM.gid != strtol( temp, NULL, 16 ) )
     return 0;
   // HackID
-  _strset_s( temp, 6, 0 );
+  strnset( temp, 0, 6 );
   for ( j = 0; j < 5; ++j, ++i )
     temp[j] = line[i];
   if ( line[8] == ' ' )
@@ -129,13 +130,13 @@ uchar HACK_LIB_EXP armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source )
   schar i = 4, j = 4;
   char temp[6] = {0};
   // We start with GameID anyway so just shove it straight on
-  _ultoa_s( _armaxRawCOM.gid, temp, 6, 16 );
+  snprintf( temp, 6, "%X", _armaxRawCOM.gid );
   while ( i > -1 && !temp[i] ) --i;
   for ( ; j > -1; --j, --i )
     line[j] = (i > -1) ? temp[i] : '0';
   // HackID
-  _strset_s( temp, 6, 0 );
-  _ultoa_s( hack->id, temp, 6, 16 );
+  strnset( temp, 0, 6 );
+  snprintf( temp, 6, "%lX", hack->id );
   i = 5;
   while ( i > -1 && !temp[i] ) --i;
   for ( j = 8; j > 3; --j, --i )
@@ -149,8 +150,8 @@ uchar HACK_LIB_EXP armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source )
   // Parent ID
   if ( hack->ci )
   {
-    _strset_s( temp, 6, 0 );
-    _ultoa_s( _armaxRawCOM.hl.hacks->a[hack->oi].id, temp, 6, 16 );
+    strnset( temp, 0, 6 );
+    snprintf( temp, 6, "%lX", _armaxRawCOM.hl.hacks->a[hack->oi].id );
     i = 5;
     while ( i > -1 && !temp[i] ) --i;
   }
@@ -315,14 +316,14 @@ uchar _armaxRawCode_Raw2TxtWr( char *line, void *_source, ulong *p1, ulong *p2 )
 {
   char temp[9] = {0};
   schar i = 8, j = 8;
-  _ultoa_s( *p1, temp, 9, 16 );
+  snprintf( temp, 9, "%lX", *p1 );
   while ( i > -1 && !temp[i] ) --i;
   for ( ; j > -1; --j, --i )
     line[j] = (i > -1) ? temp[i] : '0';
   line[9] = line[8];
   line[8] = ' ';
-  _strset_s( temp, 9, 0 );
-  _ultoa_s( *p1, temp, 9, 16 );
+  strnset( temp, 0, 9 );
+  snprintf( temp, 9, "%lX", *p1 );
   i = 8;
   while ( i > -1 && !temp[i] ) --i;
   for ( j = 16; j > 8; --j, --i )

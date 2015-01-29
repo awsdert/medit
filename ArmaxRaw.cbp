@@ -17,6 +17,7 @@
 					<Add option="/MDd" />
 					<Add option="/W3" />
 					<Add option="/Zi" />
+					<Add option="/DBUILD_HACK_LIB" />
 					<Add option="/D_DEBUG" />
 					<Add option="/D_X86_" />
 					<Add directory="$(WIN8)/include/um" />
@@ -48,6 +49,7 @@
 					<Add option="/MD" />
 					<Add option="/Ox" />
 					<Add option="/W3" />
+					<Add option="/DBUILD_HACK_LIB" />
 					<Add option="/DNDEBUG" />
 					<Add option="/D_X86_" />
 					<Add directory="$(WIN8)/include/um" />
@@ -77,9 +79,7 @@
 				<Compiler>
 					<Add option="-Wall" />
 					<Add option="-g" />
-					<Add option="/MDd" />
-					<Add option="/W3" />
-					<Add option="/Zi" />
+					<Add option="-DBUILD_HACK_LIB" />
 					<Add option="-D_DEBUG" />
 					<Add option="-D_X86_" />
 					<Add directory="$(MINGW)/include" />
@@ -88,8 +88,6 @@
 					<Add directory="$(MINGW)/include" />
 				</ResourceCompiler>
 				<Linker>
-					<Add option="/DEBUG" />
-					<Add option="/INCREMENTAL:NO" />
 					<Add library="user32" />
 					<Add library="shell32" />
 					<Add directory="$(MINGW)/lib" />
@@ -108,9 +106,7 @@
 				<Compiler>
 					<Add option="-fomit-frame-pointer" />
 					<Add option="-Wall" />
-					<Add option="/MD" />
-					<Add option="/Ox" />
-					<Add option="/W3" />
+					<Add option="-DBUILD_HACK_LIB" />
 					<Add option="-DNDEBUG" />
 					<Add option="-D_X86_" />
 					<Add directory="$(MINGW)/include" />
@@ -120,7 +116,6 @@
 				</ResourceCompiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="/INCREMENTAL:NO" />
 					<Add library="user32" />
 					<Add library="shell32" />
 					<Add directory="$(MINGW)/lib" />
@@ -131,7 +126,6 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="/DBUILD_HACK_LIB" />
 			<Add directory="$(IPIPE)" />
 		</Compiler>
 		<ResourceCompiler>

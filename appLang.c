@@ -69,7 +69,7 @@ LANG const _appDefLang =
   {"Load"},
   {"Save"}
 }};
-LANG _appLang = {{{0}}};
+LANG _appLang = {{{{0}}}};
 LANG const *appLang = &_appLang;
 
 void appLoadLang ( char *name )
@@ -80,11 +80,11 @@ void appLoadLang ( char *name )
   if ( r != 0 )
   {
     memset ( fname, 0, PATH_MAX );
-    strcat_s ( fname,    PATH_MAX, "lang" );
-    strcat_s ( fname,    PATH_MAX, DIR_SEP );
-    strcat_s ( fname,    PATH_MAX, name );
-    strcat_s ( fname,    PATH_MAX, ".applang" );
-    ipFdOpen ( &fd, fname, IP_O_FILE, IP_D_W, IP_A_R );
+    strncat ( fname, "lang", PATH_MAX );
+    strncat ( fname, DIR_SEP, PATH_MAX );
+    strncat ( fname, name, PATH_MAX );
+    strncat ( fname, ".applang", PATH_MAX );
+    ipFdOpen ( fd, fname, IP_O_FILE, IP_D_W );
     ipFdRdBuff ( fd, &_appLang, sizeof ( LANG ) );
     ipFdShut ( fd );
   }

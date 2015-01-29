@@ -7,32 +7,32 @@ static char _name[ NAME_MAX ] = {0};
 
 void  _appInitCwd( char *argv[], char *appName )
 {
+  char const *szTok = NULL;
   char
     szSep[] = "\\/",
-   *szTok = NULL,
-   *szTmp = NULL,
-   *szPrv = NULL,
-   *szNxt = NULL;
+   szTmp[NAME_MAX] = {0},
+   szPrv[NAME_MAX] = {0},
+   szNxt[NAME_MAX] = {0};
   char path[ PATH_MAX ] = {0};
-  strcpy_s( path, PATH_MAX, argv[0] );
+  strncpy( path, argv[0], PATH_MAX );
   /* Capture CWD and APPNAME */
-  szPrv = strtok_s( path, szSep, &szTok );
-  szNxt = strtok_s( NULL, szSep, &szTok );
+  szTok = strntok( szPrv, NAME_MAX, path, szSep, NULL );
+  szTok = strntok( szNxt, NAME_MAX, path, szSep, szTok );
   do
   {
-    szTmp = szPrv;
-    szPrv = szNxt;
-    szNxt = strtok_s( NULL, szSep, &szTok );
-    strcat_s( _cwd, PATH_MAX, szTmp );
-    strcat_s( _cwd, PATH_MAX, DIR_SEP  );
+    memcpy( szTmp, szPrv, NAME_MAX );
+    memcpy( szPrv, szNxt, NAME_MAX );
+    szTok = strntok( szNxt, NAME_MAX, path, szSep, szTok );
+    strncat( _cwd,   szTmp, PATH_MAX );
+    strncat( _cwd, DIR_SEP, PATH_MAX );
   }
-  while ( szNxt );
-  szTmp = strtok_s( szPrv, ".", &szTok );
-  szNxt = strtok_s( szTmp, "-", &szTok );
-  strcpy_s( _exe, NAME_MAX * 2, szNxt );
-  szNxt = strtok_s( NULL,  DIR_SEP, &szTok );
-  strcpy_s( _ver, NAME_MAX * 2, szNxt );
-  strcpy_s( _name, NAME_MAX, appName );
+  while ( szTok );
+  szTok = strntok( szTmp, NAME_MAX, szPrv, ".", NULL );
+  szTok = strntok( szNxt, NAME_MAX, szTmp, "-", NULL );
+  strncpy( _exe, szNxt, NAME_MAX * 2 );
+  szTok = strntok( szNxt, NAME_MAX, szTmp, DIR_SEP, szTok );
+  strncpy( _ver, szNxt, NAME_MAX * 2 );
+  strncpy( _name, appName, NAME_MAX );
 }
 char const* appGetCwp( void ) { return _cwp; }
 char const* appGetCwd( void ) { return _cwd; }

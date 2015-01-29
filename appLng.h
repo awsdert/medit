@@ -76,7 +76,7 @@ typedef struct _LANG
 extern LANG const *appLang;
 
 /**
-  \brief loads "~/APPDATA/APPNAME/lang/*.applang"
+  \brief loads "%HOME%\.medit\lang\*.applang"
   \param name assumed to be at least 2 characters long for "en" (English GB)
 **/
 void appLoadLang( char *name );

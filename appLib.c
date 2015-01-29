@@ -14,13 +14,13 @@ quit:
     memset( appSession.lib, 0, NAME_MAX );
     return;
   }
-  memcpy_s( appSession.lib, NAME_MAX, name, strlen( name ) );
+  strncpy( appSession.lib, name, NAME_MAX );
   char path[ PATH_MAX ] = {0};
-  strcpy_s( path, PATH_MAX, ipGetUsrDir() );
-  strcat_s( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "data" );
+  strncpy( path, ipGetUsrDir(), PATH_MAX );
+  strncat( path, DIR_SEP ".medit" DIR_SEP "data", PATH_MAX );
   guiPfm_OnDefPath( path );
-  strcat_s( path, PATH_MAX, DIR_SEP );
-  strcat_s( path, PATH_MAX, name );
+  strncat( path, DIR_SEP, PATH_MAX );
+  strncat( path, name, PATH_MAX );
   if ( _access( path, 0 ) != 0 )
     goto quit;
   lib = libOpen( path );
