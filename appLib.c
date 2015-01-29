@@ -4,47 +4,40 @@ HACK_COM *hCOM = NULL;
 HLIB lib = NULL;
 void appLoadLib( char* name )
 {
-  char path[ PATH_MAX ] = {0};
-  //char ext[5] = "." LIB_EXT;
-  _GETHACKCOM gethackcom = NULL;
   if( lib )
     libShut( lib );
-  lib  = NULL;
-  hCOM = NULL;
-  if ( !name )
+  if ( !name || !name[0] )
   {
+quit:
+    lib  = NULL;
+    hCOM = NULL;
+    memset( appSession.lib, 0, NAME_MAX );
     return;
   }
+  memcpy_s( appSession.lib, NAME_MAX, name, strlen( name ) );
+  char path[ PATH_MAX ] = {0};
   strcpy_s( path, PATH_MAX, ipGetUsrDir() );
   strcat_s( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "data" );
   guiPfm_OnDefPath( path );
   strcat_s( path, PATH_MAX, DIR_SEP );
   strcat_s( path, PATH_MAX, name );
-  /*
-  if ( strcmpi( path, ext ) < 0 )
-    strcat_s( path, PATH_MAX, "." LIB_EXT );
-  */
+  if ( _access( path, 0 ) != 0 )
+    goto quit;
   lib = libOpen( path );
   if ( !lib )
   {
     IupMessage( "Failure to load Library", name );
-    return;
+    goto quit;
   }
-  gethackcom = (_GETHACKCOM)libAddr( lib, "GetHackCOM");
+  _GETHACKCOM gethackcom = (_GETHACKCOM)libAddr( lib, "GetHackCOM");
   if ( !gethackcom )
   {
     IupMessage( "Failure to load hack COM", name );
     libShut( lib );
-    return;
+    goto quit;
   }
   hCOM = gethackcom();
   hCOM->GetBase     = GetBase;
   hCOM->ResizeHacks = hacksReSize;
   hCOM->ResizeCodes = codesReSize;
-}
-void appFreeLib( void )
-{
-  if( lib )
-    libShut( lib );
-  lib = NULL;
 }

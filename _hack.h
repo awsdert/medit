@@ -22,6 +22,13 @@ typedef struct _HACKL
   HACKS *hacks;
 } HACKL;
 
+
+#ifdef BUILD_HACK_LIB
+#define HACK_LIB_EXP LIB_EXP
+#else
+#define HACK_LIB_EXP LIB_IMP
+#endif
+
 typedef uchar (*_HACK_COM_HACK_FUNC)( HACK *hack, char* line, void *_source );
 typedef uchar (*_HACK_COM_CODE_FUNC)( CODE *code, char* line, void *_source );
 typedef uchar (*_HACK_COM_LINE_FUNC)( char *line, void *_source );

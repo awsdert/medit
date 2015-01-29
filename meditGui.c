@@ -73,6 +73,7 @@ int main( int argc, char *argv[] )
     guiOpen(2);
     guiPro_OnShow( NULL );
     guiOpen(2);
+    appLoadLib( appSession.lib );
   }
   appLoadLang( appSession.lang );
   // Get on with GUI
@@ -95,7 +96,7 @@ int main( int argc, char *argv[] )
   ipFdOpen( &fd, path, IP_O_MKFILE | IP_O_RW, IP_D_RW, IP_A_RW );
   ipFdWrBuff( fd, &appSession, sizeof( SESSION ) );
   ipFdShut( fd );
-  appFreeLib();
+  appLoadLib( NULL );
   IupClose();
   return ret;
 }

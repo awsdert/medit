@@ -156,8 +156,9 @@ int  guiMenu_OnValueChanged ( Ihandle *ih )
     IupHide ( kid );
   }
   // Find and show appropriate group
-  i = IupGetInt ( ih, IUP_VALUE ) - 1;
-  if ( i >= 0 && fset[i] && cb[i] )
+  i = IupGetInt ( ih, IUP_VALUE );
+  IupSetInt( ih, "MEDIT_I", i );
+  if ( (--i) >= 0 && fset[i] && cb[i] )
   {
     IupShow ( fset[i] );
     cb[i] ( fset[i] );
@@ -171,7 +172,8 @@ int  guiMenu_OnValueChanged ( Ihandle *ih )
 }
 void guiOpen ( uchar saveFile )
 {
-  int fd, i = (guiMenu ? IupGetInt ( guiMenu, IUP_VALUE ) : guiMenu_Org),
+  // FIXME: i = 0 when attempt to load hacks
+  int fd, i = (guiMenu ? IupGetInt ( guiMenu, "MEDIT_I" ) : guiMenu_Org),
     op = _O_RDWR | ((saveFile == 1) ? _O_CREAT : 0) | ( (i >= guiMenu_Hacks) ? _O_TEXT : _O_BINARY );
   char path[ PATH_MAX ] = {0};
   char opath[ PATH_MAX ] = {0};

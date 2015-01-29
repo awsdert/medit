@@ -60,18 +60,11 @@ typedef void*   HLIB;
 #endif
 /**
   \brief Loads *.dll, *.so, etc
-  \param name 1st part of library filename, version and extension is appended to this
-  \param hfunc Pointer to pointer that will receive hack communication objects pointer
-  \param cfunc Pointer to pointer that will receive code communication objects pointer
+  \param name library filename, if NULL will free current library if loaded
   Loads a library and acquires the objects needed for communicating with it,
   also sets the pointers on the object needed by library to query required info.
  **/
 void appLoadLib( char* name );
-/** \brief Frees *.dll, *.so, etc
-  \param lib reference to library to free
-  Frees Library and returns NULL for simple cleaning of variable holding reference
-**/
-void appFreeLib( void );
 /** \brief Converts number to text
   \param value Number to convert
   \param dst buffer that will hold text (assumed to be at least _CVTBUFSIZE length)

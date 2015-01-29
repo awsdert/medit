@@ -2,7 +2,7 @@
 
 HACK_COM _armaxRawCOM = {0};
 
-void  ARMAX_RAW_EXP armaxRawHack_OnLoad( FILE *file, char const *dataDir )
+void  HACK_LIB_EXP armaxRawHack_OnLoad( FILE *file, char const *dataDir )
 {
   hack_t hi = 0;
   uchar ci = 0;
@@ -62,25 +62,25 @@ void  ARMAX_RAW_EXP armaxRawHack_OnLoad( FILE *file, char const *dataDir )
   _armaxRawCOM.hl.hacks->c = hi;
   _armaxRawCOM.hl.hacks->i = --hi;
 }
-void  ARMAX_RAW_EXP armaxRawHack_OnSave( FILE *file, char const *dataDir )
+void  HACK_LIB_EXP armaxRawHack_OnSave( FILE *file, char const *dataDir )
 {
   // TODO: Implement Armax Raw Saver
 }
-uchar ARMAX_RAW_EXP armaxRawHack_RdLine( char  *line, void *_source )
+uchar HACK_LIB_EXP armaxRawHack_RdLine( char  *line, void *_source )
 {
   _strset_s( line, 80, 0 );
-  if ( ipRdLineA( line, 80, (FILE*)_source ) )
+  if ( ipRdLineA( line, 79, (FILE*)_source ) )
     return 1;
   return 0;
 }
-uchar ARMAX_RAW_EXP armaxRawHack_WrLine( char  *line, void *_source )
+uchar HACK_LIB_EXP armaxRawHack_WrLine( char  *line, void *_source )
 {
  if ( ipWrLineA( line, (FILE*)_source ) )
     return 1;
   return 0;
 }
 
-uchar ARMAX_RAW_EXP armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source )
+uchar HACK_LIB_EXP armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source )
 {
   ulint info = strtoull( line, NULL, 16 );
   char temp[6] = {0};
@@ -124,7 +124,7 @@ uchar ARMAX_RAW_EXP armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source 
   // Let Parent ID be defined elsewhere
   return 1;
 }
-uchar ARMAX_RAW_EXP armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source )
+uchar HACK_LIB_EXP armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source )
 {
   schar i = 4, j = 4;
   char temp[6] = {0};
@@ -273,7 +273,7 @@ void _armaxRawCode_Txt2RawLoop( CODE *code, char *line, void *_source, ulint *in
   code->loop = (*p2 >> 16) & 0xFF;
   code->addr[1] = *p2 & 0xFFFFF;
 }
-uchar ARMAX_RAW_EXP armaxRawCode_Txt2Raw( CODE *code, char *line, void *_source )
+uchar HACK_LIB_EXP armaxRawCode_Txt2Raw( CODE *code, char *line, void *_source )
 {
   ulint info = strtoull( line, NULL, 16 );
   ulong p1 = (ulong)(info >> 32), p2 = (ulong)info;
@@ -376,7 +376,7 @@ uchar _armaxRawCode_Raw2TxtCmp( CODE *code, char *line, void *_source, ulong *p1
   // TODO: Implement _armaxRawCode_Raw2TxtCmp()
   return 0;
 }
-uchar ARMAX_RAW_EXP armaxRawCode_Raw2Txt( CODE *code, char *line, void *_source )
+uchar HACK_LIB_EXP armaxRawCode_Raw2Txt( CODE *code, char *line, void *_source )
 {
   ulong p1 = 0, p2 = 0;
   if ( code->addr[0] > 0x1ffffff )
@@ -406,7 +406,7 @@ uchar ARMAX_RAW_EXP armaxRawCode_Raw2Txt( CODE *code, char *line, void *_source 
   return 1;
 }
 
-ARMAX_RAW_EXP HACK_COM* GetHackCOM( void )
+HACK_LIB_EXP HACK_COM* GetHackCOM( void )
 {
   HACK_COM* com = &_armaxRawCOM;
   com->OnLoad  = armaxRawHack_OnLoad;

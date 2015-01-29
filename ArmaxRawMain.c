@@ -1,6 +1,7 @@
 #include "ArmaxRawMain.h"
 
-EXT_C ARMAX_RAW_EXP BOOL APIENTRY
+#if 0
+EXT_C LIB_EXP BOOL APIENTRY
   DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
   switch (fdwReason)
@@ -22,3 +23,9 @@ EXT_C ARMAX_RAW_EXP BOOL APIENTRY
   }
   return TRUE; // succesful
 }
+#else
+EXT_C LIB_EXP int main ( void )
+{
+  return 0;
+}
+#endif

@@ -570,7 +570,7 @@ void guiHacks_OnSave ( int fd )
     return;
   char path[ PATH_MAX ] = {0};
   strcpy_s ( path, PATH_MAX, ipGetUsrDir() );
-  strcat_s ( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "temp" DIR_SEP );
+  strcat_s ( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "temp" );
   guiHacks_OnDefPath ( path );
   FILE *file  = ipFdOpenFile ( fd, "r+" );
   hCOM->OnSave ( file, path );

@@ -43,6 +43,8 @@ typedef struct _SESSION
   char base[NAME_MAX];
   char  tar[NAME_MAX];
   char  pro[NAME_MAX];
+  char   hl[NAME_MAX];
+  char  lib[NAME_MAX];
   hack_t hi;
   uchar  ci;
 } SESSION;
