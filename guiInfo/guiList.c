@@ -56,7 +56,7 @@ int _iupHList_OnButton( Ihandle *ih, int button, int pressed, int x, int y, char
   else if ( iup_isbutton1( status ) )
   {
     px += x;
-    strcpy_s( attr, 20, IupGetAttribute( ih, "CLIENTOFFSET" ) );
+    strncpyi( attr, 20, IupGetAttribute( ih, "CLIENTOFFSET" ) );
     tmp = strtok_s( attr, "x", &tok );
     cx = atoi( tmp );
     tmp = strtok_s( attr, "x", &tok );
@@ -64,7 +64,7 @@ int _iupHList_OnButton( Ihandle *ih, int button, int pressed, int x, int y, char
     for ( ; i < c; ++i )
     {
       fset = IupGetChild( layout, i );
-      strcpy_s( attr, 20, IupGetAttribute( fset, "POSITION" ) );
+      strncpyi( attr, 20, IupGetAttribute( fset, "POSITION" ) );
       tmp = strtok_s( attr, "x", &tok );
       px = cx + atoi( tmp );
       tmp = strtok_s( NULL, "x", &tok );

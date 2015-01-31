@@ -27,31 +27,31 @@ void guiPro_OnDefPath ( char *path )
 {
   guiTar_OnDefPath ( path );
   mkdir ( path );
-  strcat_s ( path, PATH_MAX, DIR_SEP );
-  strcat_s ( path, PATH_MAX, appSession.pro );
+  strncat ( path, DIR_SEP, PATH_MAX );
+  strncat ( path, appSession.pro, PATH_MAX );
 }
 void guiPro_OnDefExt ( char *path )
 {
-  strcat_s ( path, PATH_MAX, "m-pro" );
+  strncat ( path, "m-pro", PATH_MAX );
 }
-void guiPro_OnSave ( int fd )
+void guiPro_OnSave ( FILE *file )
 {
-  ipFdWrBuff ( fd, &srcPro, sizeof ( DATA_PRO ) );
+  fwrite ( &srcPro, sizeof ( DATA_PRO ), 1, file );
 }
 
-void guiPro_OnLoad ( int fd )
+void guiPro_OnLoad ( FILE *file )
 {
-  ipFdRdBuff ( fd, &srcPro, sizeof ( DATA_PRO ) );
+  fread ( &srcPro, sizeof ( DATA_PRO ), 1, file );
 }
 void guiPro_OnApply ( void )
 {
   srcPro = tmpPro;
-  strcpy_s ( appSession.pro, NAME_MAX, tmpPro.file );
+  strncpyi ( appSession.pro, tmpPro.file, NAME_MAX );
 }
 void guiPro_OnReset ( void )
 {
   tmpPro = srcPro;
-  strcpy_s ( appSession.pro, NAME_MAX, srcPro.file );
+  strncpyi ( appSession.pro, srcPro.file, NAME_MAX );
 }
 int guiPro_OnShow ( Ihandle *ih )
 {

@@ -76,7 +76,7 @@ void appLoadLang ( char *name )
 {
   int fd;
   char fname[ PATH_MAX ] = {0};
-  int  r = ( name && name[0] ) ? _strcmpi ( name, "en" ) : 0;
+  int  r = ( name && name[0] ) ? istrcmp( name, "en" ) : 0;
   if ( r != 0 )
   {
     memset ( fname, 0, PATH_MAX );

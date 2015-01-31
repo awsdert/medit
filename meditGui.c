@@ -1,6 +1,6 @@
 #include "guiMain.h"
 //static FILE *hLang = NULL;
-GUI          appGui = {0};
+GUI          appGui = {{0}};
 GUI_MAIN     guiDlg = {NULL};
 SESSION  appSession = {"en",""};
 DATA_ORG     srcOrg = {""};
@@ -24,15 +24,9 @@ extern int  guiMenu_OnValueChanged( Ihandle *ih );
 int main( int argc, char *argv[] )
 {
   int    ret = 0;
-  long   i = 0, p = 0, j = 0, k = 0, c = 0, l = 0, lines = 100;
   int fd;
-  char
-    text[100][20] = {{0}},
-    szSep[] = "\\/",
-    path[ PATH_MAX ] = {0},
-    *szTok = NULL, *szPrv = NULL, *szNow = NULL, *szTmp = NULL;
-  DWORD size = 0;
-  char **lngx = (char**)appLang;
+  char path[ PATH_MAX] = {0};
+  char const *szTok = NULL;
   /* Initialise IUP */
   if ( IupOpen(&argc, &argv) == IUP_ERROR )
   {
@@ -41,27 +35,24 @@ int main( int argc, char *argv[] )
   }
   _appInitCwd( argv, "medit" );
   // Capture default font
-  szTok = NULL;
-  szTmp = IupGetAttribute( NULL, "DEFAULTFONT" );
-  strcpy_s( path, PATH_MAX, szTmp );
-  szTmp = strtok_s( path, ", ", &szTok );
-  strcat_s( appGui.font, 20, szTmp );
-  szTmp = strtok_s( NULL, ", ", &szTok );
-  strcat_s( appGui.fontSize, 5, szTmp );
+  szTok = IupGetAttribute( NULL, "DEFAULTFONT" );
+  strncpyi( path, szTok, PATH_MAX );
+  szTok = strntok( appGui.font,    20, path, ", ",  NULL );
+  szTok = strntok( appGui.fontSize, 5, path, ", ", szTok );
   // Prep directories in case they don't exist
-  strcpy_s( path, PATH_MAX, ipGetUsrDir() );
-  strcat_s( path, PATH_MAX, DIR_SEP ".medit" );
+  strncpyi( path, ipGetUsrDir(), PATH_MAX );
+  strncat( path, DIR_SEP ".medit", PATH_MAX );
   if ( _access( path, 0 ) != 0 )
     ipMkDir( path );
-  strcat_s( path, PATH_MAX, DIR_SEP "lang" );
+  strncat( path, DIR_SEP "lang", PATH_MAX );
   if ( _access( path, 0 ) != 0 )
     ipMkDir( path );
   // Just force a NULL character
-  strcpy_s( path, PATH_MAX, ipGetUsrDir() );
-  strcat_s( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "default.m-session" );
+  strncpyi( path, ipGetUsrDir(), PATH_MAX );
+  strncat( path, DIR_SEP ".medit" DIR_SEP "default.m-session", PATH_MAX );
   if ( _access( path, 0 ) == 0 )
   {
-    ipFdOpen( &fd, path, IP_O_FILE | IP_O_RW, IP_D_RW, IP_A_RW );
+    ipFdOpen( fd, path, IP_O_FILE | IP_O_RW, IP_D_RW );
     ipFdRdBuff( fd, &appSession, sizeof( SESSION ) );
     ipFdShut( fd );
     appSession.lang[6] = 0;
@@ -91,9 +82,9 @@ int main( int argc, char *argv[] )
   (void)guiMenu_OnValueChanged( guiMenu );
   IupSetInt ( guiData, IUP_VALUE, 0 );
   ret = IupMainLoop();
-  strcpy_s( path, PATH_MAX, ipGetUsrDir() );
-  strcat_s( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "default.m-session" );
-  ipFdOpen( &fd, path, IP_O_MKFILE | IP_O_RW, IP_D_RW, IP_A_RW );
+  strncpyi( path, ipGetUsrDir(), PATH_MAX );
+  strncat( path, DIR_SEP ".medit" DIR_SEP "default.m-session", PATH_MAX );
+  ipFdOpen( fd, path, IP_O_MKFILE | IP_O_RW, IP_D_RW );
   ipFdWrBuff( fd, &appSession, sizeof( SESSION ) );
   ipFdShut( fd );
   appLoadLib( NULL );

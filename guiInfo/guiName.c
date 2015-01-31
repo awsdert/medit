@@ -23,6 +23,6 @@ int guiName_OnValueChanged( Ihandle *ih )
   further than NAME_MAX but no harm in being careful */
   srcName = IupGetAttribute( ih, "MEDIT_SRC_NAME" );
   tmpName = IupGetAttribute( ih, "MEDIT_TMP_NAME" );
-  strcpy_s( tmpName, NAME_MAX, IupGetAttribute( ih, IUP_VALUE ) );
+  strncpyi( tmpName, IupGetAttribute( ih, IUP_VALUE ), NAME_MAX );
   return IUP_DEFAULT;
 }

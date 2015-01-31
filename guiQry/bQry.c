@@ -9,7 +9,7 @@ void* bQry( pid_t pid, size_t size )
   {
     if ( (mbi.AllocationProtect & 0xF) == PAGE_READWRITE && mbi.RegionSize == size )
       return mbi.BaseAddress;
-    (uintptr_t)addr += mbi.RegionSize;
+    addr += mbi.RegionSize;
   }
   CloseHandle( ph );
   return NULL;

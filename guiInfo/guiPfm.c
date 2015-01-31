@@ -3,7 +3,6 @@
 GUI_PFM guiPfm = {{NULL}};
 void  guiPfm_OnLang ( void )
 {
-  Ihandle *hbox = IupGetChild ( guiPfm.hlEndian, 0 );
   IupSetAttribute ( guiPfm.main.fset, IUP_TITLE, appLang->a[ LNG_PLATFORM ].a );
   IupSetAttribute ( guiPfm.name.fset, IUP_TITLE, appLang->a[ LNG_NAME     ].a );
   IupSetAttribute ( guiPfm.file.fset, IUP_TITLE, appLang->a[ LNG_FILE     ].a );
@@ -44,31 +43,31 @@ void guiPfm_OnDefPath ( char *path )
 {
   guiOrg_OnDefPath ( path );
   mkdir ( path );
-  strcat_s ( path, PATH_MAX, DIR_SEP );
-  strcat_s ( path, PATH_MAX, appSession.pfm );
+  strncat ( path, DIR_SEP, PATH_MAX );
+  strncat ( path, appSession.pfm, PATH_MAX );
 }
 void guiPfm_OnDefExt ( char *path )
 {
-  strcat_s ( path, PATH_MAX, "m-pfm" );
+  strncat ( path, "m-pfm", PATH_MAX );
 }
-void guiPfm_OnLoad ( int fd )
+void guiPfm_OnLoad ( FILE *file )
 {
-  ipFdRdBuff ( fd, &srcPfm, sizeof ( DATA_PFM ) );
+  fread ( &srcPfm, sizeof ( DATA_PFM ), 1, file );
 }
 
-void guiPfm_OnSave ( int fd )
+void guiPfm_OnSave ( FILE *file )
 {
-  ipFdWrBuff ( fd, &srcPfm, sizeof ( DATA_PFM ) );
+  fwrite ( &srcPfm, sizeof ( DATA_PFM ), 1, file );
 }
 void guiPfm_OnApply ( void )
 {
   srcPfm = tmpPfm;
-  strcpy_s ( appSession.pfm, NAME_MAX, tmpPfm.file );
+  strncpyi ( appSession.pfm, tmpPfm.file, NAME_MAX );
 }
 void guiPfm_OnReset ( void )
 {
   tmpPfm = srcPfm;
-  strcpy_s ( appSession.pfm, NAME_MAX, srcPfm.file );
+  strncpyi ( appSession.pfm, srcPfm.file, NAME_MAX );
 }
 int   guiPfm_OnShow ( Ihandle *ih )
 {

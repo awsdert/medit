@@ -36,14 +36,14 @@ void guiHacks_OnLang ( void )
   char path[ PATH_MAX ] = {0};
   IupSetAttribute ( guiHacks.main.fset,  IUP_TITLE, appLang->a[ LNG_HACKS  ].a );
   IupSetAttribute ( guiHacks.fsetFormat, IUP_TITLE, appLang->a[ LNG_FORMAT ].a );
-  strcpy_s ( path, PATH_MAX, ipGetUsrDir() );
-  strcat_s ( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "data" );
+  strncpyi ( path, ipGetUsrDir(), PATH_MAX );
+  strncat ( path, DIR_SEP ".medit" DIR_SEP "data", PATH_MAX );
   guiPfm_OnDefPath ( path );
-  strcat_s ( path, PATH_MAX, DIR_SEP "*." LIB_EXT );
+  strncat ( path, DIR_SEP "*." LIB_EXT, PATH_MAX );
   if ( i > 0 )
   {
     attr = IupGetAttributeId ( guiHacks.ddFormat, IUP_TITLE, i );
-    strcpy_s ( name, NAME_MAX, attr );
+    strncpyi ( name, attr, NAME_MAX );
   }
   IupSetInt ( guiHacks.ddFormat, IUP_VALUE, 0 );
   IupSetAttribute ( guiHacks.ddFormat, "1", NULL );
@@ -68,7 +68,7 @@ void guiHacks_OnLang ( void )
     if ( !c && i > 0 )
     {
       attr = IupGetAttributeId ( guiHacks.ddFormat, IUP_TITLE, 1 );
-      strcpy_s ( name, NAME_MAX * 2, attr );
+      strncpyi ( name, attr, NAME_MAX * 2 );
       IupSetInt ( guiHacks.ddFormat, IUP_VALUE, 1 );
     }
     c = 1;
@@ -138,7 +138,7 @@ int guiHacks_OnSelection ( Ihandle *ih, int id, int status )
   {
     if ( status != 0 )
     {
-      tmpHacks.hacks->i = ( id < 1 ) ? 0 : ( hack_t ) IupGetAttributeId ( ih, "USERDATA", id );
+      tmpHacks.hacks->i = ( id < 1 ) ? 0 : ( hack_t ) IupGetIntId ( ih, "USERDATA", id );
     }
     else
     {
@@ -187,14 +187,14 @@ hack_t guiHacks_BuildTree ( Ihandle *ih, hack_t i, hack_t ui )
   if ( strcmp ( name, appLang->a[ LNG_NEW ].a ) == 0 )
   {
     char no[10] = {0};
-    sprintf_s ( no, 10, " (0x%02X)", hack->ci );
-    strcat_s ( name, NAME_MAX, no );
+    snprintf ( no, 10, " (0x%02X)", hack->ci );
+    strncat ( name, no, NAME_MAX );
   }
   if ( hack->fi > 0 )
   {
     IupSetStrAttributeId ( ih, hack->pi ? "INSERTBRANCH" : "ADDBRANCH", p, name );
     IupSetAttributeId ( ih, "TOGGLEVISIBLE", ui, IUP_NO );
-    IupSetAttributeId ( ih, "USERDATA", ui, ( char* ) i );
+    IupSetIntId ( ih, "USERDATA", ui, i );
     ui = guiHacks_BuildTree ( ih, hack->fi, ++ui );
   }
   else
@@ -202,7 +202,7 @@ hack_t guiHacks_BuildTree ( Ihandle *ih, hack_t i, hack_t ui )
     IupSetStrAttributeId ( ih, hack->pi ? "INSERTLEAF" : "ADDLEAF", p, name );
     IupSetAttributeId ( ih, "TOGGLEVISIBLE", ui, IUP_YES );
     IupSetAttributeId ( ih, "TOGGLEVALUE", ui, hack->use ? IUP_ON : IUP_OFF );
-    IupSetAttributeId ( ih, "USERDATA", ui, ( char* ) i );
+    IupSetIntId ( ih, "USERDATA", ui, i );
   }
   if ( hack->ni > 0 )
   {
@@ -286,11 +286,11 @@ void guiHacks_OnAdd ( uchar insert )
   hack->oi = ownr->ci;
   if ( !c )
   {
-    strcpy_s ( name, NAME_MAX, appLang->a[ LNG__M_ ].a );
+    strncpyi ( name, appLang->a[ LNG__M_ ].a, NAME_MAX );
   }
   else
   {
-    strcpy_s ( name, NAME_MAX, appLang->a[ LNG_NEW ].a );
+    strncpyi ( name, appLang->a[ LNG_NEW ].a, NAME_MAX );
   }
   //guiHacks_OnShow ( guiHacks.main.fset );
 }
@@ -306,7 +306,7 @@ void guiHacks_OnRemUpdate ( hack_t i )
     guiHacks_OnRemUpdate ( hack->ni );
   }
   memset ( hack, 0, sizeof ( HACK ) );
-  _strset_s ( tmpHacks.names[i].a, NAME_MAX, 0 );
+  memset ( tmpHacks.names[i].a, 0, NAME_MAX );
   tmpIndex[i] = 0;
 }
 void guiHacks_OnRem ( void )
@@ -347,7 +347,7 @@ void guiHacks_OnRem ( void )
     ownr->fi = 0;
   }
   memset ( hack, 0, sizeof ( HACK ) );
-  _strset_s ( name, NAME_MAX, 0 );
+  memset( name, 0, NAME_MAX );
   tmpIndex[i] = 0;
   //guiHacks_OnShow ( guiHacks.main.fset );
 }
@@ -523,11 +523,11 @@ void guiHacks_OnDefPath ( char *path )
 {
   guiPro_OnDefPath ( path );
   mkdir ( path );
-  strcat_s ( path, PATH_MAX, DIR_SEP );
+  strncat ( path, DIR_SEP, PATH_MAX );
 }
 void guiHacks_OnDefExt ( char *path )
 {
-  strcat_s ( path, PATH_MAX, "txt" );
+  strncat ( path, "txt", PATH_MAX );
 }
 void guiHacks_OnApply ( void )
 {
@@ -552,29 +552,29 @@ void guiHacks_OnReset ( void )
     }
   }
 }
-void guiHacks_OnLoad ( int fd )
+void guiHacks_OnLoad ( FILE *file )
 {
   if ( !hCOM )
     return;
   char path[ PATH_MAX ] = {0};
-  strcpy_s ( path, PATH_MAX, ipGetUsrDir() );
-  strcat_s ( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "temp" );
+  strncpyi ( path, ipGetUsrDir(), PATH_MAX );
+  strncat ( path, DIR_SEP ".medit" DIR_SEP "temp", PATH_MAX );
   guiHacks_OnDefPath ( path );
-  FILE *file  = ipFdOpenFile ( fd, "r+" );
+  //FILE *file = ipFdOpenFile ( fd, "r+" );
   hCOM->OnLoad ( file, path );
-  ipShut ( file );
+  //ipShut ( file );
 }
-void guiHacks_OnSave ( int fd )
+void guiHacks_OnSave ( FILE *file )
 {
   if ( !hCOM )
     return;
   char path[ PATH_MAX ] = {0};
-  strcpy_s ( path, PATH_MAX, ipGetUsrDir() );
-  strcat_s ( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "temp" );
+  strncpyi ( path, ipGetUsrDir(), PATH_MAX );
+  strncat ( path, DIR_SEP ".medit" DIR_SEP "temp", PATH_MAX );
   guiHacks_OnDefPath ( path );
-  FILE *file  = ipFdOpenFile ( fd, "r+" );
+  //FILE *file  = ipFdOpenFile ( fd, "r+" );
   hCOM->OnSave ( file, path );
-  ipShut ( file );
+  //ipShut ( file );
 }
 int guiHacks_OnShow ( Ihandle *ih )
 {

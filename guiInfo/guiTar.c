@@ -58,38 +58,38 @@ void  guiTar_OnInit ( void )
   guiTar_OnLang();
 }
 
-void guiTar_OnLoad ( int fd )
+void guiTar_OnLoad ( FILE *file )
 {
-  ipFdRdBuff ( fd, &srcTar, sizeof ( DATA_TAR ) );
+  fread ( &srcTar, sizeof ( DATA_TAR ), 1, file );
   changeEndian ( &srcTar.bases, sizeof ( BASES ), 'L', getEndian() );
 }
 
-void guiTar_OnSave ( int fd )
+void guiTar_OnSave ( FILE *file )
 {
   changeEndian ( &srcTar.bases, sizeof ( BASES ), getEndian(), 'L' );
-  ipFdWrBuff ( fd, &srcTar, sizeof ( DATA_TAR ) );
+  fwrite ( &srcTar, sizeof ( DATA_TAR ), 1, file );
 }
 void guiTar_OnApply ( void )
 {
   srcTar = tmpTar;
-  strcpy_s ( appSession.tar, NAME_MAX, tmpTar.file );
+  strncpyi ( appSession.tar, tmpTar.file, NAME_MAX );
 }
 void guiTar_OnReset ( void )
 {
   tmpTar = srcTar;
-  strcpy_s ( appSession.tar, NAME_MAX, srcTar.file );
+  strncpyi ( appSession.tar, srcTar.file, NAME_MAX );
 }
 extern void guiPfm_OnDefPath ( char *path );
 void guiTar_OnDefPath ( char *path )
 {
   guiPfm_OnDefPath ( path );
   mkdir ( path );
-  strcat_s ( path, PATH_MAX, DIR_SEP );
-  strcat_s ( path, PATH_MAX, appSession.tar );
+  strncat ( path, DIR_SEP, PATH_MAX );
+  strncat ( path, appSession.tar, PATH_MAX );
 }
 void guiTar_OnDefExt ( char *path )
 {
-  strcat_s ( path, PATH_MAX, "m-tar" );
+  strncat ( path, "m-tar", PATH_MAX );
 }
 extern char *srcBaseName;
 extern char *tmpBaseName;
@@ -145,7 +145,7 @@ int guiTarg_OnKAny ( Ihandle *ih, int c )
 }
 int guiTarg_OnValueChanged ( Ihandle *ih )
 {
-  strcpy_s ( tmpTar.targ, NAME_MAX, IupGetAttribute ( ih, IUP_VALUE ) );
+  strncpyi ( tmpTar.targ, IupGetAttribute ( ih, IUP_VALUE ), NAME_MAX );
   return IUP_DEFAULT;
 }
 int guiPath_OnKAny ( Ihandle *ih, int c )
@@ -163,7 +163,7 @@ int guiPath_OnKAny ( Ihandle *ih, int c )
 }
 int guiPath_OnValueChanged ( Ihandle *ih )
 {
-  strcpy_s ( tmpTar.path, PATH_MAX, IupGetAttribute ( ih, IUP_VALUE ) );
+  strncpyi ( tmpTar.path, IupGetAttribute ( ih, IUP_VALUE ), PATH_MAX );
   return IUP_DEFAULT;
 }
 #endif

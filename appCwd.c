@@ -14,7 +14,7 @@ void  _appInitCwd( char *argv[], char *appName )
    szPrv[NAME_MAX] = {0},
    szNxt[NAME_MAX] = {0};
   char path[ PATH_MAX ] = {0};
-  strncpy( path, argv[0], PATH_MAX );
+  strncpyi( path, argv[0], PATH_MAX );
   /* Capture CWD and APPNAME */
   szTok = strntok( szPrv, NAME_MAX, path, szSep, NULL );
   szTok = strntok( szNxt, NAME_MAX, path, szSep, szTok );
@@ -29,10 +29,10 @@ void  _appInitCwd( char *argv[], char *appName )
   while ( szTok );
   szTok = strntok( szTmp, NAME_MAX, szPrv, ".", NULL );
   szTok = strntok( szNxt, NAME_MAX, szTmp, "-", NULL );
-  strncpy( _exe, szNxt, NAME_MAX * 2 );
+  strncpyi( _exe, szNxt, NAME_MAX * 2 );
   szTok = strntok( szNxt, NAME_MAX, szTmp, DIR_SEP, szTok );
-  strncpy( _ver, szNxt, NAME_MAX * 2 );
-  strncpy( _name, appName, NAME_MAX );
+  strncpyi( _ver, szNxt, NAME_MAX * 2 );
+  strncpyi( _name, appName, NAME_MAX );
 }
 char const* appGetCwp( void ) { return _cwp; }
 char const* appGetCwd( void ) { return _cwd; }

@@ -27,6 +27,6 @@ int guiFile_OnValueChanged( Ihandle *ih )
 {
   srcFile = IupGetAttribute( ih, "MEDIT_SRC_FILE" );
   tmpFile = IupGetAttribute( ih, "MEDIT_TMP_FILE" );
-  strcpy_s( tmpFile, NAME_MAX, IupGetAttribute( ih, IUP_VALUE ) );
+  strncpyi( tmpFile, IupGetAttribute( ih, IUP_VALUE ), NAME_MAX );
   return IUP_DEFAULT;
 }

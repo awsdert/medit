@@ -49,8 +49,6 @@ int  guiMenu_OnValueChanged ( Ihandle *ih );
 #define guiMenu_Count guiMenu_About
 void guiMenu_OnLang ( void )
 {
-  GUI_CODES *codes = guiCodes;
-  CODES *srcC = srcCodes, *tmpC = tmpCodes;
   int i = IupGetInt ( guiMenu, IUP_VALUE );
   IupSetAttribute ( guiData, MSTR ( guiData_Load ), appLang->a[ LNG_LOAD         ].a );
   IupSetAttribute ( guiData, MSTR ( guiData_Apply ), appLang->a[ LNG_APPLY        ].a );
@@ -140,7 +138,7 @@ int  guiMenu_OnValueChanged ( Ihandle *ih )
     guiCode_OnShow,
     NULL
   };
-  char  *title = IupGetAttribute ( kid, IUP_TITLE );
+  //char  *title = IupGetAttribute ( kid, IUP_TITLE );
   int i = 1, c = IupGetChildCount ( guiDlg.vb );
   // Hide all groups first
   for ( ; i < c; ++i )
@@ -173,18 +171,17 @@ int  guiMenu_OnValueChanged ( Ihandle *ih )
 void guiOpen ( uchar saveFile )
 {
   // FIXME: i = 0 when attempt to load hacks
-  int fd, i = (guiMenu ? IupGetInt ( guiMenu, "MEDIT_I" ) : guiMenu_Org),
-    op = _O_RDWR | ((saveFile == 1) ? _O_CREAT : 0) | ( (i >= guiMenu_Hacks) ? _O_TEXT : _O_BINARY );
+  FILE *file = NULL;
+  int i = (guiMenu ? IupGetInt ( guiMenu, "MEDIT_I" ) : guiMenu_Org);
   char path[ PATH_MAX ] = {0};
   char opath[ PATH_MAX ] = {0};
-  void *buff = NULL;
   if ( !appMethods.OnDefPath || !appMethods.OnDefExt )
   {
     return;
   }
-  strcpy_s ( path, PATH_MAX, ipGetUsrDir() );
-  strcat_s ( path, PATH_MAX, DIR_SEP ".medit" DIR_SEP "data" );
-  strcpy_s ( opath, PATH_MAX, path );
+  strncpyi ( path, ipGetUsrDir(), PATH_MAX );
+  strncat ( path, DIR_SEP ".medit" DIR_SEP "data", PATH_MAX );
+  strncpyi ( opath, path, PATH_MAX );
   appMethods.OnDefPath ( opath );
   if ( saveFile == 1 )
   {
@@ -192,41 +189,43 @@ void guiOpen ( uchar saveFile )
   }
   appMethods.OnDefPath ( path );
   // Rename Directory
-  if ( saveFile == 1 && _access( opath, 0 ) == 0 && strcmpi( opath, path ) != 0 )
+  if ( saveFile == 1 && _access( opath, 0 ) == 0 && istrcmp( opath, path ) != 0 )
     rename( opath, path );
   if ( !saveFile || i >= guiMenu_Hacks )
   {
-    strcat_s ( opath, PATH_MAX, "*." );
-    strcat_s ( path, PATH_MAX, "*." );
+    strncat ( opath, "*.", PATH_MAX );
+    strncat ( path, "*.", PATH_MAX );
   }
   else
   {
-    strcat_s ( opath, PATH_MAX, "." );
-    strcat_s ( path, PATH_MAX, "." );
+    strncat ( opath, ".", PATH_MAX );
+    strncat ( path, ".", PATH_MAX );
   }
   appMethods.OnDefExt ( path );
   appMethods.OnDefExt ( opath );
   // Rename File
-  if ( saveFile == 1 && i < guiMenu_Hacks && _access( opath, 0 ) == 0 && strcmpi( opath, path ) != 0 )
+  if ( saveFile == 1 && i < guiMenu_Hacks && _access( opath, 0 ) == 0 && istrcmp( opath, path ) != 0 )
     rename( opath, path );
   if ( !saveFile || i >= guiMenu_Hacks )
   {
     if ( IupGetFile ( path ) == -1 )
       return;
   }
-  ipFdOpen ( &fd, path, op, IP_D_RW, IP_A_RW );
-  if ( fd < 1 )
+  if ( _access( path, 0 ) != 0 )
+    _creat( path, _S_IREAD | _S_IWRITE );
+  fopen( path, (i >= guiMenu_Hacks) ? "r+" : "r+b" );
+  if ( !file )
     return;
   if ( saveFile == 1 )
   {
-    appMethods.OnSave ( fd );
+    appMethods.OnSave ( file );
   }
   else
   {
-    appMethods.OnLoad ( fd );
+    appMethods.OnLoad ( file );
     appMethods.OnReset();
   }
-  ipFdShut ( fd );
+  fclose ( file );
 }
 int  guiData_OnValueChanged ( Ihandle *ih )
 {

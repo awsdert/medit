@@ -14,9 +14,9 @@ quit:
     memset( appSession.lib, 0, NAME_MAX );
     return;
   }
-  strncpy( appSession.lib, name, NAME_MAX );
+  strncpyi( appSession.lib, name, NAME_MAX );
   char path[ PATH_MAX ] = {0};
-  strncpy( path, ipGetUsrDir(), PATH_MAX );
+  strncpyi( path, ipGetUsrDir(), PATH_MAX );
   strncat( path, DIR_SEP ".medit" DIR_SEP "data", PATH_MAX );
   guiPfm_OnDefPath( path );
   strncat( path, DIR_SEP, PATH_MAX );

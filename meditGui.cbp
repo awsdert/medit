@@ -91,6 +91,7 @@
 				<Compiler>
 					<Add option="-Wall" />
 					<Add option="-g" />
+					<Add option="-std=c99" />
 					<Add option="-DGUI_SHARED" />
 					<Add option="-D_DEBUG" />
 					<Add option="-D_X86_" />
@@ -127,6 +128,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-fomit-frame-pointer" />
+					<Add option="-std=c99" />
 					<Add option="-DGUI_SHARED" />
 					<Add option="-DNDEBUG" />
 					<Add option="-D_X86_" />
@@ -158,7 +160,6 @@
 				</Linker>
 			</Target>
 		</Build>
-		<Unit filename="../Ipipe/ipipe/c.h" />
 		<Unit filename="_guiMain.h" />
 		<Unit filename="_hack.h" />
 		<Unit filename="appCwd.c">

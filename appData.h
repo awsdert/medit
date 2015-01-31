@@ -50,7 +50,7 @@ typedef struct _SESSION
 } SESSION;
 
 typedef void (*_METHODS_PATH_FUNC)( char *path );
-typedef void (*_METHODS_FILE_FUNC)( int  fd    );
+typedef void (*_METHODS_FILE_FUNC)( FILE *file );
 typedef void (*_METHODS_SET_FUNC) ( void );
 typedef void (*_METHODS_ADD_FUNC) ( uchar insert );
 typedef void (*_METHODS_MOV_FUNC) ( schar x, schar y );

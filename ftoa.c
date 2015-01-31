@@ -1,5 +1,5 @@
 #include "_guiMain.h"
-
+#if 0
 void ftoa( double value, char* dst, int sigDigits )
 {
   char tmp[ _CVTBUFSIZE ] = {0};
@@ -78,3 +78,4 @@ void ftoa_s( double value, char* dst, size_t length, int sigDigits )
   }
   dst[++i] = 0;
 }
+#endif

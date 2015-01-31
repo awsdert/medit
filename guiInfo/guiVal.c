@@ -8,9 +8,6 @@ void guiVal_OnLang( void )
 }
 void guiVal_OnInit( void )
 {
-  Ihandle *layout;
-  int i = 0;
-  Ihandle *child, *kid;
   guiVal->tbValue  = IupText( NULL );
   guiVal->hlType = IupHList(NULL);
   IupSetStrAttribute( guiVal->hlType,  "1",  "schar" );
@@ -26,13 +23,6 @@ void guiVal_OnInit( void )
   IupSetStrAttribute( guiVal->hlType, "11",    "fpn" );
   IupSetStrAttribute( guiVal->hlType, "12",    "dpn" );
   IupSetStrAttribute( guiVal->hlType, "13",    "lpn" );
-  layout = IupGetChild( guiVal->hlType, 0 );
-  for ( ; i < VAL_COUNT; ++i )
-  {
-    child = IupGetChild( layout, i );
-    kid = IupGetChild( child, 0 );
-    IupSetInt( child, IUP_VALUE, i );
-  }
   guiVal->value.vb   = IupVbox(  guiVal->tbValue, guiVal->hlType, NULL );
   guiVal->value.fset = IupFrame( guiVal->value.vb );
   IupSetAttribute( guiVal->value.fset, IUP_SIZE, "100x30" );

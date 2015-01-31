@@ -7,13 +7,12 @@ void guiQry_OnLang( void )
 #endif
   const int len = NAME_MAX * 2;
   char atrue[NAME_MAX * 2] = {0}, afalse[NAME_MAX * 2] = {0};
-  Ihandle *layout = IupGetChild( guiQry.hlQry, 0 );
-  strcat_s( atrue,  len, appLang->a[ LNG_ALWAYS ].a );
-  strcat_s( atrue,  len, " " );
-  strcat_s( atrue,  len, appLang->a[ LNG_TRUE ].a );
-  strcat_s( afalse, len, appLang->a[ LNG_ALWAYS ].a );
-  strcat_s( afalse, len, " " );
-  strcat_s( afalse, len, appLang->a[ LNG_FALSE ].a );
+  strncat( atrue,  appLang->a[ LNG_ALWAYS ].a, len );
+  strncat( atrue,  " ", len );
+  strncat( atrue,  appLang->a[ LNG_TRUE   ].a, len );
+  strncat( afalse, appLang->a[ LNG_ALWAYS ].a, len );
+  strncat( afalse, " ", len );
+  strncat( afalse, appLang->a[ LNG_FALSE  ].a, len );
   IupSetAttribute( guiQry.main.fset, IUP_TITLE, appLang->a[ LNG_SEARCH ].a );
   IupSetAttribute( guiQry.hlQry, "1", appLang->a[ LNG_SEARCH ].a );
   IupSetStrAttribute( guiQry.hlQry, "2", atrue  );
@@ -40,7 +39,7 @@ void guiQry_OnLang( void )
 extern GUI_CODE *guiCode;
 void guiQry_OnInit( void )
 {
-  int i = 0, j = 2;
+
   guiQry.hlQry = IupHList(NULL);
   IupSetStrAttribute( guiQry.hlQry, "1", "?" );
   IupSetStrAttribute( guiQry.hlQry, "2", "+" );
@@ -56,9 +55,10 @@ void guiQry_OnInit( void )
   guiQry.fsetMain = IupFrame( guiQry.vbMain   );
   IupSetAttribute( guiQry.fsetMain, IUP_EXPAND, IUP_HORIZONTAL );
   IupSetAttribute( guiQry.fsetMain, "FLOATING", IUP_YES );
+  int i = 0;
   do
   {
-    j = 0;
+    int j = 0;
     do
     {
       appGui.val = &guiQry.val[i][j];
@@ -71,7 +71,7 @@ void guiQry_OnInit( void )
     ++i;
   }
   while ( i < QRY_COUNT );
-  i = 0; j = 2;
+  i = 0;
 #endif
   guiQry_OnLang();
 }
@@ -101,7 +101,7 @@ int guiQry_OnShow( Ihandle *ih )
 
 int guiQryMenu_OnClick( Ihandle *ph, int button, int pressed, int x, int y, char* status )
 {
-  int i = 0, c = 0, used = IupGetInt( ph, IUP_VALUE ) - 1;
+  //int i = 0, c = 0, used = IupGetInt( ph, IUP_VALUE ) - 1;
   //search( used );
   return IUP_DEFAULT;
 }

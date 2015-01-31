@@ -65,6 +65,7 @@ typedef void*   HLIB;
   also sets the pointers on the object needed by library to query required info.
  **/
 void appLoadLib( char* name );
+#if 0
 /** \brief Converts number to text
   \param value Number to convert
   \param dst buffer that will hold text (assumed to be at least _CVTBUFSIZE length)
@@ -80,5 +81,5 @@ void ftoa(   double value, char* dst,                int sigDigits );
   Will NULL terminate dst
 **/
 void ftoa_s( double value, char *dst, size_t length, int sigDigits );
-
+#endif
 SHUT_C

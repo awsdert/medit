@@ -8,7 +8,7 @@ uchar GetBase ( char *name )
 {
   for ( uchar i = 0; i < tmpTar.bases.c; ++i )
   {
-    if ( _strcmpi ( name, tmpTar.bname[i].a ) == 0 )
+    if ( istrcmp ( name, tmpTar.bname[i].a ) == 0 )
     {
       return i;
     }
@@ -25,13 +25,15 @@ void  guiBase_OnLang ( void )
 }
 void guiBase_OnInit ( void )
 {
+  char text[ 100 ] = {0};
   guiText_OnInit ( &guiBase->name,
                    ( Icallback ) guiName_OnKAny,  guiName_OnValueChanged );
   guiSpin_OnInit ( &guiBase->addr,
                    ( Icallback ) guiAddr_OnKAny,  guiAddr_OnValueChanged );
-  IupSetfAttribute( guiBase->addr.tb, "SPINMAX", "%" PRI_LI "u", LI( ~0u ) );
+  snprintf( text, 100, "%" PRIuLI, LI(~0) );
+  IupSetStrAttribute( guiBase->addr.tb, "SPINMAX", text );
   guiSpin_OnInit ( &guiBase->size, ( Icallback ) guiSize_OnKAny,  guiSize_OnValueChanged );
-  IupSetStrf( guiBase->size.tb, "SPINMAX", "%" PRI_LI "u", LI( ~0u ) );
+  IupSetStrAttribute( guiBase->size.tb, "SPINMAX", text );
   guiSpin_OnInit ( &guiBase->depth, ( Icallback ) guiDepth_OnKAny, guiDepth_OnValueChanged );
   IupSetStrAttribute( guiBase->depth.tb, "SPINMAX", "15" );
   guiBase->main.vb = IupVbox (
@@ -44,21 +46,21 @@ void guiBase_OnInit ( void )
 }
 extern void guiTar_OnDefPath ( char *path );
 extern void guiTar_OnDefExt ( char *path );
-void  guiBase_OnLoad ( int fd )
+void  guiBase_OnLoad ( FILE *file )
 {
   uchar i = GetBase ( appSession.base );
-  ipFdSetPos ( fd, ( int ) ( ( uintptr_t ) &srcTar.bases.a[i] - ( uintptr_t ) &srcTar ), IP_S_SET );
-  ipFdRdBuff ( fd, &srcTar.bases.a[i], sizeof ( BASE ) );
+  ipSetPos ( file, ( int ) ( ( uintptr_t ) &srcTar.bases.a[i] - ( uintptr_t ) &srcTar ), IP_S_SET );
+  fread ( &srcTar.bases.a[i], sizeof ( BASE ), 1, file );
 }
 void  guiBase_OnReset ( void )
 {
   tmpTar = srcTar;
 }
-void  guiBase_OnSave ( int fd )
+void  guiBase_OnSave ( FILE *file )
 {
   uchar i = GetBase ( appSession.base );
-  ipFdSetPos ( fd, ( int ) ( ( uintptr_t ) &srcTar.bases.a[i] - ( uintptr_t ) &srcTar ), SEEK_SET );
-  ipFdRdBuff ( fd, &srcTar.bases.a[i], sizeof ( BASE ) );
+  ipSetPos ( file, ( int ) ( ( uintptr_t ) &srcTar.bases.a[i] - ( uintptr_t ) &srcTar ), SEEK_SET );
+  fread( &srcTar.bases.a[i], sizeof ( BASE ), 1, file );
 }
 void  guiBase_OnApply ( void )
 {
@@ -122,7 +124,7 @@ int  guiAddr_OnValueChanged ( Ihandle *ih )
   if ( tmpBase->addr > ( UINTPTR_MAX - tmpBase->size ) )
   {
     tmpBase->addr = ( UINTPTR_MAX - tmpBase->size );
-    sprintf_s ( valStr, strlen ( valStr ), "%" PRI_LI "X", tmpBase->addr );
+    snprintf ( valStr, strlen ( valStr ), "%" PRI_LI "X", tmpBase->addr );
     IupSetStrAttribute ( ih, IUP_VALUE, valStr );
     return IUP_CLOSE;
   }
@@ -134,7 +136,7 @@ int  guiAddr_OnSpin( Ihandle *ih, int inc )
   tmpBase->addr += inc;
   if ( tmpBase->addr > ( UINTPTR_MAX - tmpBase->size ) )
     tmpBase->addr = ( UINTPTR_MAX - tmpBase->size );
-  sprintf_s ( valStr, 22, "%" PRI_LI "X", tmpBase->addr );
+  snprintf ( valStr, 22, "%" PRI_LI "X", tmpBase->addr );
   IupSetStrAttribute ( ih, IUP_VALUE, valStr );
   return IUP_DEFAULT;
 }
@@ -145,7 +147,7 @@ int  guiSize_OnValueChanged ( Ihandle *ih )
   if ( tmpBase->size > ( UINTPTR_MAX - tmpBase->addr ) )
   {
     tmpBase->size = ( UINTPTR_MAX - tmpBase->addr );
-    sprintf_s ( valStr, strlen ( valStr ), "%" PRI_LI "X", tmpBase->size );
+    snprintf ( valStr, strlen ( valStr ), "%" PRI_LI "X", tmpBase->size );
     IupSetStrAttribute ( ih, IUP_VALUE, valStr );
     return IUP_CLOSE;
   }
@@ -157,7 +159,7 @@ int guiSize_OnSpin( Ihandle *ih, int inc )
   tmpBase->size += inc;
   if ( tmpBase->size > ( UINTPTR_MAX - tmpBase->addr ) )
     tmpBase->size = ( UINTPTR_MAX - tmpBase->addr );
-  sprintf_s ( valStr, 22, "%" PRI_LI "X", tmpBase->size );
+  snprintf ( valStr, 22, "%" PRI_LI "X", tmpBase->size );
   IupSetStrAttribute ( ih, IUP_VALUE, valStr );
   return IUP_DEFAULT;
 }
@@ -168,7 +170,7 @@ int guiDepth_OnValueChanged ( Ihandle *ih )
   if ( tmpBase->depth > 0xF )
   {
     tmpBase->depth = 0xF;
-    sprintf_s ( valStr, strlen ( valStr ), "%" PRI_LI "X", tmpBase->size );
+    snprintf ( valStr, strlen ( valStr ), "%" PRI_LI "X", tmpBase->size );
     IupSetStrAttribute ( ih, IUP_VALUE, valStr );
     return IUP_CLOSE;
   }

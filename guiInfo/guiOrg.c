@@ -21,30 +21,30 @@ void  guiOrg_OnInit ( void )
 void guiOrg_OnDefPath ( char *path )
 {
   mkdir ( path );
-  strcat_s ( path, PATH_MAX, DIR_SEP );
-  strcat_s ( path, PATH_MAX, appSession.org );
+  strncat ( path, DIR_SEP, PATH_MAX );
+  strncat ( path, appSession.org, PATH_MAX );
 }
 void guiOrg_OnDefExt ( char *path )
 {
-  strcat_s ( path, PATH_MAX, "m-org" );
+  strncat ( path, "m-org", PATH_MAX );
 }
-void  guiOrg_OnLoad ( int fd )
+void  guiOrg_OnLoad ( FILE *file )
 {
-  ipFdRdBuff ( fd, &srcOrg, sizeof ( DATA_ORG ) );
+  fread ( &srcOrg, sizeof ( DATA_ORG ), 1, file );
 }
-void  guiOrg_OnSave ( int fd )
+void  guiOrg_OnSave ( FILE *file )
 {
-  ipFdWrBuff ( fd, &srcOrg, sizeof ( DATA_ORG ) );
+  fwrite ( &srcOrg, sizeof ( DATA_ORG ), 1, file );
 }
 void  guiOrg_OnApply ( void )
 {
   srcOrg = tmpOrg;
-  strcpy_s ( appSession.org, NAME_MAX, tmpOrg.file );
+  strncpyi ( appSession.org, tmpOrg.file, NAME_MAX );
 }
 void  guiOrg_OnReset ( void )
 {
   tmpOrg = srcOrg;
-  strcpy_s ( appSession.org, NAME_MAX, srcOrg.file );
+  strncpyi ( appSession.org, srcOrg.file, NAME_MAX );
 }
 int   guiOrg_OnShow ( Ihandle *ih )
 {

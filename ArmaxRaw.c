@@ -32,12 +32,12 @@ void  HACK_LIB_EXP armaxRawHack_OnLoad( FILE *file, char const *dataDir )
       armaxRawHack_RdLine( line, file );
     }
     if ( line[0] == '"' || line[0] == '\'' )
-      strncpy( line, &line[1], 80 );
+      strncpyi( line, &line[1], 80 );
     len = strlen( line );
     --len;
     if ( line[len] == '"' || line[len] == '\'' )
       line[len] = 0;
-    strncpy( _armaxRawCOM.hl.names[hi].a, line, NAME_MAX );
+    strncpyi( _armaxRawCOM.hl.names[hi].a, line, NAME_MAX );
     armaxRawHack_RdLine( line, file );
     armaxRawHack_Txt2Raw( hack, line, file );
     _armaxRawCOM.ResizeCodes( &_armaxRawCOM.cl, NULL, 0 );
@@ -49,10 +49,10 @@ void  HACK_LIB_EXP armaxRawHack_OnLoad( FILE *file, char const *dataDir )
       armaxRawHack_RdLine( line, file );
       armaxRawCode_Txt2Raw( code, line, file );
     }
-    strnset( line, 0, 80 );
+    memset( line, 0, 80 );
     snprintf( line, 80, "%X", hi );
-    strnset( path, 0, PATH_MAX );
-    strncpy( path, dataDir, PATH_MAX );
+    memset( path, 0, PATH_MAX );
+    strncpyi( path, dataDir, PATH_MAX );
     strncat( path, line, PATH_MAX );
     strncat( path, ".src-codes", PATH_MAX );
     if ( _access( path, 0 ) != 0 )
@@ -70,7 +70,7 @@ void  HACK_LIB_EXP armaxRawHack_OnSave( FILE *file, char const *dataDir )
 }
 uchar HACK_LIB_EXP armaxRawHack_RdLine( char  *line, void *_source )
 {
-  strnset( line, 0, 80 );
+  memset( line, 0, 80 );
   if ( ipRdLineA( line, 79, (FILE*)_source ) )
     return 1;
   return 0;
@@ -96,7 +96,7 @@ uchar HACK_LIB_EXP armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source )
   else if ( _armaxRawCOM.gid != strtol( temp, NULL, 16 ) )
     return 0;
   // HackID
-  strnset( temp, 0, 6 );
+  memset( temp, 0, 6 );
   for ( j = 0; j < 5; ++j, ++i )
     temp[j] = line[i];
   if ( line[8] == ' ' )
@@ -135,7 +135,7 @@ uchar HACK_LIB_EXP armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source )
   for ( ; j > -1; --j, --i )
     line[j] = (i > -1) ? temp[i] : '0';
   // HackID
-  strnset( temp, 0, 6 );
+  memset( temp, 0, 6 );
   snprintf( temp, 6, "%lX", hack->id );
   i = 5;
   while ( i > -1 && !temp[i] ) --i;
@@ -150,7 +150,7 @@ uchar HACK_LIB_EXP armaxRawHack_Raw2Txt( HACK *hack, char *line, void *_source )
   // Parent ID
   if ( hack->ci )
   {
-    strnset( temp, 0, 6 );
+    memset( temp, 0, 6 );
     snprintf( temp, 6, "%lX", _armaxRawCOM.hl.hacks->a[hack->oi].id );
     i = 5;
     while ( i > -1 && !temp[i] ) --i;
@@ -322,7 +322,7 @@ uchar _armaxRawCode_Raw2TxtWr( char *line, void *_source, ulong *p1, ulong *p2 )
     line[j] = (i > -1) ? temp[i] : '0';
   line[9] = line[8];
   line[8] = ' ';
-  strnset( temp, 0, 9 );
+  memset( temp, 0, 9 );
   snprintf( temp, 9, "%lX", *p1 );
   i = 8;
   while ( i > -1 && !temp[i] ) --i;
