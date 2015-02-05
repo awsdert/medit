@@ -33,10 +33,6 @@ OPEN_C
 #define JK_HS_D   0x00004000
 #define JK_HS_L   0x00008000
 
-#define DIV_SIZE( T1, T2 ) (sizeof(T1) / sizeof(T2))
-#define MOD_SIZE( T1, T2 ) (sizeof(T1) % sizeof(T2))
-#define NODES_NEEDED( T1, T2 ) (DIV_SIZE(T1,T2) + (MOD_SIZE(T1,T2) ? 1 : 0))
-
 typedef union _RLN
 {
   ulint u[ ( sizeof( lpn ) / sizeof( lint ) ) + ( ( sizeof( lpn ) % sizeof(
@@ -59,6 +55,74 @@ typedef union _RLF
   long s;
   float r;
 } RLF;
+
+typedef struct _BASE
+{
+  ulint addr;
+  ulint size;
+  uchar depth;
+} BASE;
+
+#define BASES_COUNT 0x10
+#define BASES_LAST  0xf
+typedef struct _BASES
+{
+  uchar c;
+  BASE  a[ BASES_COUNT ];
+} BASES;
+
+typedef ushort hack_t;
+#define HACK_T_MAX USHRT_MAX
+/**
+  \brief Holds relative information about a hack
+  \param use 1 = Use during hook, 0 = Do NOT use during hook
+  \param irl If immeadiate children are not folders: 1 = radio, 0 = check
+  \param cid Codelist ID
+  \param coi Codelist Owner ID
+  \param id Index
+  \param ui List Index
+  \param oi Owner Index
+  \param fi First Child Index
+  \param ni Next Sibling Index
+  \param pi Prev Sibling Index
+**/
+typedef struct struct_HACK
+{
+  uchar  use : 1;
+  // Is Radio List
+  uchar  irl : 1;
+  // ID (codelist file usage only)
+  ushort cid;
+  // Owner ID (codelist file usage only)
+  ushort coi;
+  // Current Index
+  hack_t id;
+  // UI Index
+  hack_t ui;
+  // Owner Index
+  hack_t oi;
+  // 1st Child Index
+  hack_t fi;
+  // Next Sibling Index
+  hack_t ni;
+  // Prev Sibling Index
+  hack_t pi;
+} HACK;
+
+typedef struct _HACKS
+{
+  hack_t i;
+  hack_t c;
+  hack_t _c;
+  size_t s;
+  HACK   a[1];
+} HACKS;
+
+#define HACKS_SIZE (sizeof(HACKS) - sizeof(HACK))
+
+#define DIV_SIZE( T1, T2 ) (sizeof(T1) / sizeof(T2))
+#define MOD_SIZE( T1, T2 ) (sizeof(T1) % sizeof(T2))
+#define NODES_NEEDED( T1, T2 ) (DIV_SIZE(T1,T2) + (MOD_SIZE(T1,T2) ? 1 : 0))
 
 static uchar const NUM_d_buff_size     = NODES_NEEDED( lpn,   dpn );
 static uchar const NUM_f_buff_size     = NODES_NEEDED( lpn,   fpn );
@@ -116,69 +180,6 @@ typedef enum _CODE_T
   CODE_COUNT
 } CODE_T;
 
-typedef struct _BASE
-{
-  ulint addr;
-  ulint size;
-  uchar depth;
-} BASE;
-
-#define BASES_COUNT 0x10
-#define BASES_LAST  0xf
-typedef struct _BASES
-{
-  uchar c;
-  BASE  a[ BASES_COUNT ];
-} BASES;
-
-typedef ushort hack_t;
-#define HACK_T_MAX USHRT_MAX
-/**
-  \brief Holds relative information about a hack
-  \param use 1 = Use during hook, 0 = Do NOT use during hook
-  \param irl If immeadiate children are not folders: 1 = radio, 0 = check
-  \param cid Codelist ID
-  \param coi Codelist Owner ID
-  \param id Index
-  \param ui List Index
-  \param oi Owner Index
-  \param fi First Child Index
-  \param ni Next Sibling Index
-  \param pi Prev Sibling Index
-**/
-typedef struct struct_HACK
-{
-  uchar  use : 1;
-  // Is Radio List
-  uchar  irl : 1;
-  // ID (codelist file usage only)
-  ushort cid;
-  // Owner ID (codelist file usage only)
-  ushort coi;
-  // Current Index
-  hack_t id;
-  // UI Index
-  hack_t ui;
-  // Owner Index
-  hack_t oi;
-  // 1st Child Index
-  hack_t fi;
-  // Next Sibling Index
-  hack_t ni;
-  // Prev Sibling Index
-  hack_t pi;
-} HACK;
-static size_t const HACKS_SIZE = ( sizeof( size_t ) + ( 3 * sizeof(
-                                     hack_t ) ) );
-typedef struct _HACKS
-{
-  hack_t i;
-  hack_t c;
-  hack_t _c;
-  size_t s;
-  HACK   a[1];
-} HACKS;
-
 #define CODEV_COUNT 20
 #define CODEV_LAST  19
 typedef struct _CODE
@@ -195,12 +196,11 @@ typedef struct _CODE
   uchar _ni;
   uchar _fi;
   uchar _pi;
-  uchar _tm      : 4;
+  uchar _tm : 4;
 } CODE;
 
 #define CODES_COUNT 30
 #define CODES_LAST  29
-static size_t const CODES_SIZE = ( sizeof( size_t ) + 3 );
 typedef struct _CODES
 {
   uchar  i;
@@ -209,6 +209,7 @@ typedef struct _CODES
   size_t s;
   CODE   a[1];
 } CODES;
+#define CODES_SIZE ( sizeof( CODES ) - sizeof(CODE) )
 
 /*
   This is merely for %TMP%\PROC_ID\info.bin, it ensures a consistent data

@@ -1,10 +1,10 @@
 #include "guiCode.h"
 GUI_CODE *guiCode = NULL;
-CODE *srcCode;
-CODE *tmpCode;
-void guiCode_SetGUI( GUI_CODE *code, CODE *src, CODE *tmp )
+CODE *refCode = NULL;
+void guiCode_SetGUI( GUI_CODE *code, CODE *ref )
 {
   guiCode = code;
+  refCode = ref;
 }
 void guiCode_OnLang( void )
 {

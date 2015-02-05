@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="msw-x86-d-vc" />
+	<File name="..\hack.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1727" topLine="40" />
+		</Cursor>
+	</File>
+	<File name="EnableDebugPrivileges.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="335" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="GetProcessIdByName.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="568" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="GetProcessParentId.c" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="441" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="Itoa_s.c" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1180" topLine="29" />
@@ -59,26 +79,6 @@
 	<File name="..\c.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="3023" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="..\hack.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1727" topLine="40" />
-		</Cursor>
-	</File>
-	<File name="EnableDebugPrivileges.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="335" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="GetProcessIdByName.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="568" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="GetProcessParentId.c" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="441" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

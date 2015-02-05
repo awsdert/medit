@@ -79,11 +79,10 @@ extern DATA_TAR     tmpTar;
 extern HACKL      tmpHacks;
 extern HACK       *srcHack;
 extern HACK       *tmpHack;
-extern CODES     *srcCodes;
-extern CODES     *tmpCodes;
-extern CODES      resCodes;
-extern CODE       *srcCode;
-extern CODE       *tmpCode;
+extern CODEL      tmpCodes;
+extern CODEL      resCodes;
+extern CODEL     *refCodes;
+extern CODE       *refCode;
 extern METHODS  appMethods;
 extern HACK_COM      *hCOM;
 

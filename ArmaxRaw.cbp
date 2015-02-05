@@ -20,6 +20,8 @@
 					<Add option="/DBUILD_HACK_LIB" />
 					<Add option="/D_DEBUG" />
 					<Add option="/D_X86_" />
+					<Add option="/D_MT" />
+					<Add option="/D_DLL" />
 					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(WIN8)/include/shared" />
 				</Compiler>
@@ -30,6 +32,7 @@
 				<Linker>
 					<Add option="/DEBUG" />
 					<Add option="/INCREMENTAL:NO" />
+					<Add option="/MANIFEST:NO" />
 					<Add library="user32" />
 					<Add library="shell32" />
 					<Add library="Ipipe-$(TARGET_NAME)" />
@@ -53,6 +56,8 @@
 					<Add option="/DBUILD_HACK_LIB" />
 					<Add option="/DNDEBUG" />
 					<Add option="/D_X86_" />
+					<Add option="/D_MT" />
+					<Add option="/D_DLL" />
 					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(WIN8)/include/shared" />
 				</Compiler>
@@ -62,6 +67,7 @@
 				</ResourceCompiler>
 				<Linker>
 					<Add option="/INCREMENTAL:NO" />
+					<Add option="/MANIFEST:NO" />
 					<Add library="user32" />
 					<Add library="shell32" />
 					<Add library="Ipipe-$(TARGET_NAME)" />

@@ -12,6 +12,7 @@
 				<Option type="1" />
 				<Option compiler="msvc2013-x86" />
 				<Compiler>
+					<Add option="/MDd" />
 					<Add option="/Zi" />
 					<Add option="/D_DEBUG" />
 					<Add option="/D_X86_" />
@@ -24,6 +25,8 @@
 				</ResourceCompiler>
 				<Linker>
 					<Add option="/DEBUG" />
+					<Add option="/INCREMENTAL:NO" />
+					<Add option="/MANIFEST:NO" />
 					<Add directory="$(WIN8)/Lib/winv6.3/um/x86" />
 				</Linker>
 			</Target>
@@ -34,6 +37,7 @@
 				<Option compiler="msvc2013-x86" />
 				<Option use_console_runner="0" />
 				<Compiler>
+					<Add option="/MD" />
 					<Add option="/Ox" />
 					<Add option="/DNDEBUG" />
 					<Add option="/D_X86_" />
@@ -45,6 +49,8 @@
 					<Add directory="$(WIN8)/include/shared" />
 				</ResourceCompiler>
 				<Linker>
+					<Add option="/INCREMENTAL:NO" />
+					<Add option="/MANIFEST:NO" />
 					<Add directory="$(WIN8)/Lib/winv6.3/um/x86" />
 				</Linker>
 			</Target>

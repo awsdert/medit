@@ -15,6 +15,7 @@ hack_t _armaxRawHack_OnLoad( FILE *file, char *path, char const *dir,
   {
     return hi;
   }
+
   while ( fgets( line, 80, file ) )
   {
     if ( len = ferror( file ) )
@@ -42,7 +43,7 @@ hack_t _armaxRawHack_OnLoad( FILE *file, char *path, char const *dir,
 
     if ( hi == _armaxRawCOM.hl.hacks->_c )
     {
-      _armaxRawCOM.ResizeHacks( &_armaxRawCOM.hl, NULL, hi + 10 );
+      _armaxRawCOM.ResizeHacks( &_armaxRawCOM.hl, hi + 10 );
     }
 
     indx = &_armaxRawCOM.hl.hacks->a[hi];
@@ -55,31 +56,34 @@ hack_t _armaxRawHack_OnLoad( FILE *file, char *path, char const *dir,
     {
       return ++hi;
     }
+
     if ( *line > '"' )
     {
-      _armaxRawCOM.ResizeCodes( &_armaxRawCOM.cl, NULL, 0 );
+      _armaxRawCOM.ResizeCodes( &_armaxRawCOM.cl, 0 );
+      _armaxRawCOM.cl.codes->c = 0;
 
-      for ( ci = 0; fgets( line, 80, file ); ++ci )
+      for ( ci = 0; fgets( line, 80, file ); )
       {
         if ( *line < '"' )
         {
           break;
         }
+
         if ( len = ferror( file ) )
         {
           break;
         }
 
-        if ( ci == _armaxRawCOM.cl->_c )
+        if ( ci == _armaxRawCOM.cl.codes->_c )
         {
-          _armaxRawCOM.ResizeCodes( &_armaxRawCOM.cl, NULL, ci + 10 );
+          _armaxRawCOM.ResizeCodes( &_armaxRawCOM.cl, ci + 10 );
         }
 
-        code = &_armaxRawCOM.cl->a[ci];
+        code = &_armaxRawCOM.cl.codes->a[ci++];
+        _armaxRawCOM.cl.codes->c = ci;
         armaxRawCode_Txt2Raw( code, line, file );
       }
 
-      _armaxRawCOM.cl->c = ci;
       memset( line, 0, 80 );
       snprintf( line, 80, "%X", hi );
       memset( path, 0, PATH_MAX );
@@ -93,10 +97,11 @@ hack_t _armaxRawHack_OnLoad( FILE *file, char *path, char const *dir,
       }
 
       data = fopen( path, "wb" );
-      fwrite( _armaxRawCOM.cl, _armaxRawCOM.cl->s + CODES_SIZE, 1, data );
+      fwrite( _armaxRawCOM.cl.codes, _armaxRawCOM.cl.codes->s + CODES_SIZE, 1, data );
       fflush( data );
       fclose( data );
     }
+
     if ( prev )
     {
       if ( !indx->cid || indx->coi == prev->cid )
@@ -118,6 +123,7 @@ hack_t _armaxRawHack_OnLoad( FILE *file, char *path, char const *dir,
     }
 
     prev = indx;
+
     if ( feof( file ) )
     {
       break;
@@ -141,7 +147,7 @@ void  HACK_LIB_EXP armaxRawHack_OnLoad( char *_path, char const *dir )
   _armaxRawCOM.RdError = ( _HACK_COM_GERR )ferror;
   _armaxRawCOM.RdLine  = ( _HACK_COM_GETS )fgets;
   _armaxRawCOM.WrLine  = ( _HACK_COM_PUTS )fputs;
-  _armaxRawCOM.ResizeHacks( &_armaxRawCOM.hl, NULL, 0 );
+  _armaxRawCOM.ResizeHacks( &_armaxRawCOM.hl, 0 );
   _armaxRawCOM.hl.hacks->c = _armaxRawHack_OnLoad( file, path, dir, line, 0, 0 );
   _armaxRawCOM.hl.hacks->i = _armaxRawCOM.hl.hacks->c - 1;
   fclose( file );

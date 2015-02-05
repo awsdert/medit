@@ -4,7 +4,6 @@ Ihandle *guiMenu = NULL;
 Ihandle *guiData = NULL;
 extern CODES srcHackCodes;
 extern CODES tmpHackCodes;
-extern CODES resCodes;
 int  guiData_OnValueChanged ( Ihandle *ih );
 int  guiMenu_OnValueChanged ( Ihandle *ih );
 #define guiData_Load  1

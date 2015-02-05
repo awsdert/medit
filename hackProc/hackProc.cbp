@@ -24,6 +24,8 @@
 				</ResourceCompiler>
 				<Linker>
 					<Add option="/DEBUG" />
+					<Add option="/INCREMENTAL:NO" />
+					<Add option="/MANIFEST:NO" />
 					<Add option="/NODEFAULTLIB" />
 					<Add option="/ENTRY:main" />
 					<Add library="kernel32" />
@@ -52,6 +54,8 @@
 					<Add directory="$(WIN8)/include/um" />
 				</ResourceCompiler>
 				<Linker>
+					<Add option="/INCREMENTAL:NO" />
+					<Add option="/MANIFEST:NO" />
 					<Add option="/NODEFAULTLIB" />
 					<Add option="/ENTRY:main" />
 					<Add library="kernel32" />

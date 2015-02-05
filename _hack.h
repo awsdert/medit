@@ -18,10 +18,16 @@ typedef enum _REGION_T
 
 typedef struct _HACKL
 {
-  NAME  *names;
-  HACKS *hacks;
+  hack_t **index;
+  HACKS   *hacks;
+  NAME    *names;
 } HACKL;
 
+typedef struct structCODEL
+{
+  uchar **index;
+  CODES  *codes;
+} CODEL;
 
 #ifdef BUILD_HACK_LIB
 #define HACK_LIB_EXP LIB_EXP
@@ -36,10 +42,8 @@ typedef char* ( __cdecl *_HACK_COM_GETS )( char *line, int size, void *_source )
 typedef int   ( __cdecl *_HACK_COM_PUTS )( char *line, void *_source );
 typedef void  ( *_HACK_COM_FILE_FUNC )( char *_path, char const *dataDir );
 typedef uchar ( *_HACK_COM_GETBASE )  ( char *name );
-typedef void  ( *_HACK_COM_RESIZEHL ) ( HACKL  *hl, hack_t **indexList,
-                                        hack_t count );
-typedef void  ( *_HACK_COM_RESIZECL ) ( CODES **cl, uchar **indexList,
-                                        uchar count );
+typedef void  ( *_HACK_COM_RESIZEHL ) ( HACKL *hl, hack_t count );
+typedef void  ( *_HACK_COM_RESIZECL ) ( CODEL *cl, uchar  count );
 
 typedef struct _HACK_COM
 {
@@ -61,7 +65,7 @@ typedef struct _HACK_COM
   REGION_T reg;
   ushort   gid;
   HACKL    hl;
-  CODES   *cl;
+  CODEL    cl;
 } HACK_COM;
 
 typedef HACK_COM* ( *_GETHACKCOM )( void );

@@ -22,9 +22,9 @@ void execHacksId ( pid_t pid )
 }
 GUI_HACKS guiHacks = {{NULL}};
 // Lists original index or HACK_T_MAX if new
-hack_t *tmpIndex = NULL;
+hack_t *tmpHacksIndex = NULL;
 // Syncs name with hack
-HACKL tmpHacks = {0};
+HACKL tmpHacks = {&tmpHacksIndex, NULL};
 extern void guiPfm_OnDefPath ( char *path );
 extern void guiPro_OnDefPath ( char *path );
 void guiHacks_OnLang ( void )
@@ -93,45 +93,68 @@ void guiHacks_OnLang ( void )
 }
 extern void  guiPro_OnInit ( void );
 extern void guiHack_OnInit ( void );
-void hacksReSize ( HACKL *hl, hack_t **indexList, hack_t count )
+void* appRealloc( void *src, size_t oldSize, size_t newSize )
+{
+  void *dst = malloc( newSize );
+  if ( !dst )
+    return NULL;
+  memcpy( dst, src, ( newSize < oldSize ) ? newSize : oldSize );
+  free( src );
+  return dst;
+}
+void hacksReSize ( HACKL *hl, hack_t count )
 {
   hack_t i, c, _c, n = count ? count : 1;
   void* check;
+
   if ( !hl->hacks )
   {
     check = malloc ( sizeof ( HACKS ) );
+
     if ( !check )
+    {
       return;
+    }
+
     hl->hacks = check;
     check = malloc ( NAME_MAX );
+
     if ( !check )
     {
 cleanInit:
       free( hl->hacks );
       hl->hacks = NULL;
+
       if ( hl->names )
       {
         free( hl->names );
         hl->names = NULL;
       }
+
       return;
     }
+
     hl->names = check;
     memset ( hl->hacks, 0, sizeof ( HACKS ) );
     memset ( hl->names, 0, NAME_MAX );
     hl->hacks->_c = 1;
     hl->hacks->s = sizeof ( HACK );
 
-    if ( indexList )
+    if ( hl->index )
     {
       check = malloc ( sizeof ( hack_t ) );
+
       if ( !check )
+      {
         goto cleanInit;
-      ( *indexList ) = check;
-      ( *indexList ) [0] = 0;
+      }
+
+      ( *hl->index ) = check;
+      ( *hl->index ) [0] = 0;
     }
   }
-   c = hl->hacks->c;
+
+  c = hl->hacks->c;
   _c = hl->hacks->_c;
 
   if ( count <= _c )
@@ -145,30 +168,38 @@ cleanInit:
   }
   else
   {
-    size_t  s = ( n - 1 ) * sizeof ( HACK );
-    check = realloc ( hl->hacks, sizeof ( HACKS ) + s );
+    size_t s = n * sizeof ( HACK );
+    check = appRealloc ( hl->hacks, HACKS_SIZE + hl->hacks->s, HACKS_SIZE + s );
+
     if ( !check )
+    {
       return;
+    }
+
     hl->hacks = check;
-    check = realloc ( hl->names, n * NAME_MAX );
+    check = appRealloc ( hl->names, hl->hacks->_c * NAME_MAX, n * NAME_MAX );
+
     if ( !check )
     {
-clean:
-      s = (hl->hacks->_c - 1) * sizeof(HACK);
-      hl->hacks = realloc( hl->hacks, sizeof ( HACKS ) + s );
-      hl->names = realloc( hl->names, hl->hacks->_c * NAME_MAX );
       return;
     }
-    if ( indexList )
-    {
-      check = realloc ( ( *indexList ), n * sizeof ( hack_t ) );
-      if ( !check )
-        goto clean;
-      ( *indexList ) = check;
-    }
+
     hl->names = check;
+
+    if ( hl->index )
+    {
+      check = appRealloc ( ( *hl->index ), hl->hacks->_c * sizeof(hack_t), n * sizeof ( hack_t ) );
+
+      if ( !check )
+      {
+        return;
+      }
+
+      ( *hl->index ) = check;
+    }
+
     hl->hacks->_c = n;
-    hl->hacks->s  = s + sizeof ( HACK );
+    hl->hacks->s  = s;
   }
 
   i = hl->hacks->c;
@@ -176,9 +207,9 @@ clean:
   ( void ) memset ( &hl->names[i], 0, c * NAME_MAX );
   ( void ) memset ( &hl->hacks->a[i], 0, c * sizeof ( HACK ) );
 
-  if ( indexList )
+  if ( hl->index )
   {
-    ( void ) memset ( & ( *indexList ) [i], 0, c * sizeof ( hack_t ) );
+    ( void ) memset ( & ( *hl->index ) [i], 0, c * sizeof ( hack_t ) );
   }
 
 updateCount:
@@ -186,7 +217,7 @@ updateCount:
 }
 int guiHacks_OnSelection ( Ihandle *ih, int id, int status )
 {
-  if ( tmpIndex )
+  if ( tmpHacksIndex )
   {
     if ( status != 0 )
     {
@@ -276,7 +307,8 @@ void guiHacks_OnAdd ( uchar insert )
   hack_t c = 0, i = 0;
   char *name;
   HACK *hack, *ownr, *indx;
-  if ( tmpIndex )
+
+  if ( tmpHacksIndex )
   {
     i = tmpHacks.hacks->i;
 
@@ -303,13 +335,13 @@ void guiHacks_OnAdd ( uchar insert )
 
     if ( c == tmpHacks.hacks->c )
     {
-      hacksReSize ( &tmpHacks, &tmpIndex, c + 1 );
+      hacksReSize ( &tmpHacks, c + 1 );
     }
   }
   else
   {
     // Prep initial buffer
-    hacksReSize ( &tmpHacks, &tmpIndex, 5 );
+    hacksReSize ( &tmpHacks, 5 );
     tmpHacks.hacks->c = 1;
   }
 
@@ -385,19 +417,20 @@ void guiHacks_OnRemUpdate ( hack_t i )
 
   memset ( hack, 0, sizeof ( HACK ) );
   memset ( tmpHacks.names[i].a, 0, NAME_MAX );
-  tmpIndex[i] = 0;
+  tmpHacksIndex[i] = 0;
 }
 void guiHacks_OnRem ( void )
 {
   hack_t i;
   char *name;
   HACK *hack, *ownr, *prev, *next;
-  if ( !tmpIndex || !tmpHacks.hacks->i || tmpHacks.hacks->c < 2 )
+
+  if ( !tmpHacksIndex || !tmpHacks.hacks->i || tmpHacks.hacks->c < 2 )
   {
     return;
   }
 
-     i = tmpHacks.hacks->i;
+  i = tmpHacks.hacks->i;
   name = tmpHacks.names[i].a;
   hack = &tmpHacks.hacks->a[i];
   ownr = &tmpHacks.hacks->a[hack->oi];
@@ -433,14 +466,15 @@ void guiHacks_OnRem ( void )
 
   memset ( hack, 0, sizeof ( HACK ) );
   memset( name, 0, NAME_MAX );
-  tmpIndex[i] = 0;
+  tmpHacksIndex[i] = 0;
   //guiHacks_OnShow ( guiHacks.main.fset );
 }
 void guiHacks_OnMov ( schar x, schar y )
 {
   hack_t i;
   HACK *hack, *ownr, *prev, *next;
-  if ( !tmpIndex )
+
+  if ( !tmpHacksIndex )
   {
     return;
   }
@@ -641,42 +675,52 @@ void guiHacks_OnDefExt ( char *path )
 void guiHacks_OnApply ( void )
 {
   hack_t i = 0;
+
   if ( !hCOM || !tmpHacks.hacks )
+  {
     return;
-  hacksReSize ( &hCOM->hl, NULL, tmpHacks.hacks->_c );
+  }
+
+  hacksReSize ( &hCOM->hl, tmpHacks.hacks->_c );
   memcpy ( hCOM->hl.names, tmpHacks.names, tmpHacks.hacks->_c * NAME_MAX );
   memcpy ( hCOM->hl.hacks->a, tmpHacks.hacks->a, tmpHacks.hacks->s );
 
   for ( ; i < tmpHacks.hacks->_c; ++i )
   {
-    tmpIndex[i] = i;
+    tmpHacksIndex[i] = i;
   }
 }
 void guiHacks_OnReset ( void )
 {
   hack_t i = 0;
-  if ( !hCOM )
-    return;
-  hacksReSize ( &tmpHacks, &tmpIndex, hCOM->hl.hacks ? hCOM->hl.hacks->_c : 0 );
 
-  if ( hCOM && tmpIndex )
+  if ( !hCOM )
+  {
+    return;
+  }
+
+  hacksReSize ( &tmpHacks, hCOM->hl.hacks ? hCOM->hl.hacks->_c : 0 );
+
+  if ( hCOM && tmpHacksIndex )
   {
     memcpy ( tmpHacks.names, hCOM->hl.names, hCOM->hl.hacks->_c * NAME_MAX );
     memcpy ( tmpHacks.hacks->a, hCOM->hl.hacks->a, hCOM->hl.hacks->s );
 
     for ( ; i < tmpHacks.hacks->_c; ++i )
     {
-      tmpIndex[i] = i;
+      tmpHacksIndex[i] = i;
     }
   }
 }
 void guiHacks_OnLoad ( char *path )
 {
   char dir[ PATH_MAX ] = {0};
+
   if ( !hCOM )
   {
     return;
   }
+
   strncpyi ( dir, ipGetUsrDir(), PATH_MAX );
   appendstr ( dir, DIR_SEP ".medit" DIR_SEP "temp", PATH_MAX );
   guiHacks_OnDefPath ( dir );
@@ -685,10 +729,12 @@ void guiHacks_OnLoad ( char *path )
 void guiHacks_OnSave ( char *path )
 {
   char dir[ PATH_MAX ] = {0};
+
   if ( !hCOM )
   {
     return;
   }
+
   strncpyi ( dir, ipGetUsrDir(), PATH_MAX );
   appendstr ( dir, DIR_SEP ".medit" DIR_SEP "temp", PATH_MAX );
   guiHacks_OnDefPath ( dir );
@@ -717,10 +763,9 @@ int guiHacks_OnShow ( Ihandle *ih )
   IupSetAttribute ( guiHacks.treeHacks,  "FLOATING", IUP_NO );
   IupSetAttribute ( guiHacks.treeHacks, "DELNODE0", "ALL" );
 
-  if ( tmpIndex && tmpHacks.hacks->c )
+  if ( tmpHacksIndex && tmpHacks.hacks->c )
   {
     ( void ) guiHacks_BuildTree ( guiHacks.treeHacks, 0, 0 );
-    //IupSetAttributeId( guiHacks.treeHacks, "MARKED", 0, IUP_NO );
     IupSetAttributeId ( guiHacks.treeHacks, "MARKED",
                         tmpHacks.hacks->a[tmpHacks.hacks->i].ui, IUP_YES );
   }

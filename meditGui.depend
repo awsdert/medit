@@ -2,14 +2,14 @@
 1422967010 source:c:\users\lee\documents\github\medit\appcwd.c
 	"appData.h"
 
-1422971234 c:\users\lee\documents\github\medit\appdata.h
+1423138603 c:\users\lee\documents\github\medit\appdata.h
 	"_hack.h"
 
-1423077649 c:\users\lee\documents\github\medit\_hack.h
+1423137482 c:\users\lee\documents\github\medit\_hack.h
 	"hack.h"
 	<ipipe/main.h>
 
-1423073110 c:\users\lee\documents\github\medit\hack.h
+1423140188 c:\users\lee\documents\github\medit\hack.h
 	<float.h>
 	<ipipe/c.h>
 
@@ -884,7 +884,7 @@
 1423067728 source:c:\users\lee\documents\github\medit\applib.c
 	"_guiMain.h"
 
-1422574331 c:\users\lee\documents\github\medit\_guimain.h
+1423143198 c:\users\lee\documents\github\medit\_guimain.h
 	<iup.h>
 	"appLng.h"
 	"appData.h"
@@ -904,10 +904,10 @@
 1422967010 source:c:\users\lee\documents\github\medit\ftoa.c
 	"_guiMain.h"
 
-1422967010 source:c:\users\lee\documents\github\medit\guihacks\guicode.c
+1423138613 source:c:\users\lee\documents\github\medit\guihacks\guicode.c
 	"guiCode.h"
 
-1421936359 c:\users\lee\documents\github\medit\guihacks\guicode.h
+1423138505 c:\users\lee\documents\github\medit\guihacks\guicode.h
 	"../guiInfo/guiSpin.h"
 	"../guiInfo/guiVal.h"
 	"../guiInfo/guiCmp.h"
@@ -925,13 +925,13 @@
 1418906805 c:\users\lee\documents\github\medit\guiinfo\guicmp.h
 	"../_guiMain.h"
 
-1423093479 source:c:\users\lee\documents\github\medit\guihacks\guicodes.c
+1423143198 source:c:\users\lee\documents\github\medit\guihacks\guicodes.c
 	"guiCodes.h"
 
-1420281600 c:\users\lee\documents\github\medit\guihacks\guicodes.h
+1423138719 c:\users\lee\documents\github\medit\guihacks\guicodes.h
 	"guiCode.h"
 
-1421934512 source:c:\users\lee\documents\github\medit\guihacks\guihack.c
+1423138850 source:c:\users\lee\documents\github\medit\guihacks\guihack.c
 	"guiHack.h"
 
 1419619630 c:\users\lee\documents\github\medit\guihacks\guihack.h
@@ -941,7 +941,7 @@
 1419792457 c:\users\lee\documents\github\medit\guiinfo\guiorg.h
 	"guiText.h"
 
-1423093559 source:c:\users\lee\documents\github\medit\guihacks\guihacks.c
+1423143242 source:c:\users\lee\documents\github\medit\guihacks\guihacks.c
 	"guiHacks.h"
 
 1421008023 c:\users\lee\documents\github\medit\guihacks\guihacks.h
@@ -1016,7 +1016,7 @@
 1422967010 source:c:\users\lee\documents\github\medit\guiinfo\guival.c
 	"guiVal.h"
 
-1422971720 source:c:\users\lee\documents\github\medit\guimenu.c
+1423138973 source:c:\users\lee\documents\github\medit\guimenu.c
 	"guiMain.h"
 
 1422967010 source:c:\users\lee\documents\github\medit\guiqry\bqry.c
@@ -1028,7 +1028,7 @@
 1422967010 source:c:\users\lee\documents\github\medit\guiqry\guiqry.c
 	"guiQry.h"
 
-1422576859 source:c:\users\lee\documents\github\medit\guiqry\guires.c
+1423138973 source:c:\users\lee\documents\github\medit\guiqry\guires.c
 	"guiRes.h"
 
 1422967011 source:c:\users\lee\documents\github\medit\guiqry\iqry.c

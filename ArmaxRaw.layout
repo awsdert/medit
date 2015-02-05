@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="msw-x86-d-vc" />
-	<File name="hack.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="83" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="ArmaxRaw.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1723" topLine="54" />
+			<Cursor1 position="2448" topLine="78" />
 		</Cursor>
 	</File>
 	<File name="ArmaxRawMain.c" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -24,6 +19,11 @@
 	<File name="_hack.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="28" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="hack.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="83" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

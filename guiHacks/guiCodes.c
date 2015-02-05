@@ -1,93 +1,108 @@
 #include "guiCodes.h"
 GUI_CODES *guiCodes = NULL;
-CODES *srcCodes = NULL;
-CODES *tmpCodes = NULL;
-void codesReSize( CODES **cl, uchar **indexList, uchar count )
+uchar *tmpCodesIndex = NULL;
+CODEL  tmpCodes = {&tmpCodesIndex, NULL};
+CODEL *refCodes = &tmpCodes;
+void codesReSize( CODEL *cl, uchar count )
 {
   uchar i = 0, c  = 0;
   void *check;
+
   if ( !cl )
   {
     return;
   }
 
-  if ( !( *cl ) )
+  if ( !cl->codes )
   {
     check = malloc( sizeof( CODES ) );
-    if ( !check )
-      return;
-    ( *cl ) = check;
-    memset( *cl, 0, sizeof( CODES ) );
-    ( *cl )->_c = 1;
-    ( *cl )->s  = sizeof( CODE );
 
-    if ( indexList )
+    if ( !check )
+    {
+      return;
+    }
+
+    cl->codes = check;
+    memset( cl->codes, 0, sizeof( CODES ) );
+    cl->codes->_c = 1;
+    cl->codes->s  = sizeof( CODE );
+
+    if ( cl->index )
     {
       check = malloc( 1 );
+
       if ( !check )
       {
-        free( *cl );
-        (*cl) = NULL;
+        free( cl->codes );
+        cl->codes = NULL;
         return;
       }
-      ( *indexList ) = check;
-      ( *indexList )[0] = 0;
+
+      ( *cl->index ) = check;
+      ( *cl->index )[0] = 0;
     }
   }
 
-  if ( count <= ( *cl )->_c )
+  if ( count <= cl->codes->_c )
   {
-    if ( count >= ( *cl )->c )
+    if ( count >= cl->codes->c )
     {
       goto updateCount;
     }
 
-    ( *cl )->c = count;
+    cl->codes->c = count;
   }
   else
   {
-    size_t s = ( count - 1 ) * sizeof( CODE );
-    check = realloc( *cl, sizeof( CODES ) + s );
+    size_t s = count * sizeof( CODE );
+    check = appRealloc( cl->codes, CODES_SIZE + cl->codes->s, CODES_SIZE + s );
+
     if ( !check )
-      return;
-    ( *cl ) = check;
-    if ( indexList )
     {
-      check = realloc( *indexList, count );
+      return;
+    }
+
+    cl->codes = check;
+
+    if ( cl->index )
+    {
+      check = appRealloc( ( *cl->index ), cl->codes->_c, count );
+
       if ( !check )
       {
-        s = ( (*cl)->_c - 1 ) * sizeof( CODE );
-        ( *cl ) = realloc( *cl, sizeof( CODES ) + s );
         return;
       }
-      (*indexList) = check;
+
+      ( *cl->index ) = check;
     }
-    ( *cl )->_c = count;
-    ( *cl )->s = s + sizeof( CODE );
+
+    cl->codes->_c = count;
+    cl->codes->s = s;
   }
 
-  i = ( *cl )->c;
-  c = ( *cl )->_c - i;
+  i = cl->codes->c;
+  c = cl->codes->_c - i;
 
   if ( c )
   {
-    memset( &( ( *cl )->a[i] ), 0, c * sizeof( CODE ) );
+    memset( &( cl->codes->a[i] ), 0, c * sizeof( CODE ) );
 
-    if ( indexList )
+    if ( cl->index )
     {
-      memset( &( *indexList )[i], 0, c );
+      memset( &( *cl->index )[i], 0, c );
     }
   }
 
 updateCount:
-  ( *cl )->c = count;
+  cl->codes->c = count;
 }
-void guiCodes_SetGUI( GUI_CODES *codes, CODES *src, CODES *tmp )
+void guiCodes_SetGUI( GUI_CODES *codes, CODEL *ref )
 {
   guiCodes = codes;
-  srcCodes = src;
-  tmpCodes = tmp;
-  guiCode_SetGUI( &codes->code, &src->a[ src->i ], &tmp->a[ tmp->i ] );
+  refCodes = ref;
+  if ( !ref->codes )
+    codesReSize( ref, 1 );
+  guiCode_SetGUI( &codes->code, ref->codes ? &ref->codes->a[ ref->codes->i ] : NULL );
 }
 void guiCodes_OnLang( void )
 {
@@ -115,7 +130,8 @@ uchar guiCodes_BuildTree( Ihandle *ih, uchar i, int p )
   char *attr = "APPENDLEAF";
   char const *value;
   uchar j = 0;
-  switch ( tmpCodes->a[i].type )
+
+  switch ( tmpCodes.codes->a[i].type )
   {
   case CODE_CMP:
     attr = "APPENDBRANCH";
@@ -153,16 +169,19 @@ uchar guiCodes_BuildTree( Ihandle *ih, uchar i, int p )
 
   IupSetStrAttributeId( ih, attr, p, value );
 
-  if ( tmpCodes->a[i].type == CODE_CMP || tmpCodes->a[i].type == CODE_JOKER )
+  if ( tmpCodes.codes->a[i].type == CODE_CMP
+       || tmpCodes.codes->a[i].type == CODE_JOKER )
   {
     p = i++;
     j = 0;
+
     do
     {
       guiCodes_BuildTree( ih, i, p );
-      ++j; ++i;
+      ++j;
+      ++i;
     }
-    while ( j < tmpCodes->a[i].loop && j < UCHAR_MAX );
+    while ( j < tmpCodes.codes->a[i].loop && j < UCHAR_MAX );
   }
   else
   {
@@ -174,7 +193,8 @@ uchar guiCodes_BuildTree( Ihandle *ih, uchar i, int p )
 int guiCodes_OnShow( Ihandle *ih )
 {
   uchar i = 0;
-  while ( i < tmpCodes->c )
+
+  while ( i < tmpCodes.codes->c )
   {
     i = guiCodes_BuildTree( guiCodes->treeCodes, i, -1 );
   }

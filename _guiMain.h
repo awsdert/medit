@@ -34,8 +34,9 @@ extern Ihandle *guiMenu;
 extern Ihandle *guiData;
 char getEndian( void );
 char changeEndian( void* source, size_t size, char curEndian, char nxtEndian );
-void hacksReSize( HACKL  *hl, hack_t **indexList, hack_t count );
-void codesReSize( CODES **cl, uchar  **indexList, uchar  count );
+void* appRealloc( void *src, size_t oldSize, size_t newSize );
+void hacksReSize( HACKL *hl, hack_t count );
+void codesReSize( CODEL *cl, uchar  count );
 
 #ifdef HLIST
 Ihandle* IupHList( const char *action );

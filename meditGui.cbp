@@ -12,10 +12,13 @@
 				<Option type="0" />
 				<Option compiler="msvc2013-x86" />
 				<Compiler>
-					<Add option="/MD" />
+					<Add option="/MDd" />
 					<Add option="/Zi" />
 					<Add option="/DGUI_SHARED" />
 					<Add option="/D_DEBUG" />
+					<Add option="/D_X86_" />
+					<Add option="/D_MT" />
+					<Add option="/D_DLL" />
 					<Add directory="$(WIN8)/include/shared" />
 					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(IUP)/include" />
@@ -29,6 +32,7 @@
 				</ResourceCompiler>
 				<Linker>
 					<Add option="/DEBUG" />
+					<Add option="/INCREMENTAL:NO" />
 					<Add option="/MANIFEST:NO" />
 					<Add library="kernel32" />
 					<Add library="iup" />
@@ -56,6 +60,9 @@
 					<Add option="/Ox" />
 					<Add option="/DGUI_SHARED" />
 					<Add option="/DNDEBUG" />
+					<Add option="/D_X86_" />
+					<Add option="/D_MT" />
+					<Add option="/D_DLL" />
 					<Add directory="$(WIN8)/include/shared" />
 					<Add directory="$(WIN8)/include/um" />
 					<Add directory="$(IUP)/include" />
@@ -68,6 +75,7 @@
 					<Add directory="$(IPIPE)" />
 				</ResourceCompiler>
 				<Linker>
+					<Add option="/INCREMENTAL:NO" />
 					<Add option="/MANIFEST:NO" />
 					<Add library="kernel32" />
 					<Add library="iup" />

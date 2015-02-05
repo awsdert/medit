@@ -14,7 +14,7 @@ typedef struct _GUI_CODES
 } GUI_CODES;
 
 extern GUI_CODES *guiCodes;
-void guiCodes_SetGUI( GUI_CODES *codes, CODES *src, CODES *tmp );
+void guiCodes_SetGUI( GUI_CODES *codes, CODEL *ref );
 void guiCodes_OnLang( void );
 int  guiCodes_OnShow( Ihandle *ih );
 

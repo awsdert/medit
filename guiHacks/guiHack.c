@@ -2,8 +2,6 @@
 GUI_HACK guiHack = {{NULL}};
 HACK *srcHack = NULL;
 HACK *tmpHack = NULL;
-CODES srcHackCodes = {0};
-CODES tmpHackCodes = {0};
 void guiHack_OnLang( void )
 {
   IupSetAttribute( guiHack.main.fset, IUP_TITLE, appLang->a[ LNG_HACK ].a );
@@ -12,7 +10,7 @@ void guiHack_OnLang( void )
 extern void guiCodes_OnInit( void );
 void guiHack_OnInit( void )
 {
-  guiCodes_SetGUI( &guiHack.codes, &srcHackCodes, &tmpHackCodes );
+  guiCodes_SetGUI( &guiHack.codes, &tmpCodes );
   guiCodes_OnInit();
 }
 int guiHack_OnShow( Ihandle *ih )
