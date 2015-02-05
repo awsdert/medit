@@ -4,14 +4,19 @@
 GUI_ORG guiOrg = {{NULL}};
 void  guiOrg_OnLang ( void )
 {
-  IupSetAttribute ( guiOrg.main.fset, IUP_TITLE, appLang->a[ LNG_ORGANISATION ].a );
-  IupSetAttribute ( guiOrg.name.fset, IUP_TITLE, appLang->a[ LNG_NAME         ].a );
-  IupSetAttribute ( guiOrg.file.fset, IUP_TITLE, appLang->a[ LNG_FILE         ].a );
+  IupSetAttribute ( guiOrg.main.fset, IUP_TITLE,
+                    appLang->a[ LNG_ORGANISATION ].a );
+  IupSetAttribute ( guiOrg.name.fset, IUP_TITLE,
+                    appLang->a[ LNG_NAME         ].a );
+  IupSetAttribute ( guiOrg.file.fset, IUP_TITLE,
+                    appLang->a[ LNG_FILE         ].a );
 }
 void  guiOrg_OnInit ( void )
 {
-  guiText_OnInit ( &guiOrg.name, ( Icallback ) guiName_OnKAny, ( Icallback ) guiName_OnValueChanged );
-  guiText_OnInit ( &guiOrg.file, ( Icallback ) guiFile_OnKAny, ( Icallback ) guiFile_OnValueChanged );
+  guiText_OnInit ( &guiOrg.name, ( Icallback ) guiName_OnKAny,
+                   ( Icallback ) guiName_OnValueChanged );
+  guiText_OnInit ( &guiOrg.file, ( Icallback ) guiFile_OnKAny,
+                   ( Icallback ) guiFile_OnValueChanged );
   guiOrg.main.vb   = IupVbox ( guiOrg.name.fset,  guiOrg.file.fset,  NULL );
   guiOrg.main.fset = IupFrame ( guiOrg.main.vb );
   IupAppend ( guiDlg.vb, guiOrg.main.fset );
@@ -21,20 +26,24 @@ void  guiOrg_OnInit ( void )
 void guiOrg_OnDefPath ( char *path )
 {
   mkdir ( path );
-  strncat ( path, DIR_SEP, PATH_MAX );
-  strncat ( path, appSession.org, PATH_MAX );
+  appendstr ( path, DIR_SEP, PATH_MAX );
+  appendstr ( path, appSession.org, PATH_MAX );
 }
 void guiOrg_OnDefExt ( char *path )
 {
-  strncat ( path, "m-org", PATH_MAX );
+  appendstr ( path, "m-org", PATH_MAX );
 }
-void  guiOrg_OnLoad ( FILE *file )
+void  guiOrg_OnLoad ( char *path )
 {
+  FILE *file = fopen( path, "rb" );
   fread ( &srcOrg, sizeof ( DATA_ORG ), 1, file );
+  fclose( file );
 }
-void  guiOrg_OnSave ( FILE *file )
+void  guiOrg_OnSave ( char *path )
 {
+  FILE *file = fopen( path, "wb" );
   fwrite ( &srcOrg, sizeof ( DATA_ORG ), 1, file );
+  fclose( file );
 }
 void  guiOrg_OnApply ( void )
 {
@@ -54,8 +63,12 @@ int   guiOrg_OnShow ( Ihandle *ih )
   appMethods.OnReset   = guiOrg_OnReset;
   appMethods.OnSave    = guiOrg_OnSave;
   appMethods.OnApply   = guiOrg_OnApply;
+
   if ( !ih )
+  {
     return IUP_DEFAULT;
+  }
+
   IupSetAttribute ( guiOrg.name.tb, "MEDIT_SRC_NAME", srcOrg.name );
   IupSetAttribute ( guiOrg.name.tb, "MEDIT_TMP_NAME", tmpOrg.name );
   IupSetAttribute ( guiOrg.file.tb, "MEDIT_SRC_FILE", srcOrg.file );

@@ -6,13 +6,15 @@ BASE *tmpBase = NULL;
 GUI_BASE *guiBase = NULL;
 uchar GetBase ( char *name )
 {
-  for ( uchar i = 0; i < tmpTar.bases.c; ++i )
+  uchar i = 0;
+  for ( ; i < tmpTar.bases.c; ++i )
   {
     if ( istrcmp ( name, tmpTar.bname[i].a ) == 0 )
     {
       return i;
     }
   }
+
   return BASES_COUNT;
 }
 void  guiBase_OnLang ( void )
@@ -30,11 +32,13 @@ void guiBase_OnInit ( void )
                    ( Icallback ) guiName_OnKAny,  guiName_OnValueChanged );
   guiSpin_OnInit ( &guiBase->addr,
                    ( Icallback ) guiAddr_OnKAny,  guiAddr_OnValueChanged );
-  snprintf( text, 100, "%" PRIuLI, LI(~0) );
+  snprintf( text, 100, "%" PRIuLI, LI( ~0 ) );
   IupSetStrAttribute( guiBase->addr.tb, "SPINMAX", text );
-  guiSpin_OnInit ( &guiBase->size, ( Icallback ) guiSize_OnKAny,  guiSize_OnValueChanged );
+  guiSpin_OnInit ( &guiBase->size, ( Icallback ) guiSize_OnKAny,
+                   guiSize_OnValueChanged );
   IupSetStrAttribute( guiBase->size.tb, "SPINMAX", text );
-  guiSpin_OnInit ( &guiBase->depth, ( Icallback ) guiDepth_OnKAny, guiDepth_OnValueChanged );
+  guiSpin_OnInit ( &guiBase->depth, ( Icallback ) guiDepth_OnKAny,
+                   guiDepth_OnValueChanged );
   IupSetStrAttribute( guiBase->depth.tb, "SPINMAX", "15" );
   guiBase->main.vb = IupVbox (
                        guiBase->name.fset,
@@ -46,21 +50,27 @@ void guiBase_OnInit ( void )
 }
 extern void guiTar_OnDefPath ( char *path );
 extern void guiTar_OnDefExt ( char *path );
-void  guiBase_OnLoad ( FILE *file )
+void  guiBase_OnLoad ( char *path )
 {
+  FILE *file = fopen( path, "rb" );
   uchar i = GetBase ( appSession.base );
-  ipSetPos ( file, ( int ) ( ( uintptr_t ) &srcTar.bases.a[i] - ( uintptr_t ) &srcTar ), IP_S_SET );
+  ipSetPos ( file, ( int ) ( ( uintptr_t ) &srcTar.bases.a[i] -
+                             ( uintptr_t ) &srcTar ), IP_S_SET );
   fread ( &srcTar.bases.a[i], sizeof ( BASE ), 1, file );
+  fclose( file );
 }
 void  guiBase_OnReset ( void )
 {
   tmpTar = srcTar;
 }
-void  guiBase_OnSave ( FILE *file )
+void  guiBase_OnSave ( char *path )
 {
+  FILE *file = fopen( path, "wb" );
   uchar i = GetBase ( appSession.base );
-  ipSetPos ( file, ( int ) ( ( uintptr_t ) &srcTar.bases.a[i] - ( uintptr_t ) &srcTar ), SEEK_SET );
+  ipSetPos ( file, ( int ) ( ( uintptr_t ) &srcTar.bases.a[i] -
+                             ( uintptr_t ) &srcTar ), SEEK_SET );
   fread( &srcTar.bases.a[i], sizeof ( BASE ), 1, file );
+  fclose( file );
 }
 void  guiBase_OnApply ( void )
 {
@@ -93,6 +103,7 @@ int  guiAddr_OnKAny ( Ihandle *ih, int c )
   {
     return IUP_DEFAULT;
   }
+
   return IUP_CLOSE;
 }
 int  guiSize_OnKAny ( Ihandle *ih, int c )
@@ -107,6 +118,7 @@ int  guiSize_OnKAny ( Ihandle *ih, int c )
   {
     return IUP_DEFAULT;
   }
+
   return IUP_CLOSE;
 }
 int guiDepth_OnKAny ( Ihandle *ih, int c )
@@ -115,12 +127,15 @@ int guiDepth_OnKAny ( Ihandle *ih, int c )
   {
     return IUP_DEFAULT;
   }
+
   return IUP_CLOSE;
 }
 int  guiAddr_OnValueChanged ( Ihandle *ih )
 {
   char *valStr = IupGetAttribute ( ih, IUP_VALUE );
-  tmpBase->addr   = strtoull ( valStr, NULL, 16 );
+  //tmpBase->addr   = strtouli ( valStr, NULL, 16 );
+  scanf( "%" PRI_LI "X", tmpBase->addr );
+
   if ( tmpBase->addr > ( UINTPTR_MAX - tmpBase->size ) )
   {
     tmpBase->addr = ( UINTPTR_MAX - tmpBase->size );
@@ -128,14 +143,19 @@ int  guiAddr_OnValueChanged ( Ihandle *ih )
     IupSetStrAttribute ( ih, IUP_VALUE, valStr );
     return IUP_CLOSE;
   }
+
   return IUP_DEFAULT;
 }
 int  guiAddr_OnSpin( Ihandle *ih, int inc )
 {
   char valStr[22] = {0};
   tmpBase->addr += inc;
+
   if ( tmpBase->addr > ( UINTPTR_MAX - tmpBase->size ) )
+  {
     tmpBase->addr = ( UINTPTR_MAX - tmpBase->size );
+  }
+
   snprintf ( valStr, 22, "%" PRI_LI "X", tmpBase->addr );
   IupSetStrAttribute ( ih, IUP_VALUE, valStr );
   return IUP_DEFAULT;
@@ -143,7 +163,9 @@ int  guiAddr_OnSpin( Ihandle *ih, int inc )
 int  guiSize_OnValueChanged ( Ihandle *ih )
 {
   char *valStr = IupGetAttribute ( ih, IUP_VALUE );
-  tmpBase->size   = strtoull ( valStr, NULL, 16 );
+  //tmpBase->size   = strtouli ( valStr, NULL, 16 );
+  scanf( "%" PRI_LI "X", tmpBase->addr );
+
   if ( tmpBase->size > ( UINTPTR_MAX - tmpBase->addr ) )
   {
     tmpBase->size = ( UINTPTR_MAX - tmpBase->addr );
@@ -151,14 +173,19 @@ int  guiSize_OnValueChanged ( Ihandle *ih )
     IupSetStrAttribute ( ih, IUP_VALUE, valStr );
     return IUP_CLOSE;
   }
+
   return IUP_DEFAULT;
 }
 int guiSize_OnSpin( Ihandle *ih, int inc )
 {
   char valStr[22] = {0};
   tmpBase->size += inc;
+
   if ( tmpBase->size > ( UINTPTR_MAX - tmpBase->addr ) )
+  {
     tmpBase->size = ( UINTPTR_MAX - tmpBase->addr );
+  }
+
   snprintf ( valStr, 22, "%" PRI_LI "X", tmpBase->size );
   IupSetStrAttribute ( ih, IUP_VALUE, valStr );
   return IUP_DEFAULT;
@@ -167,6 +194,7 @@ int guiDepth_OnValueChanged ( Ihandle *ih )
 {
   char *valStr = IupGetAttribute ( ih, IUP_VALUE );
   tmpBase->depth  = ( uchar ) strtoul ( valStr, NULL, 10 );
+
   if ( tmpBase->depth > 0xF )
   {
     tmpBase->depth = 0xF;
@@ -174,5 +202,6 @@ int guiDepth_OnValueChanged ( Ihandle *ih )
     IupSetStrAttribute ( ih, IUP_VALUE, valStr );
     return IUP_CLOSE;
   }
+
   return IUP_DEFAULT;
 }

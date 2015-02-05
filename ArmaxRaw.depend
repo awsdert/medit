@@ -1,93 +1,45 @@
 # depslib dependency file v1.0
-1422531604 source:c:\users\lee\documents\github\medit\armaxrawmain.c
+1422967022 source:c:\users\lee\documents\github\medit\armaxrawmain.c
 	"ArmaxRawMain.h"
 
-1422531883 c:\users\lee\documents\github\medit\armaxrawmain.h
+1422986333 c:\users\lee\documents\github\medit\armaxrawmain.h
 	"_hack.h"
 
-1422531745 c:\users\lee\documents\github\medit\_hack.h
+1423077649 c:\users\lee\documents\github\medit\_hack.h
 	"hack.h"
 	<ipipe/main.h>
 
-1406191186 c:\users\lee\documents\github\ipipe\ipipe.h
-	"IpipeTypes.h"
-
-1405763171 c:\users\lee\documents\github\ipipe\ipipetypes.h
-	<limits.h>
+1423073110 c:\users\lee\documents\github\medit\hack.h
 	<float.h>
-	<stdio.h>
-	<stddef.h>
-	<stdlib.h>
-	<string.h>
-	<windows.h>
+	<ipipe/c.h>
 
-1377099492 c:\program files (x86)\windows kits\8.1\include\um\windows.h
-	<winapifamily.h>
-	<sdkddkver.h>
-	<winresrc.h>
-	<excpt.h>
-	<stdarg.h>
+1423069034 c:\users\lee\documents\github\ipipe\ipipe\c.h
+	<climits>
+	<cstdint>
+	<cctype>
+	<cstring>
+	<cstdio>
+	<limits.h>
+	<stdint.h>
+	<ctype.h>
+	<string.h>
+	<stdio.h>
 	<windef.h>
-	<winbase.h>
-	<wingdi.h>
-	<winuser.h>
-	<winnls.h>
-	<wincon.h>
-	<winver.h>
-	<winreg.h>
-	<winnetwk.h>
-	<cderr.h>
-	<dde.h>
-	<ddeml.h>
-	<dlgs.h>
-	<lzexpand.h>
-	<mmsystem.h>
-	<nb30.h>
-	<rpc.h>
-	<shellapi.h>
-	<winperf.h>
-	<winsock.h>
-	<wincrypt.h>
-	<winefs.h>
-	<winscard.h>
-	<winspool.h>
-	<ole.h>
-	<ole2.h>
-	<commdlg.h>
-	<stralign.h>
-	<winwlm.h>
-	<ole2.h>
-	<winsvc.h>
-	<mcx.h>
-	<imm.h>
+	<Windows.h>
+	<windowsx.h>
+	<linux/limits.h>
+
+1377099492 c:\program files (x86)\windows kits\8.1\include\shared\windef.h
+	<winapifamily.h>
+	<minwindef.h>
+	<winnt.h>
 
 1371531860 c:\program files (x86)\windows kits\8.1\include\shared\winapifamily.h
 
-1377099456 c:\program files (x86)\windows kits\8.1\include\shared\sdkddkver.h
-
-1371531154 c:\program files (x86)\windows kits\8.1\include\um\winresrc.h
-	<winuser.rh>
-	<commctrl.rh>
-	<dde.rh>
-	<winnt.rh>
-	<dlgs.h>
-	<winver.h>
-
-1377099488 c:\program files (x86)\windows kits\8.1\include\um\winuser.rh
-
-1377099914 c:\program files (x86)\windows kits\8.1\include\um\commctrl.rh
-
-1371531150 c:\program files (x86)\windows kits\8.1\include\um\dde.rh
-
-1377099320 c:\program files (x86)\windows kits\8.1\include\um\winnt.rh
-
-1371529830 c:\program files (x86)\windows kits\8.1\include\um\dlgs.h
+1377099316 c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h
+	<specstrings.h>
 	<winapifamily.h>
-
-1377099926 c:\program files (x86)\windows kits\8.1\include\um\winver.h
-	<winapifamily.h>
-	<SpecStrings.h>
-	<verrsrc.h>
+	<winnt.h>
 
 1371529712 c:\program files (x86)\windows kits\8.1\include\shared\specstrings.h
 	<sal.h>
@@ -114,19 +66,6 @@
 1371529712 c:\program files (x86)\windows kits\8.1\include\shared\sdv_driverspecs.h
 
 1377099814 c:\program files (x86)\windows kits\8.1\include\shared\no_sal2.h
-
-1371529714 c:\program files (x86)\windows kits\8.1\include\um\verrsrc.h
-	<winapifamily.h>
-
-1377099492 c:\program files (x86)\windows kits\8.1\include\shared\windef.h
-	<winapifamily.h>
-	<minwindef.h>
-	<winnt.h>
-
-1377099316 c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h
-	<specstrings.h>
-	<winapifamily.h>
-	<winnt.h>
 
 1392830698 c:\program files (x86)\windows kits\8.1\include\um\winnt.h
 	<ctype.h>
@@ -168,6 +107,8 @@
 1371529706 c:\program files (x86)\windows kits\8.1\include\shared\guiddef.h
 	<string.h>
 
+1377099456 c:\program files (x86)\windows kits\8.1\include\shared\sdkddkver.h
+
 1371529712 c:\program files (x86)\windows kits\8.1\include\shared\pshpack4.h
 
 1371529712 c:\program files (x86)\windows kits\8.1\include\shared\poppack.h
@@ -181,6 +122,73 @@
 1371529042 c:\program files (x86)\windows kits\8.1\include\shared\apiset.h
 
 1371531856 c:\program files (x86)\windows kits\8.1\include\shared\ktmtypes.h
+
+1377099492 c:\program files (x86)\windows kits\8.1\include\um\windows.h
+	<winapifamily.h>
+	<sdkddkver.h>
+	<winresrc.h>
+	<excpt.h>
+	<stdarg.h>
+	<windef.h>
+	<winbase.h>
+	<wingdi.h>
+	<winuser.h>
+	<winnls.h>
+	<wincon.h>
+	<winver.h>
+	<winreg.h>
+	<winnetwk.h>
+	<cderr.h>
+	<dde.h>
+	<ddeml.h>
+	<dlgs.h>
+	<lzexpand.h>
+	<mmsystem.h>
+	<nb30.h>
+	<rpc.h>
+	<shellapi.h>
+	<winperf.h>
+	<winsock.h>
+	<wincrypt.h>
+	<winefs.h>
+	<winscard.h>
+	<winspool.h>
+	<ole.h>
+	<ole2.h>
+	<commdlg.h>
+	<stralign.h>
+	<winwlm.h>
+	<ole2.h>
+	<winsvc.h>
+	<mcx.h>
+	<imm.h>
+
+1371531154 c:\program files (x86)\windows kits\8.1\include\um\winresrc.h
+	<winuser.rh>
+	<commctrl.rh>
+	<dde.rh>
+	<winnt.rh>
+	<dlgs.h>
+	<winver.h>
+
+1377099488 c:\program files (x86)\windows kits\8.1\include\um\winuser.rh
+
+1377099914 c:\program files (x86)\windows kits\8.1\include\um\commctrl.rh
+
+1371531150 c:\program files (x86)\windows kits\8.1\include\um\dde.rh
+
+1377099320 c:\program files (x86)\windows kits\8.1\include\um\winnt.rh
+
+1371529830 c:\program files (x86)\windows kits\8.1\include\um\dlgs.h
+	<winapifamily.h>
+
+1377099926 c:\program files (x86)\windows kits\8.1\include\um\winver.h
+	<winapifamily.h>
+	<SpecStrings.h>
+	<verrsrc.h>
+
+1371529714 c:\program files (x86)\windows kits\8.1\include\um\verrsrc.h
+	<winapifamily.h>
 
 1377099320 c:\program files (x86)\windows kits\8.1\include\um\winbase.h
 	<winapifamily.h>
@@ -843,35 +851,10 @@
 
 1371529718 c:\program files (x86)\windows kits\8.1\include\um\ime_cmodes.h
 
-1422477027 source:c:\users\lee\documents\github\medit\armaxraw.c
-	"ArmaxRawMain.h"
-
-1420928562 c:\users\lee\documents\github\medit\hack.h
-	<float.h>
-	<ipipe/c.h>
-
-1414407985 c:\users\lee\documents\github\medit\c.h
-	<windef.h>
-	<Windows.h>
-	<windowsx.h>
-	<linux/limits.h>
-
 1371531154 c:\program files (x86)\windows kits\8.1\include\shared\windowsx.h
 	<winapifamily.h>
 
-1422547811 c:\users\lee\documents\github\ipipe\ipipe\c.h
-	<climits>
-	<cstdint>
-	<cstdio>
-	<limits.h>
-	<stdint.h>
-	<stdio.h>
-	<windef.h>
-	<Windows.h>
-	<windowsx.h>
-	<linux/limits.h>
-
-1422550730 c:\users\lee\documents\github\ipipe\ipipe\main.h
+1422967034 c:\users\lee\documents\github\ipipe\ipipe\main.h
 	"types.h"
 	<fcntl.h>
 	<share.h>
@@ -892,308 +875,6 @@
 	<stdlib.h>
 	<string.h>
 
-1379878923 c:\sdk\mingw\include\float.h
-	<_mingw.h>
-
-1379878920 c:\sdk\mingw\include\_mingw.h
-	<sdkddkver.h>
-
-1379879794 c:\sdk\mingw\include\sdkddkver.h
-	<_mingw.h>
-
-1379878922 c:\sdk\mingw\include\limits.h
-	<_mingw.h>
-
-1379878922 c:\sdk\mingw\include\stdint.h
-	<_mingw.h>
-	<stddef.h>
-
-1379878922 c:\sdk\mingw\include\stdio.h
-	<_mingw.h>
-	<stddef.h>
-	<stdarg.h>
-	<sys/types.h>
-
-1379878925 c:\sdk\mingw\include\sys\types.h
-	<_mingw.h>
-	<stddef.h>
-
-1379879797 c:\sdk\mingw\include\windef.h
-	<_mingw.h>
-	<winnt.h>
-
-1379879798 c:\sdk\mingw\include\winnt.h
-	<_mingw.h>
-	<winerror.h>
-	<string.h>
-	<basetsd.h>
-	<pshpack4.h>
-	<poppack.h>
-
-1379879797 c:\sdk\mingw\include\winerror.h
-	<_mingw.h>
-
-1379878924 c:\sdk\mingw\include\string.h
-	<_mingw.h>
-	<stddef.h>
-
-1379879780 c:\sdk\mingw\include\basetsd.h
-	<_mingw.h>
-
-1379879792 c:\sdk\mingw\include\pshpack4.h
-
-1379879791 c:\sdk\mingw\include\poppack.h
-
-1379879797 c:\sdk\mingw\include\windows.h
-	<_mingw.h>
-	<winresrc.h>
-	<stdarg.h>
-	<windef.h>
-	<wincon.h>
-	<winbase.h>
-	<wingdi.h>
-	<winuser.h>
-	<winnls.h>
-	<winver.h>
-	<winnetwk.h>
-	<winreg.h>
-	<winsvc.h>
-	<cderr.h>
-	<dde.h>
-	<ddeml.h>
-	<dlgs.h>
-	<imm.h>
-	<lzexpand.h>
-	<mmsystem.h>
-	<nb30.h>
-	<rpc.h>
-	<shellapi.h>
-	<winperf.h>
-	<commdlg.h>
-	<winspool.h>
-	<winsock.h>
-	<ole2.h>
-
-1379879798 c:\sdk\mingw\include\winresrc.h
-	<_mingw.h>
-	<winuser.h>
-	<winnt.h>
-	<winver.h>
-	<dde.h>
-	<dlgs.h>
-	<commctrl.h>
-
-1379879799 c:\sdk\mingw\include\winuser.h
-	<_mingw.h>
-
-1379879799 c:\sdk\mingw\include\winver.h
-	<_mingw.h>
-
-1379879781 c:\sdk\mingw\include\dde.h
-	<_mingw.h>
-
-1379879782 c:\sdk\mingw\include\dlgs.h
-	<_mingw.h>
-
-1379879781 c:\sdk\mingw\include\commctrl.h
-	<_mingw.h>
-	<prsht.h>
-
-1379879791 c:\sdk\mingw\include\prsht.h
-	<_mingw.h>
-
-1379879797 c:\sdk\mingw\include\wincon.h
-	<_mingw.h>
-
-1379879797 c:\sdk\mingw\include\winbase.h
-	<_mingw.h>
-
-1379879798 c:\sdk\mingw\include\wingdi.h
-	<_mingw.h>
-
-1379879798 c:\sdk\mingw\include\winnls.h
-	<_mingw.h>
-
-1379879798 c:\sdk\mingw\include\winnetwk.h
-	<_mingw.h>
-
-1379879798 c:\sdk\mingw\include\winreg.h
-	<_mingw.h>
-	<reason.h>
-
-1379879792 c:\sdk\mingw\include\reason.h
-	<_mingw.h>
-
-1379879799 c:\sdk\mingw\include\winsvc.h
-	<_mingw.h>
-
-1379879780 c:\sdk\mingw\include\cderr.h
-	<_mingw.h>
-
-1379879781 c:\sdk\mingw\include\ddeml.h
-	<_mingw.h>
-
-1379879784 c:\sdk\mingw\include\imm.h
-	<_mingw.h>
-
-1379879787 c:\sdk\mingw\include\lzexpand.h
-	<_mingw.h>
-
-1379879788 c:\sdk\mingw\include\mmsystem.h
-	<_mingw.h>
-
-1379879788 c:\sdk\mingw\include\nb30.h
-	<_mingw.h>
-
-1379879793 c:\sdk\mingw\include\rpc.h
-	<windows.h>
-	<_mingw.h>
-	<rpcdce.h>
-	<rpcnsi.h>
-	<rpcnterr.h>
-	<winerror.h>
-	<excpt.h>
-
-1379879793 c:\sdk\mingw\include\rpcdce.h
-	<_mingw.h>
-	<basetyps.h>
-	<rpcdcep.h>
-
-1379879780 c:\sdk\mingw\include\basetyps.h
-	<_mingw.h>
-
-1379879793 c:\sdk\mingw\include\rpcdcep.h
-	<_mingw.h>
-
-1379879793 c:\sdk\mingw\include\rpcnsi.h
-	<_mingw.h>
-
-1379879793 c:\sdk\mingw\include\rpcnterr.h
-	<_mingw.h>
-
-1379878922 c:\sdk\mingw\include\excpt.h
-	<_mingw.h>
-	<windef.h>
-
-1379879795 c:\sdk\mingw\include\shellapi.h
-	<_mingw.h>
-	<pshpack2.h>
-	<poppack.h>
-
-1379879792 c:\sdk\mingw\include\pshpack2.h
-
-1379879798 c:\sdk\mingw\include\winperf.h
-	<_mingw.h>
-
-1379879781 c:\sdk\mingw\include\commdlg.h
-	<_mingw.h>
-	<unknwn.h>
-	<prsht.h>
-
-1379879796 c:\sdk\mingw\include\unknwn.h
-	<_mingw.h>
-	<windows.h>
-	<objfwd.h>
-	<wtypes.h>
-
-1379879789 c:\sdk\mingw\include\objfwd.h
-	<_mingw.h>
-	<basetyps.h>
-
-1379879799 c:\sdk\mingw\include\wtypes.h
-	<_mingw.h>
-	<rpc.h>
-	<rpcndr.h>
-
-1379879793 c:\sdk\mingw\include\rpcndr.h
-	<_mingw.h>
-	<rpcnsip.h>
-	<objfwd.h>
-
-1379879793 c:\sdk\mingw\include\rpcnsip.h
-	<_mingw.h>
-
-1379879798 c:\sdk\mingw\include\winspool.h
-	<_mingw.h>
-
-1379879798 c:\sdk\mingw\include\winsock.h
-	<_mingw.h>
-	<windows.h>
-	<mswsock.h>
-
-1379879788 c:\sdk\mingw\include\mswsock.h
-	<_mingw.h>
-
-1379879790 c:\sdk\mingw\include\ole2.h
-	<_mingw.h>
-	<winerror.h>
-	<objbase.h>
-	<olectlid.h>
-	<oleauto.h>
-	<oleidl.h>
-
-1379879789 c:\sdk\mingw\include\objbase.h
-	<rpc.h>
-	<rpcndr.h>
-	<_mingw.h>
-	<stdlib.h>
-	<basetyps.h>
-	<wtypes.h>
-	<unknwn.h>
-	<objidl.h>
-	<cguid.h>
-
-1379878923 c:\sdk\mingw\include\stdlib.h
-	<_mingw.h>
-	<stddef.h>
-
-1379879790 c:\sdk\mingw\include\objidl.h
-	<_mingw.h>
-	<objfwd.h>
-
-1379879780 c:\sdk\mingw\include\cguid.h
-	<_mingw.h>
-
-1379879791 c:\sdk\mingw\include\olectlid.h
-	<_mingw.h>
-
-1379879790 c:\sdk\mingw\include\oleauto.h
-	<_mingw.h>
-	<oaidl.h>
-
-1379879789 c:\sdk\mingw\include\oaidl.h
-	<_mingw.h>
-	<windows.h>
-	<ole2.h>
-
-1379879791 c:\sdk\mingw\include\oleidl.h
-	<_mingw.h>
-	<objfwd.h>
-
-1379879797 c:\sdk\mingw\include\windowsx.h
-	<_mingw.h>
-
-1379878922 c:\sdk\mingw\include\fcntl.h
-	<_mingw.h>
-	<io.h>
-
-1379878921 c:\sdk\mingw\include\io.h
-	<_mingw.h>
-	<sys/types.h>
-	<string.h>
-	<string.h>
-
-1379878921 c:\sdk\mingw\include\share.h
-	<_mingw.h>
-
-1379878924 c:\sdk\mingw\include\sys\stat.h
-	<_mingw.h>
-	<stddef.h>
-	<sys/types.h>
-	<string.h>
-
-1379878923 c:\sdk\mingw\include\direct.h
-	<_mingw.h>
-	<stddef.h>
-	<io.h>
+1423078141 source:c:\users\lee\documents\github\medit\armaxraw.c
+	"ArmaxRawMain.h"
 

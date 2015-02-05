@@ -25,14 +25,14 @@ typedef struct _ME_PIPE
 
 typedef union _LPN
 {
-    lpn val;
+  lpn val;
   uchar buf[ sizeof( lpn ) ];
 } LPN;
 
 typedef struct _ME_LPN
 {
   uchar used[CMP_COUNT];
-    LPN buff[CMP_COUNT];
+  LPN buff[CMP_COUNT];
 } ME_LPN;
 
 typedef struct _ME_ULINT
@@ -44,34 +44,34 @@ typedef struct _ME_ULINT
 typedef struct _ME_LINT
 {
   uchar used[CMP_COUNT];
-   lint buff[CMP_COUNT];
+  lint buff[CMP_COUNT];
 } ME_LINT;
 
 
 void* bQry( pid_t pid, size_t size );
 void  fQry( uchar   used,
-          ME_PIPE  *mepI,
-          ME_PIPE  *mepO,
-          ME_PIPE  *mepP,
-          int       prev,
-          schar    bytes,
-          ME_LPN   *mecM,
-          ME_LPN   *mecN );
+            ME_PIPE  *mepI,
+            ME_PIPE  *mepO,
+            ME_PIPE  *mepP,
+            int       prev,
+            schar    bytes,
+            ME_LPN   *mecM,
+            ME_LPN   *mecN );
 void  iQry( uchar   used,
-          ME_PIPE  *mepI,
-          ME_PIPE  *mepO,
-          ME_PIPE  *mepP,
-          int       prev,
-          schar    bytes,
-          ME_LINT  *mecM,
-          ME_LINT  *mecN );
+            ME_PIPE  *mepI,
+            ME_PIPE  *mepO,
+            ME_PIPE  *mepP,
+            int       prev,
+            schar    bytes,
+            ME_LINT  *mecM,
+            ME_LINT  *mecN );
 void  uQry( uchar   used,
-          ME_PIPE  *mepI,
-          ME_PIPE  *mepO,
-          ME_PIPE  *mepP,
-          int       prev,
-          schar    bytes,
-          ME_ULINT *mecM,
-          ME_ULINT *mecN );
+            ME_PIPE  *mepI,
+            ME_PIPE  *mepO,
+            ME_PIPE  *mepP,
+            int       prev,
+            schar    bytes,
+            ME_ULINT *mecM,
+            ME_ULINT *mecN );
 
 SHUT_C

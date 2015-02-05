@@ -29,13 +29,17 @@ typedef struct _HACKL
 #define HACK_LIB_EXP LIB_IMP
 #endif
 
-typedef uchar (*_HACK_COM_HACK_FUNC)( HACK *hack, char* line, void *_source );
-typedef uchar (*_HACK_COM_CODE_FUNC)( CODE *code, char* line, void *_source );
-typedef uchar (*_HACK_COM_LINE_FUNC)( char *line, void *_source );
-typedef void  (*_HACK_COM_FILE_FUNC)( FILE *file, char const *dataDir );
-typedef uchar (*_HACK_COM_GETBASE)  ( char *name );
-typedef void  (*_HACK_COM_RESIZEHL) ( HACKL  *hl, hack_t **indexList, hack_t count );
-typedef void  (*_HACK_COM_RESIZECL) ( CODES **cl, hack_t **indexList, hack_t count );
+typedef uchar ( *_HACK_COM_HACK_FUNC )( HACK *hack, char* line, void *_source );
+typedef uchar ( *_HACK_COM_CODE_FUNC )( CODE *code, char* line, void *_source );
+typedef int   ( __cdecl *_HACK_COM_GERR )( void *_source );
+typedef char* ( __cdecl *_HACK_COM_GETS )( char *line, int size, void *_source );
+typedef int   ( __cdecl *_HACK_COM_PUTS )( char *line, void *_source );
+typedef void  ( *_HACK_COM_FILE_FUNC )( char *_path, char const *dataDir );
+typedef uchar ( *_HACK_COM_GETBASE )  ( char *name );
+typedef void  ( *_HACK_COM_RESIZEHL ) ( HACKL  *hl, hack_t **indexList,
+                                        hack_t count );
+typedef void  ( *_HACK_COM_RESIZECL ) ( CODES **cl, uchar **indexList,
+                                        uchar count );
 
 typedef struct _HACK_COM
 {
@@ -46,8 +50,9 @@ typedef struct _HACK_COM
   _HACK_COM_FILE_FUNC OnLoad;
   _HACK_COM_FILE_FUNC OnSave;
   // Replace with handler of _source when not loading/saving a file
-  _HACK_COM_LINE_FUNC RdLine;
-  _HACK_COM_LINE_FUNC WrLine;
+  _HACK_COM_GERR      RdError;
+  _HACK_COM_GETS      RdLine;
+  _HACK_COM_PUTS      WrLine;
   // 80 characters per line
   _HACK_COM_HACK_FUNC T2H;
   _HACK_COM_HACK_FUNC H2T;
@@ -59,6 +64,6 @@ typedef struct _HACK_COM
   CODES   *cl;
 } HACK_COM;
 
-typedef HACK_COM* (*_GETHACKCOM)( void );
+typedef HACK_COM* ( *_GETHACKCOM )( void );
 
 SHUT_C

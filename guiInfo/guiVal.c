@@ -1,6 +1,9 @@
 #include "guiVal.h"
 GUI_VAL *guiVal = NULL;
-void guiVal_SetGUI( GUI_VAL *val ) { guiVal = val; }
+void guiVal_SetGUI( GUI_VAL *val )
+{
+  guiVal = val;
+}
 void guiVal_OnLang( void )
 {
   IupSetAttribute( guiVal->value.fset, IUP_TITLE, appLang->a[ LNG_VALUE ].a );
@@ -9,7 +12,7 @@ void guiVal_OnLang( void )
 void guiVal_OnInit( void )
 {
   guiVal->tbValue  = IupText( NULL );
-  guiVal->hlType = IupHList(NULL);
+  guiVal->hlType = IupHList( NULL );
   IupSetStrAttribute( guiVal->hlType,  "1",  "schar" );
   IupSetStrAttribute( guiVal->hlType,  "2",  "uchar" );
   IupSetStrAttribute( guiVal->hlType,  "3",  "short" );

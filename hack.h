@@ -4,6 +4,10 @@
 
 OPEN_C
 
+#ifdef _MSC_VER
+#define snprintf sprintf_s
+#endif
+
 #define JK_CTRL   0x10000000
 #define JK_ALT    0x20000000
 #define JK_SHIFT  0x40000000
@@ -35,22 +39,24 @@ OPEN_C
 
 typedef union _RLN
 {
-  ulint u[ (sizeof(lpn) / sizeof(lint)) + ((sizeof(lpn) % sizeof(lint)) ? 1 : 0) ];
-   lint s[ (sizeof(lpn) / sizeof(lint)) + ((sizeof(lpn) % sizeof(lint)) ? 1 : 0) ];
-    lpn r;
+  ulint u[ ( sizeof( lpn ) / sizeof( lint ) ) + ( ( sizeof( lpn ) % sizeof(
+             lint ) ) ? 1 : 0 ) ];
+  lint s[ ( sizeof( lpn ) / sizeof( lint ) ) + ( ( sizeof( lpn ) % sizeof(
+            lint ) ) ? 1 : 0 ) ];
+  lpn r;
 } RLN;
 
 typedef union _RLD
 {
   ulint u;
-   lint s;
-    dpn r;
+  lint s;
+  dpn r;
 } RLD;
 
 typedef union _RLF
 {
   ulong u;
-   long s;
+  long s;
   float r;
 } RLF;
 
@@ -63,19 +69,19 @@ static uchar const NUM_short_buff_size = NODES_NEEDED( lpn, short );
 
 typedef union _NUM
 {
-     lpn l;
-     dpn d[       NODES_NEEDED( lpn,   dpn ) ];
-     fpn f[       NODES_NEEDED( lpn,   fpn ) ];
-   ulint _ulint[  NODES_NEEDED( lpn,  lint ) ];
-    lint _lint[   NODES_NEEDED( lpn,  lint ) ];
-   ulong _ulong[  NODES_NEEDED( lpn,  long ) ];
-    long _long[   NODES_NEEDED( lpn,  long ) ];
-    uint _uint[   NODES_NEEDED( lpn,   int ) ];
-     int _int[    NODES_NEEDED( lpn,   int ) ];
+  lpn l;
+  dpn d[       NODES_NEEDED( lpn,   dpn ) ];
+  fpn f[       NODES_NEEDED( lpn,   fpn ) ];
+  ulint _ulint[  NODES_NEEDED( lpn,  lint ) ];
+  lint _lint[   NODES_NEEDED( lpn,  lint ) ];
+  ulong _ulong[  NODES_NEEDED( lpn,  long ) ];
+  long _long[   NODES_NEEDED( lpn,  long ) ];
+  uint _uint[   NODES_NEEDED( lpn,   int ) ];
+  int _int[    NODES_NEEDED( lpn,   int ) ];
   ushort _ushort[ NODES_NEEDED( lpn, short ) ];
-   short _short[  NODES_NEEDED( lpn, short ) ];
-   uchar _uchar[  sizeof(lpn) ];
-   schar _schar[  sizeof(lpn) ];
+  short _short[  NODES_NEEDED( lpn, short ) ];
+  uchar _uchar[  sizeof( lpn ) ];
+  schar _schar[  sizeof( lpn ) ];
 } NUM;
 
 typedef enum   _MECMP
@@ -125,17 +131,32 @@ typedef struct _BASES
   BASE  a[ BASES_COUNT ];
 } BASES;
 
-typedef uchar hack_t;
-#define HACK_T_MAX UCHAR_MAX
-typedef struct _HACK
+typedef ushort hack_t;
+#define HACK_T_MAX USHRT_MAX
+/**
+  \brief Holds relative information about a hack
+  \param use 1 = Use during hook, 0 = Do NOT use during hook
+  \param irl If immeadiate children are not folders: 1 = radio, 0 = check
+  \param cid Codelist ID
+  \param coi Codelist Owner ID
+  \param id Index
+  \param ui List Index
+  \param oi Owner Index
+  \param fi First Child Index
+  \param ni Next Sibling Index
+  \param pi Prev Sibling Index
+**/
+typedef struct struct_HACK
 {
   uchar  use : 1;
   // Is Radio List
   uchar  irl : 1;
   // ID (codelist file usage only)
-  ulong  id;
+  ushort cid;
+  // Owner ID (codelist file usage only)
+  ushort coi;
   // Current Index
-  hack_t ci;
+  hack_t id;
   // UI Index
   hack_t ui;
   // Owner Index
@@ -147,7 +168,8 @@ typedef struct _HACK
   // Prev Sibling Index
   hack_t pi;
 } HACK;
-static size_t const HACKS_SIZE = (sizeof(size_t) + (3 * sizeof(hack_t)));
+static size_t const HACKS_SIZE = ( sizeof( size_t ) + ( 3 * sizeof(
+                                     hack_t ) ) );
 typedef struct _HACKS
 {
   hack_t i;
@@ -178,7 +200,7 @@ typedef struct _CODE
 
 #define CODES_COUNT 30
 #define CODES_LAST  29
-static size_t const CODES_SIZE = (sizeof(size_t) + 3);
+static size_t const CODES_SIZE = ( sizeof( size_t ) + 3 );
 typedef struct _CODES
 {
   uchar  i;

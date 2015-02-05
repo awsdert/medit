@@ -1,8 +1,10 @@
 // Safeguard against forced c++ compile
 #include <ipipe/c.h>
-#include STD_INC( stdio )
-#include STD_INC( stdlib )
-#include STD_INC( string )
+#ifdef __cplusplus
+#include <cstdio>
+#else
+#include <stdio.h>
+#endif
 USING( std::memset )
 USING( std::fopen_s )
 USING( std::getenv_s )
@@ -28,19 +30,21 @@ int main( int argc, char const *argv[] )
 #endif // _WIN32
   size_t length = 0;
   char *tokSeg = NULL, *tmp = cmd,
-    *tmpSeg = NULL,
-    *prvSeg = NULL,
-    *curSeg = NULL,
-    arcSeg[SEG_LENGTH] = {0};
+        *tmpSeg = NULL,
+         *prvSeg = NULL,
+          *curSeg = NULL,
+           arcSeg[SEG_LENGTH] = {0};
   strcpy_s( path, CMD_LEN, argv[0] );
   curSeg = strtok_s( path, "\\/", &tokSeg );
   cmd[0] = '"';
+
   do
   {
     ++segc;
     tmpSeg = prvSeg;
     prvSeg = curSeg;
     curSeg = strtok_s( NULL, "\\/", &tokSeg );
+
     if ( tmpSeg )
     {
       strcat_s( cmd, CMD_LEN, tmpSeg );
@@ -48,14 +52,21 @@ int main( int argc, char const *argv[] )
     }
   }
   while ( curSeg );
+
   memset( path, 0, CMD_LEN );
 #ifdef _WIN32
   getenv_s( &length, path, CMD_LEN, "SYSTEM" );
   strcat_s( path, CMD_LEN, "wowsys64" );
+
   if ( fopen_s( &test, path, "r" ) == 0 )
+  {
     strcat_s( arcSeg, SEG_LEN, "msw-x64" );
+  }
   else
+  {
     strcat_s( arcSeg, SEG_LEN, "msw-x86" );
+  }
+
 #else
 #error Not supported
 #endif
@@ -65,9 +76,9 @@ int main( int argc, char const *argv[] )
   // Add compiler
   strcat_s( arcSeg, SEG_LEN,
 #ifdef _MSC_VER
-    "-vc" );
+            "-vc" );
 #else
-    "-gcc" );
+            "-gcc" );
 #endif
   strcat_s( cmd, CMD_LEN, "meditGui-" );
   strcat_s( cmd, CMD_LEN, arcSeg );

@@ -30,6 +30,7 @@
 				<Linker>
 					<Add option="/DEBUG" />
 					<Add option="/MANIFEST:NO" />
+					<Add library="kernel32" />
 					<Add library="iup" />
 					<Add library="iupstub" />
 					<Add library="gdi32" />
@@ -68,6 +69,7 @@
 				</ResourceCompiler>
 				<Linker>
 					<Add option="/MANIFEST:NO" />
+					<Add library="kernel32" />
 					<Add library="iup" />
 					<Add library="iupstub" />
 					<Add library="gdi32" />
@@ -106,6 +108,7 @@
 					<Add directory="$(IPIPE)" />
 				</ResourceCompiler>
 				<Linker>
+					<Add library="kernel32" />
 					<Add library="iup" />
 					<Add library="iupstub" />
 					<Add library="gdi32" />
@@ -115,7 +118,7 @@
 					<Add library="oleaut32" />
 					<Add library="ole32" />
 					<Add library="shell32" />
-					<Add library="Ipipe-$(TARGET_NAME)" />
+					<Add library="libIpipe-$(TARGET_NAME)" />
 					<Add directory="$(MINGW)/lib" />
 					<Add directory="$(IUP)" />
 					<Add directory="$(LIB)" />
@@ -144,6 +147,7 @@
 				</ResourceCompiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="kernel32" />
 					<Add library="iup" />
 					<Add library="iupstub" />
 					<Add library="gdi32" />
@@ -153,7 +157,7 @@
 					<Add library="oleaut32" />
 					<Add library="ole32" />
 					<Add library="shell32" />
-					<Add library="Ipipe-$(TARGET_NAME)" />
+					<Add library="libIpipe-$(TARGET_NAME)" />
 					<Add directory="$(MINGW)/lib" />
 					<Add directory="$(IUP)" />
 					<Add directory="$(LIB)" />

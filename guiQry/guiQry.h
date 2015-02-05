@@ -19,7 +19,8 @@ typedef struct _GUI_QRY
   GUI_SPIN    index;
   Ihandle    *hlQry;
   Ihandle   *hlBase;
-  uchar q; uchar  c;
+  uchar q;
+  uchar  c;
 #ifdef GUI_SHARED
   GUI_VAL val;
 #else
@@ -31,6 +32,6 @@ extern GUI_QRY guiQry;
 void  guiQry_OnLang( void );
 int   guiQry_OnShow( Ihandle *ih );
 int   guiQryMenu_OnClick( Ihandle *ih,
-        int button, int pressed, int x, int y, char* status );
+                          int button, int pressed, int x, int y, char* status );
 
 SHUT_C

@@ -10,5 +10,6 @@ typedef struct _GUI_SPIN
   Ihandle *spin;
 } GUI_SPIN;
 
-void guiSpin_OnInit( GUI_TEXT *guiSpin, Icallback OnKAny, Icallback OnValueChanged );
+void guiSpin_OnInit( GUI_TEXT *guiSpin, Icallback OnKAny,
+                     Icallback OnValueChanged );
 SHUT_C

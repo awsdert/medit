@@ -20,8 +20,10 @@ int guiTarg_OnValueChanged ( Ihandle *ih );
 void  guiTar_OnInit ( void )
 {
   guiPfm_OnInit();
-  guiText_OnInit ( &guiTar.path, ( Icallback ) guiPath_OnKAny, guiPath_OnValueChanged );
-  guiText_OnInit ( &guiTar.targ, ( Icallback ) guiTarg_OnKAny, guiTarg_OnValueChanged );
+  guiText_OnInit ( &guiTar.path, ( Icallback ) guiPath_OnKAny,
+                   guiPath_OnValueChanged );
+  guiText_OnInit ( &guiTar.targ, ( Icallback ) guiTarg_OnKAny,
+                   guiTarg_OnValueChanged );
   guiTar.indx.spin = IupVal ( IUP_HORIZONTAL );
   guiTar.indx.fset = IupFrame ( guiTar.indx.spin );
   //guiSpin_OnInit( &guiTar.indx, NULL, NULL );
@@ -58,16 +60,20 @@ void  guiTar_OnInit ( void )
   guiTar_OnLang();
 }
 
-void guiTar_OnLoad ( FILE *file )
+void guiTar_OnLoad ( char *path )
 {
+  FILE *file = fopen( path, "rb" );
   fread ( &srcTar, sizeof ( DATA_TAR ), 1, file );
   changeEndian ( &srcTar.bases, sizeof ( BASES ), 'L', getEndian() );
+  fclose( file );
 }
 
-void guiTar_OnSave ( FILE *file )
+void guiTar_OnSave ( char *path )
 {
+  FILE *file = fopen( path, "wb" );
   changeEndian ( &srcTar.bases, sizeof ( BASES ), getEndian(), 'L' );
   fwrite ( &srcTar, sizeof ( DATA_TAR ), 1, file );
+  fclose( file );
 }
 void guiTar_OnApply ( void )
 {
@@ -84,25 +90,30 @@ void guiTar_OnDefPath ( char *path )
 {
   guiPfm_OnDefPath ( path );
   mkdir ( path );
-  strncat ( path, DIR_SEP, PATH_MAX );
-  strncat ( path, appSession.tar, PATH_MAX );
+  appendstr ( path, DIR_SEP, PATH_MAX );
+  appendstr ( path, appSession.tar, PATH_MAX );
 }
 void guiTar_OnDefExt ( char *path )
 {
-  strncat ( path, "m-tar", PATH_MAX );
+  appendstr ( path, "m-tar", PATH_MAX );
 }
 extern char *srcBaseName;
 extern char *tmpBaseName;
 int guiTar_OnShow ( Ihandle *ih )
 {
+  float vi;
   appMethods.OnDefPath = guiTar_OnDefPath;
   appMethods.OnDefExt  = guiTar_OnDefExt;
   appMethods.OnLoad    = guiTar_OnLoad;
   appMethods.OnReset   = guiTar_OnReset;
   appMethods.OnSave    = guiTar_OnSave;
   appMethods.OnApply   = guiTar_OnApply;
+
   if ( !ih )
+  {
     return IUP_DEFAULT;
+  }
+
   IupSetAttribute ( guiTar.name.tb, "MEDIT_SRC_NAME", srcTar.name );
   IupSetAttribute ( guiTar.name.tb, "MEDIT_TMP_NAME", tmpTar.name );
   IupSetAttribute ( guiTar.file.tb, "MEDIT_SRC_FILE", srcTar.file );
@@ -114,7 +125,8 @@ int guiTar_OnShow ( Ihandle *ih )
   guiText_SendShowMsg ( &guiTar.path, tmpTar.path );
   guiText_SendShowMsg ( &guiTar.targ, tmpTar.targ );
   IupShow ( guiTar.indx.fset );
-  float vi = IupGetFloat ( guiTar.indx.spin, IUP_VALUE );
+  vi = IupGetFloat ( guiTar.indx.spin, IUP_VALUE );
+
   if ( vi > 0.0f )
   {
     int i = ( int ) ceilf ( vi ) - 1;
@@ -126,6 +138,7 @@ int guiTar_OnShow ( Ihandle *ih )
     IupShow ( guiBase->main.fset );
     guiBase_OnShow ( guiBase->main.fset );
   }
+
   guiTar_OnLang();
   IupRefresh ( guiTar.main.fset );
   return IUP_DEFAULT;
@@ -133,6 +146,7 @@ int guiTar_OnShow ( Ihandle *ih )
 int guiTarg_OnKAny ( Ihandle *ih, int c )
 {
   c ^= 0xF0000000;
+
   if ( c < ' ' )
   {
     return IUP_DEFAULT;
@@ -141,6 +155,7 @@ int guiTarg_OnKAny ( Ihandle *ih, int c )
   {
     return IUP_CLOSE;
   }
+
   return IUP_DEFAULT;
 }
 int guiTarg_OnValueChanged ( Ihandle *ih )
@@ -151,6 +166,7 @@ int guiTarg_OnValueChanged ( Ihandle *ih )
 int guiPath_OnKAny ( Ihandle *ih, int c )
 {
   c ^= 0xF0000000;
+
   if ( c < ' ' )
   {
     return IUP_DEFAULT;
@@ -159,6 +175,7 @@ int guiPath_OnKAny ( Ihandle *ih, int c )
   {
     return IUP_CLOSE;
   }
+
   return IUP_DEFAULT;
 }
 int guiPath_OnValueChanged ( Ihandle *ih )

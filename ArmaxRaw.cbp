@@ -32,6 +32,7 @@
 					<Add option="/INCREMENTAL:NO" />
 					<Add library="user32" />
 					<Add library="shell32" />
+					<Add library="Ipipe-$(TARGET_NAME)" />
 					<Add directory="$(WIN8)/Lib/winv6.3/um/x86" />
 				</Linker>
 				<ExtraCommands>
@@ -63,6 +64,7 @@
 					<Add option="/INCREMENTAL:NO" />
 					<Add library="user32" />
 					<Add library="shell32" />
+					<Add library="Ipipe-$(TARGET_NAME)" />
 					<Add directory="$(WIN8)/Lib/winv6.3/um/x86" />
 				</Linker>
 				<ExtraCommands>
@@ -70,7 +72,7 @@
 				</ExtraCommands>
 			</Target>
 			<Target title="msw-x86-d-gcc">
-				<Option output="$(HOME)/.medit/data/sony/ps2/$(PROJECT_NAME)-$(TARGET_NAME)" prefix_auto="1" extension_auto="1" />
+				<Option output="$(HOME)/.medit/data/sony/ps2/lib$(PROJECT_NAME)-$(TARGET_NAME)" prefix_auto="1" extension_auto="1" />
 				<Option object_output="$(TEMP)/obj/medit/$(PROJECT_NAME)/$(TARGET_NAME)" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -91,6 +93,7 @@
 				<Linker>
 					<Add library="user32" />
 					<Add library="shell32" />
+					<Add library="libIpipe-$(TARGET_NAME)" />
 					<Add directory="$(MINGW)/lib" />
 				</Linker>
 				<ExtraCommands>
@@ -98,7 +101,7 @@
 				</ExtraCommands>
 			</Target>
 			<Target title="msw-x86-gcc">
-				<Option output="$(HOME)/.medit/data/sony/ps2/$(PROJECT_NAME)-$(TARGET_NAME)" prefix_auto="1" extension_auto="1" />
+				<Option output="$(HOME)/.medit/data/sony/ps2/lib$(PROJECT_NAME)-$(TARGET_NAME)" prefix_auto="1" extension_auto="1" />
 				<Option object_output="$(TEMP)/obj/medit/$(PROJECT_NAME)/$(TARGET_NAME)" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -120,6 +123,7 @@
 					<Add option="-s" />
 					<Add library="user32" />
 					<Add library="shell32" />
+					<Add library="libIpipe-$(TARGET_NAME)" />
 					<Add directory="$(MINGW)/lib" />
 				</Linker>
 				<ExtraCommands>
@@ -134,7 +138,6 @@
 			<Add directory="$(IPIPE)" />
 		</ResourceCompiler>
 		<Linker>
-			<Add library="Ipipe-$(TARGET_NAME)" />
 			<Add directory="$(LIB)" />
 		</Linker>
 		<Unit filename="ArmaxRaw.c">

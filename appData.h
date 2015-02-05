@@ -49,18 +49,17 @@ typedef struct _SESSION
   uchar  ci;
 } SESSION;
 
-typedef void (*_METHODS_PATH_FUNC)( char *path );
-typedef void (*_METHODS_FILE_FUNC)( FILE *file );
-typedef void (*_METHODS_SET_FUNC) ( void );
-typedef void (*_METHODS_ADD_FUNC) ( uchar insert );
-typedef void (*_METHODS_MOV_FUNC) ( schar x, schar y );
+typedef void ( *_METHODS_PATH_FUNC )( char *path );
+typedef void ( *_METHODS_SET_FUNC ) ( void );
+typedef void ( *_METHODS_ADD_FUNC ) ( uchar insert );
+typedef void ( *_METHODS_MOV_FUNC ) ( schar x, schar y );
 
 typedef struct _METHODS
 {
   _METHODS_PATH_FUNC OnDefPath;
   _METHODS_PATH_FUNC OnDefExt;
-  _METHODS_FILE_FUNC OnLoad;
-  _METHODS_FILE_FUNC OnSave;
+  _METHODS_PATH_FUNC OnLoad;
+  _METHODS_PATH_FUNC OnSave;
   _METHODS_SET_FUNC  OnApply;
   _METHODS_SET_FUNC  OnReset;
   _METHODS_SET_FUNC  OnRem;

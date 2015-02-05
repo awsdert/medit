@@ -23,23 +23,24 @@ typedef struct _HACKDATA
 } HACKDATA;
 
 /// \brief Handles actual hacking
-int      hackProc( HACKDATA *data, HACKINFO *info, CODES *codesBuff, int hi, ulong ci );
+int      hackProc( HACKDATA *data, HACKINFO *info, CODES *codesBuff, int hi,
+                   ulong ci );
 /// \brief If you need to ask then you should give up now
-BOOL    EnableDebugPrivileges(void);
+BOOL    EnableDebugPrivileges( void );
 /// \brief Injects this process into target process
 void    entryPoint( pid_t pid );
 /// \brief Forgot
-DWORD WINAPI entryThread(LPVOID param);
+DWORD WINAPI entryThread( LPVOID param );
 /// \brief Not sure this even needs to be here any more
 pid_t   GetProcessIdByNameA( LPCSTR name );
 /// \brief Not sure if needed any more
 pid_t   GetProcessParentId( pid_t pid );
 /// \brief Dunno
-HMODULE injectModule(HANDLE proc, LPVOID module);
+HMODULE injectModule( HANDLE proc, LPVOID module );
 // Needed for address retrieval
 DWORD   main();
 /// \brief Actual injection routine
-BOOL    peInjection(pid_t pid, LPTHREAD_START_ROUTINE callRoutine);
+BOOL    peInjection( pid_t pid, LPTHREAD_START_ROUTINE callRoutine );
 /// \brief Needed for acquiring needed files once injected
 BOOL    Itoa_s( int value, char* dst, size_t dstSize, unsigned char base );
 /// \brief Return both quotient and remainder from a division operation
@@ -50,7 +51,7 @@ void* __cdecl memset( void *dst, int val, size_t size );
 void* __cdecl memcpy( void *dst, void const *src, size_t size );
 #if _WIN == 32
 /// \brief (unsigned long long)num shift left
-void  __cdecl _allshl(void);
+void  __cdecl _allshl( void );
 #endif
 #pragma intrinsic(memset)
 #pragma intrinsic(memcpy)

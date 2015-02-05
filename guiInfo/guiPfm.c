@@ -29,8 +29,10 @@ void  guiPfm_OnInit ( void )
   IupAppend ( guiPfm.main.vb, guiPfm.hlEndian );
   IupMap ( guiPfm.hlEndian );
 #else
-  guiText_OnInit ( &guiPfm.name, ( Icallback ) guiName_OnKAny, guiName_OnValueChanged );
-  guiText_OnInit ( &guiPfm.file, ( Icallback ) guiFile_OnKAny, guiFile_OnValueChanged );
+  guiText_OnInit ( &guiPfm.name, ( Icallback ) guiName_OnKAny,
+                   guiName_OnValueChanged );
+  guiText_OnInit ( &guiPfm.file, ( Icallback ) guiFile_OnKAny,
+                   guiFile_OnValueChanged );
   guiPfm.main.vb   = IupVbox ( guiPfm.name.fset, guiPfm.file.fset,
                                guiPfm.listtEndian, NULL );
   guiPfm.main.fset = IupFrame ( guiPfm.main.vb );
@@ -43,21 +45,25 @@ void guiPfm_OnDefPath ( char *path )
 {
   guiOrg_OnDefPath ( path );
   mkdir ( path );
-  strncat ( path, DIR_SEP, PATH_MAX );
-  strncat ( path, appSession.pfm, PATH_MAX );
+  appendstr ( path, DIR_SEP, PATH_MAX );
+  appendstr ( path, appSession.pfm, PATH_MAX );
 }
 void guiPfm_OnDefExt ( char *path )
 {
-  strncat ( path, "m-pfm", PATH_MAX );
+  appendstr ( path, "m-pfm", PATH_MAX );
 }
-void guiPfm_OnLoad ( FILE *file )
+void guiPfm_OnLoad ( char *path )
 {
+  FILE *file = fopen( path, "rb" );
   fread ( &srcPfm, sizeof ( DATA_PFM ), 1, file );
+  fclose( file );
 }
 
-void guiPfm_OnSave ( FILE *file )
+void guiPfm_OnSave ( char *path )
 {
+  FILE *file = fopen( path, "wb" );
   fwrite ( &srcPfm, sizeof ( DATA_PFM ), 1, file );
+  fclose( file );
 }
 void guiPfm_OnApply ( void )
 {
@@ -77,8 +83,12 @@ int   guiPfm_OnShow ( Ihandle *ih )
   appMethods.OnReset   = guiPfm_OnReset;
   appMethods.OnSave    = guiPfm_OnSave;
   appMethods.OnApply   = guiPfm_OnApply;
+
   if ( !ih )
+  {
     return IUP_DEFAULT;
+  }
+
   IupSetAttribute ( guiPfm.name.tb, "MEDIT_SRC_NAME", srcPfm.name );
   IupSetAttribute ( guiPfm.name.tb, "MEDIT_TMP_NAME", tmpPfm.name );
   IupSetAttribute ( guiPfm.file.tb, "MEDIT_SRC_FILE", srcPfm.file );

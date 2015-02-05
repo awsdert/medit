@@ -7,40 +7,43 @@ void guiQry_OnLang( void )
 #endif
   const int len = NAME_MAX * 2;
   char atrue[NAME_MAX * 2] = {0}, afalse[NAME_MAX * 2] = {0};
-  strncat( atrue,  appLang->a[ LNG_ALWAYS ].a, len );
-  strncat( atrue,  " ", len );
-  strncat( atrue,  appLang->a[ LNG_TRUE   ].a, len );
-  strncat( afalse, appLang->a[ LNG_ALWAYS ].a, len );
-  strncat( afalse, " ", len );
-  strncat( afalse, appLang->a[ LNG_FALSE  ].a, len );
+  appendstr( atrue,  appLang->a[ LNG_ALWAYS ].a, len );
+  appendstr( atrue,  " ", len );
+  appendstr( atrue,  appLang->a[ LNG_TRUE   ].a, len );
+  appendstr( afalse, appLang->a[ LNG_ALWAYS ].a, len );
+  appendstr( afalse, " ", len );
+  appendstr( afalse, appLang->a[ LNG_FALSE  ].a, len );
   IupSetAttribute( guiQry.main.fset, IUP_TITLE, appLang->a[ LNG_SEARCH ].a );
   IupSetAttribute( guiQry.hlQry, "1", appLang->a[ LNG_SEARCH ].a );
   IupSetStrAttribute( guiQry.hlQry, "2", atrue  );
   IupSetStrAttribute( guiQry.hlQry, "3", afalse );
 #ifndef GUI_SHARED
+
   do
   {
     do
     {
       guiVal_SetGUI( &guiQry.val[q][c] );
 #else
-      guiVal_SetGUI( &guiQry.val );
+  guiVal_SetGUI( &guiQry.val );
 #endif
       guiVal_OnLang();
 #ifndef GUI_SHARED
     }
     while ( c < CMP_COUNT );
+
     ++q;
     c = 0;
   }
   while ( q < QRY_COUNT );
+
 #endif
 }
 extern GUI_CODE *guiCode;
 void guiQry_OnInit( void )
 {
 
-  guiQry.hlQry = IupHList(NULL);
+  guiQry.hlQry = IupHList( NULL );
   IupSetStrAttribute( guiQry.hlQry, "1", "?" );
   IupSetStrAttribute( guiQry.hlQry, "2", "+" );
   IupSetStrAttribute( guiQry.hlQry, "3", "-" );
@@ -56,9 +59,11 @@ void guiQry_OnInit( void )
   IupSetAttribute( guiQry.fsetMain, IUP_EXPAND, IUP_HORIZONTAL );
   IupSetAttribute( guiQry.fsetMain, "FLOATING", IUP_YES );
   int i = 0;
+
   do
   {
     int j = 0;
+
     do
     {
       appGui.val = &guiQry.val[i][j];
@@ -68,9 +73,11 @@ void guiQry_OnInit( void )
       ++j;
     }
     while ( j < CMP_COUNT );
+
     ++i;
   }
   while ( i < QRY_COUNT );
+
   i = 0;
 #endif
   guiQry_OnLang();
@@ -81,6 +88,7 @@ int guiQry_OnShow( Ihandle *ih )
   IupSetAttribute( guiQry.main.fset, "FLOATING", IUP_NO );
   IupSetAttribute( guiQry.cmp.main.fset, "FLOATING", IUP_NO );
   IupShow( guiQry.cmp.main.fset  );
+
   if ( guiQry.q < QRY_COUNT )
   {
 #ifndef GUI_SHARED
@@ -91,6 +99,7 @@ int guiQry_OnShow( Ihandle *ih )
     IupSetAttribute( guiVal->value.fset, "FLOATING", IUP_NO );
     IupShow( guiVal->value.fset );
   }
+
 #ifdef GUI_SHARED
   IupShow( guiOrg.main.fset );
   IupSetAttribute( guiOrg.main.fset, "FLOATING", IUP_NO );
@@ -99,7 +108,8 @@ int guiQry_OnShow( Ihandle *ih )
   return IUP_DEFAULT;
 }
 
-int guiQryMenu_OnClick( Ihandle *ph, int button, int pressed, int x, int y, char* status )
+int guiQryMenu_OnClick( Ihandle *ph, int button, int pressed, int x, int y,
+                        char* status )
 {
   //int i = 0, c = 0, used = IupGetInt( ph, IUP_VALUE ) - 1;
   //search( used );

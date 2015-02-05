@@ -15,8 +15,10 @@ void guiPro_OnInit ( void )
   guiPro.name = guiOrg.name;
   guiPro.file = guiOrg.file;
 #else
-  guiText_OnInit ( &guiPro.name, ( Icallback ) guiName_OnKAny, guiName_OnValueChanged );
-  guiText_OnInit ( &guiPro.file, ( Icallback ) guiFile_OnKAny, guiFile_OnValueChanged );
+  guiText_OnInit ( &guiPro.name, ( Icallback ) guiName_OnKAny,
+                   guiName_OnValueChanged );
+  guiText_OnInit ( &guiPro.file, ( Icallback ) guiFile_OnKAny,
+                   guiFile_OnValueChanged );
   guiPro.main.vb = IupVbox ( guiPro.name.fset, guiPro.file.fset, NULL );
   guiPro.main.fset = IupFrane ( guiPro.main.vb );
 #endif
@@ -27,21 +29,25 @@ void guiPro_OnDefPath ( char *path )
 {
   guiTar_OnDefPath ( path );
   mkdir ( path );
-  strncat ( path, DIR_SEP, PATH_MAX );
-  strncat ( path, appSession.pro, PATH_MAX );
+  appendstr ( path, DIR_SEP, PATH_MAX );
+  appendstr ( path, appSession.pro, PATH_MAX );
 }
 void guiPro_OnDefExt ( char *path )
 {
-  strncat ( path, "m-pro", PATH_MAX );
+  appendstr ( path, "m-pro", PATH_MAX );
 }
-void guiPro_OnSave ( FILE *file )
+void guiPro_OnSave ( char *path )
 {
+  FILE *file = fopen( path, "wb" );
   fwrite ( &srcPro, sizeof ( DATA_PRO ), 1, file );
+  fclose( file );
 }
 
-void guiPro_OnLoad ( FILE *file )
+void guiPro_OnLoad ( char *path )
 {
+  FILE *file = fopen( path, "rb" );
   fread ( &srcPro, sizeof ( DATA_PRO ), 1, file );
+  fclose( file );
 }
 void guiPro_OnApply ( void )
 {
@@ -61,8 +67,12 @@ int guiPro_OnShow ( Ihandle *ih )
   appMethods.OnReset   = guiPro_OnReset;
   appMethods.OnSave    = guiPro_OnSave;
   appMethods.OnApply   = guiPro_OnApply;
+
   if ( !ih )
+  {
     return IUP_DEFAULT;
+  }
+
   IupSetAttribute ( guiPro.name.tb, "MEDIT_SRC_NAME", srcPro.name );
   IupSetAttribute ( guiPro.name.tb, "MEDIT_TMP_NAME", tmpPro.name );
   IupSetAttribute ( guiPro.file.tb, "MEDIT_SRC_FILE", srcPro.file );

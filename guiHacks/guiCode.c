@@ -24,7 +24,7 @@ void guiCode_OnInit( void )
   // We don't need this anywhere else so just leave it be
   guiSpin_OnInit( &guiCode->indx, NULL, NULL );
   // Initialise Code UI
-  guiCode->type = IupHList(NULL);
+  guiCode->type = IupHList( NULL );
   guiCode->cmp.main = guiCode->main;
   guiCmp_SetGUI( &guiCode->cmp );
   guiCmp_OnInit();
