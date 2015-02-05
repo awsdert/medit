@@ -15,7 +15,6 @@ hack_t _armaxRawHack_OnLoad( FILE *file, char *path, char const *dir,
   {
     return hi;
   }
-
   while ( fgets( line, 80, file ) )
   {
     if ( len = ferror( file ) )
@@ -23,7 +22,7 @@ hack_t _armaxRawHack_OnLoad( FILE *file, char *path, char const *dir,
       break;
     }
 
-    if ( !( *line ) || *line == ';' || *line == '\n' || *line == '\r' )
+    if ( *line < '"' )
     {
       continue;
     }
@@ -56,43 +55,48 @@ hack_t _armaxRawHack_OnLoad( FILE *file, char *path, char const *dir,
     {
       return ++hi;
     }
-
-    _armaxRawCOM.ResizeCodes( &_armaxRawCOM.cl, NULL, 0 );
-
-    for ( ci = 0; fgets( line, 80, file ); ++ci )
+    if ( *line > '"' )
     {
-      if ( !( *line ) || *line == '\r' || *line == '\n' )
+      _armaxRawCOM.ResizeCodes( &_armaxRawCOM.cl, NULL, 0 );
+
+      for ( ci = 0; fgets( line, 80, file ); ++ci )
       {
-        break;
+        if ( *line < '"' )
+        {
+          break;
+        }
+        if ( len = ferror( file ) )
+        {
+          break;
+        }
+
+        if ( ci == _armaxRawCOM.cl->_c )
+        {
+          _armaxRawCOM.ResizeCodes( &_armaxRawCOM.cl, NULL, ci + 10 );
+        }
+
+        code = &_armaxRawCOM.cl->a[ci];
+        armaxRawCode_Txt2Raw( code, line, file );
       }
 
-      if ( ci == _armaxRawCOM.cl->_c )
+      _armaxRawCOM.cl->c = ci;
+      memset( line, 0, 80 );
+      snprintf( line, 80, "%X", hi );
+      memset( path, 0, PATH_MAX );
+      strncpyi( path, dir, PATH_MAX );
+      appendstr( path, line, PATH_MAX );
+      appendstr( path, ".src-codes", PATH_MAX );
+
+      if ( _access( path, 0 ) != 0 )
       {
-        _armaxRawCOM.ResizeCodes( &_armaxRawCOM.cl, NULL, ci + 10 );
+        _creat( path, _S_IREAD | _S_IWRITE );
       }
 
-      code = &_armaxRawCOM.cl->a[ci];
-      armaxRawCode_Txt2Raw( code, line, file );
+      data = fopen( path, "wb" );
+      fwrite( _armaxRawCOM.cl, _armaxRawCOM.cl->s + CODES_SIZE, 1, data );
+      fflush( data );
+      fclose( data );
     }
-
-    _armaxRawCOM.cl->c = ci;
-    memset( line, 0, 80 );
-    snprintf( line, 80, "%X", hi );
-    memset( path, 0, PATH_MAX );
-    strncpyi( path, dir, PATH_MAX );
-    appendstr( path, line, PATH_MAX );
-    appendstr( path, ".src-codes", PATH_MAX );
-
-    if ( _access( path, 0 ) != 0 )
-    {
-      _creat( path, _S_IREAD | _S_IWRITE );
-    }
-
-    data = fopen( path, "wb" );
-    fwrite( _armaxRawCOM.cl, _armaxRawCOM.cl->s + CODES_SIZE, 1, data );
-    fflush( data );
-    fclose( data );
-
     if ( prev )
     {
       if ( !indx->cid || indx->coi == prev->cid )
@@ -114,7 +118,6 @@ hack_t _armaxRawHack_OnLoad( FILE *file, char *path, char const *dir,
     }
 
     prev = indx;
-
     if ( feof( file ) )
     {
       break;
@@ -150,16 +153,16 @@ void  HACK_LIB_EXP armaxRawHack_OnSave( char *_path, char const *dataDir )
 
 uchar HACK_LIB_EXP armaxRawHack_Txt2Raw( HACK *hack, char *line, void *_source )
 {
-  hack_t         i = 0;
-  char        *tok = *line ? insertstr( line, " ", 80, 8 ) : NULL;
-  ulong         p1 = *line ? strtoul( line, &tok, 16 ) : 0;
-  ulong         p2 = *line ? strtoul( tok, NULL, 16 ) : 0;
-  ulong        pid = *line ? p2 & 0xFFFFF : 0x800;
-  ushort const gid = *line ? ( ushort )( p1 >> 16 ) : _armaxRawCOM.gid;
-  uchar  const reg = *line ? ( uchar )( ( p2 >> 24 ) & 0xF ) :
+  hack_t         i = ( *line > '"' ) ? 1 : 0;
+  char        *tok = i ? insertstr( line, " ", 80, 8 ) : NULL;
+  ulong         p1 = i ? strtoul( line, &tok, 16 ) : 0;
+  ulong         p2 = i ? strtoul( tok, NULL, 16 ) : 0;
+  ulong        pid = i ? p2 & 0xFFFFF : 0x800;
+  ushort const gid = i ? ( ushort )( p1 >> 16 ) : _armaxRawCOM.gid;
+  uchar  const reg = i ? ( uchar )( ( p2 >> 24 ) & 0xF ) :
                      ( _armaxRawCOM.reg == REGION_US ? 0 : ( _armaxRawCOM.reg == REGION_UK ? 1 :
                          2 ) );
-  uchar  const ibr = *line ? ( uchar )( ( p2 >> 20 ) & 0xF ) : 5;
+  uchar  const ibr = i ? ( uchar )( ( p2 >> 20 ) & 0xF ) : 5;
   // GameID
 
   if ( !_armaxRawCOM.gid )
@@ -329,7 +332,7 @@ uchar  _armaxRawCode_Txt2RawRd( char *line, void *_source, ulong *p1,
 {
   char *tok = line;
 
-  if ( _armaxRawCOM.RdLine( line, 80, _source ) )
+  if ( _armaxRawCOM.RdLine( line, 80, _source ) && *line > '"' )
   {
     insertstr( line, " ", 80, 8 );
     *p1 = strtoul( line, &tok, 16 );
@@ -502,8 +505,10 @@ void _armaxRawCode_Txt2RawLoop( CODE *code, char *line, void *_source,
 }
 uchar HACK_LIB_EXP armaxRawCode_Txt2Raw( CODE *code, char *line, void *_source )
 {
-  char *tok = insertstr( line, " ", 80, 8 );
-  ulong p1 = strtoul( line, &tok, 16 ), p2 = strtoul( tok, &tok, 16 );
+  uchar i = ( *line > '"' ) ? 1 : 0;
+  char *tok = i ? insertstr( line, " ", 80, 8 ) : NULL;
+  ulong p1 = i ? strtoul( line, &tok, 16 ) : 0;
+  ulong p2 = i ? strtoul( tok,  NULL, 16 ) : 0;
 
   if ( p1 == 0xDEADC0DE )
   {

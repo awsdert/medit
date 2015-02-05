@@ -99,11 +99,12 @@ void hacksReSize ( HACKL *hl, hack_t **indexList, hack_t count )
   void* check;
   if ( !hl->hacks )
   {
-    hl->hacks = malloc ( sizeof ( HACKS ) );
-    if ( !hl->hacks )
+    check = malloc ( sizeof ( HACKS ) );
+    if ( !check )
       return;
-    hl->names = malloc ( NAME_MAX );
-    if ( !hl->names )
+    hl->hacks = check;
+    check = malloc ( NAME_MAX );
+    if ( !check )
     {
 cleanInit:
       free( hl->hacks );
@@ -115,6 +116,7 @@ cleanInit:
       }
       return;
     }
+    hl->names = check;
     memset ( hl->hacks, 0, sizeof ( HACKS ) );
     memset ( hl->names, 0, NAME_MAX );
     hl->hacks->_c = 1;
