@@ -78,18 +78,18 @@ void guiTar_OnSave ( char *path )
 void guiTar_OnApply ( void )
 {
   srcTar = tmpTar;
-  strncpyi ( appSession.tar, tmpTar.file, NAME_MAX );
+  copystri ( appSession.tar, tmpTar.file, NAME_MAX );
 }
 void guiTar_OnReset ( void )
 {
   tmpTar = srcTar;
-  strncpyi ( appSession.tar, srcTar.file, NAME_MAX );
+  copystri ( appSession.tar, srcTar.file, NAME_MAX );
 }
 extern void guiPfm_OnDefPath ( char *path );
 void guiTar_OnDefPath ( char *path )
 {
   guiPfm_OnDefPath ( path );
-  mkdir ( path );
+  ipMkDir ( path );
   appendstr ( path, DIR_SEP, PATH_MAX );
   appendstr ( path, appSession.tar, PATH_MAX );
 }
@@ -160,7 +160,7 @@ int guiTarg_OnKAny ( Ihandle *ih, int c )
 }
 int guiTarg_OnValueChanged ( Ihandle *ih )
 {
-  strncpyi ( tmpTar.targ, IupGetAttribute ( ih, IUP_VALUE ), NAME_MAX );
+  copystri ( tmpTar.targ, IupGetAttribute ( ih, IUP_VALUE ), NAME_MAX );
   return IUP_DEFAULT;
 }
 int guiPath_OnKAny ( Ihandle *ih, int c )
@@ -180,7 +180,7 @@ int guiPath_OnKAny ( Ihandle *ih, int c )
 }
 int guiPath_OnValueChanged ( Ihandle *ih )
 {
-  strncpyi ( tmpTar.path, IupGetAttribute ( ih, IUP_VALUE ), PATH_MAX );
+  copystri ( tmpTar.path, IupGetAttribute ( ih, IUP_VALUE ), PATH_MAX );
   return IUP_DEFAULT;
 }
 #endif

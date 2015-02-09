@@ -108,17 +108,19 @@ typedef struct struct_HACK
   // Prev Sibling Index
   hack_t pi;
 } HACK;
-
-typedef struct _HACKS
+typedef struct VHACKS_
 {
-  hack_t i;
-  hack_t c;
-  hack_t _c;
-  size_t s;
+  hack_t count;
+  hack_t total;
+  size_t bytes;
+  hack_t index;
+} VHACKS;
+
+typedef struct HACKS_
+{
+  VHACKS size;
   HACK   a[1];
 } HACKS;
-
-#define HACKS_SIZE (sizeof(HACKS) - sizeof(HACK))
 
 #define DIV_SIZE( T1, T2 ) (sizeof(T1) / sizeof(T2))
 #define MOD_SIZE( T1, T2 ) (sizeof(T1) % sizeof(T2))
@@ -201,15 +203,19 @@ typedef struct _CODE
 
 #define CODES_COUNT 30
 #define CODES_LAST  29
-typedef struct _CODES
+typedef struct VCODES_
 {
-  uchar  i;
-  uchar  c;
-  uchar  _c;
-  size_t s;
+  uchar  count;
+  uchar  total;
+  size_t bytes;
+  uchar  index;
+} VCODES;
+
+typedef struct CODES_
+{
+  VCODES size;
   CODE   a[1];
 } CODES;
-#define CODES_SIZE ( sizeof( CODES ) - sizeof(CODE) )
 
 /*
   This is merely for %TMP%\PROC_ID\info.bin, it ensures a consistent data

@@ -33,8 +33,11 @@
 					<Add option="/DEBUG" />
 					<Add option="/INCREMENTAL:NO" />
 					<Add option="/MANIFEST:NO" />
-					<Add library="user32" />
+					<Add option="/NODEFAULTLIB" />
+					<Add library="kernel32" />
+					<Add library="msvcrtd" />
 					<Add library="shell32" />
+					<Add library="user32" />
 					<Add library="Ipipe-$(TARGET_NAME)" />
 					<Add directory="$(WIN8)/Lib/winv6.3/um/x86" />
 				</Linker>
@@ -68,8 +71,11 @@
 				<Linker>
 					<Add option="/INCREMENTAL:NO" />
 					<Add option="/MANIFEST:NO" />
-					<Add library="user32" />
+					<Add option="/NODEFAULTLIB" />
+					<Add library="kernel32" />
+					<Add library="msvcrt" />
 					<Add library="shell32" />
+					<Add library="user32" />
 					<Add library="Ipipe-$(TARGET_NAME)" />
 					<Add directory="$(WIN8)/Lib/winv6.3/um/x86" />
 				</Linker>
@@ -97,8 +103,10 @@
 					<Add directory="$(MINGW)/include" />
 				</ResourceCompiler>
 				<Linker>
-					<Add library="user32" />
+					<Add library="kernel32" />
+					<Add library="msvcrtd" />
 					<Add library="shell32" />
+					<Add library="user32" />
 					<Add library="libIpipe-$(TARGET_NAME)" />
 					<Add directory="$(MINGW)/lib" />
 				</Linker>
@@ -127,8 +135,10 @@
 				</ResourceCompiler>
 				<Linker>
 					<Add option="-s" />
-					<Add library="user32" />
+					<Add library="kernel32" />
+					<Add library="msvcrt" />
 					<Add library="shell32" />
+					<Add library="user32" />
 					<Add library="libIpipe-$(TARGET_NAME)" />
 					<Add directory="$(MINGW)/lib" />
 				</Linker>

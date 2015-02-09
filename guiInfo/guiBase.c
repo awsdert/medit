@@ -9,7 +9,7 @@ uchar GetBase ( char *name )
   uchar i = 0;
   for ( ; i < tmpTar.bases.c; ++i )
   {
-    if ( istrcmp ( name, tmpTar.bname[i].a ) == 0 )
+    if ( !istrcmp ( name, tmpTar.bname[i].a ).i )
     {
       return i;
     }

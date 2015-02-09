@@ -1,7 +1,7 @@
 #include "qry.h"
 #define SEARCH( T, C ) \
   ipFdSetPos( mepI.fd, 0, IP_S_SET ); \
-  strncpyi( szPath, szNow, 10 ); \
+  copystri( szPath, szNow, 10 ); \
   appendstr( szPath, T##Ex, 10 ); \
   ipFdOpen( mepO.fd, szPath, IP_O_FILE | IP_O_RW, IP_D_RW ); \
   if ( qNo ) \
@@ -11,7 +11,7 @@
       ipFdShut( prev ); \
       ipFdShut( mepP.fd ); \
     } \
-    strncpyi( szPath, szOld, 10 ); \
+    copystri( szPath, szOld, 10 ); \
     appendstr( szPath, T##Ex, 10 ); \
     ipFdOpen( prev, szPath, IP_O_RW, IP_D_RW ); \
   } \
@@ -53,7 +53,7 @@ void search( ushort used )
   ipFdOpen( mepI.fd, "test.xps", IP_O_RW, IP_D_RW );
   snprintf( szDmp, 4, "%i", qNo );
   appendstr( szNow, DIR_SEP, 10 );
-  strncpyi( szOld, szNow, 10 );
+  copystri( szOld, szNow, 10 );
   appendstr( szNow, szDmp, 10 );
 
   if ( qNo )
@@ -62,11 +62,11 @@ void search( ushort used )
   }
   else
   {
-    strncpyi( szDmp, "0", 4 );
+    copystri( szDmp, "0", 4 );
   }
 
   appendstr( szOld, szDmp, 10 );
-  strncpyi( szPath, szNow, 10 );
+  copystri( szPath, szNow, 10 );
   appendstr( szPath, ".dmp", 10 );
   ipFdOpen( mepO.fd, szPath, IP_O_MKFILE | IP_O_RW, IP_D_RW );
   isEof = ipFdRdBuff( mepI.fd, mepI.buff, BUFSIZ );

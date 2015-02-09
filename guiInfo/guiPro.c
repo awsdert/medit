@@ -28,7 +28,7 @@ extern void guiTar_OnDefPath ( char *path );
 void guiPro_OnDefPath ( char *path )
 {
   guiTar_OnDefPath ( path );
-  mkdir ( path );
+  ipMkDir ( path );
   appendstr ( path, DIR_SEP, PATH_MAX );
   appendstr ( path, appSession.pro, PATH_MAX );
 }
@@ -52,12 +52,12 @@ void guiPro_OnLoad ( char *path )
 void guiPro_OnApply ( void )
 {
   srcPro = tmpPro;
-  strncpyi ( appSession.pro, tmpPro.file, NAME_MAX );
+  copystri ( appSession.pro, tmpPro.file, NAME_MAX );
 }
 void guiPro_OnReset ( void )
 {
   tmpPro = srcPro;
-  strncpyi ( appSession.pro, srcPro.file, NAME_MAX );
+  copystri ( appSession.pro, srcPro.file, NAME_MAX );
 }
 int guiPro_OnShow ( Ihandle *ih )
 {

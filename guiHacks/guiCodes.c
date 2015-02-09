@@ -3,7 +3,7 @@ GUI_CODES *guiCodes = NULL;
 uchar *tmpCodesIndex = NULL;
 CODEL  tmpCodes = {&tmpCodesIndex, NULL};
 CODEL *refCodes = &tmpCodes;
-void codesReSize( CODEL *cl, uchar count )
+void LIB_EXP codesReSize( CODEL *cl, uchar count )
 {
   uchar i = 0, c  = 0;
   void *check;
@@ -24,8 +24,8 @@ void codesReSize( CODEL *cl, uchar count )
 
     cl->codes = check;
     memset( cl->codes, 0, sizeof( CODES ) );
-    cl->codes->_c = 1;
-    cl->codes->s  = sizeof( CODE );
+    cl->codes->size.total = 1;
+    cl->codes->size.bytes  = sizeof( CODE );
 
     if ( cl->index )
     {
@@ -43,19 +43,19 @@ void codesReSize( CODEL *cl, uchar count )
     }
   }
 
-  if ( count <= cl->codes->_c )
+  if ( count <= cl->codes->size.total )
   {
-    if ( count >= cl->codes->c )
+    if ( count >= cl->codes->size.count )
     {
       goto updateCount;
     }
 
-    cl->codes->c = count;
+    cl->codes->size.count = count;
   }
   else
   {
     size_t s = count * sizeof( CODE );
-    check = appRealloc( cl->codes, CODES_SIZE + cl->codes->s, CODES_SIZE + s );
+    check = brenew( cl->codes, sizeof(VCODES) + s );
 
     if ( !check )
     {
@@ -66,7 +66,7 @@ void codesReSize( CODEL *cl, uchar count )
 
     if ( cl->index )
     {
-      check = appRealloc( ( *cl->index ), cl->codes->_c, count );
+      check = brenew( ( *cl->index ), count );
 
       if ( !check )
       {
@@ -76,12 +76,12 @@ void codesReSize( CODEL *cl, uchar count )
       ( *cl->index ) = check;
     }
 
-    cl->codes->_c = count;
-    cl->codes->s = s;
+    cl->codes->size.total = count;
+    cl->codes->size.bytes = s;
   }
 
-  i = cl->codes->c;
-  c = cl->codes->_c - i;
+  i = cl->codes->size.count;
+  c = cl->codes->size.total - i;
 
   if ( c )
   {
@@ -94,7 +94,7 @@ void codesReSize( CODEL *cl, uchar count )
   }
 
 updateCount:
-  cl->codes->c = count;
+  cl->codes->size.count = count;
 }
 void guiCodes_SetGUI( GUI_CODES *codes, CODEL *ref )
 {
@@ -102,7 +102,7 @@ void guiCodes_SetGUI( GUI_CODES *codes, CODEL *ref )
   refCodes = ref;
   if ( !ref->codes )
     codesReSize( ref, 1 );
-  guiCode_SetGUI( &codes->code, ref->codes ? &ref->codes->a[ ref->codes->i ] : NULL );
+  guiCode_SetGUI( &codes->code, ref->codes ? &ref->codes->a[ ref->codes->size.index ] : NULL );
 }
 void guiCodes_OnLang( void )
 {
@@ -194,7 +194,7 @@ int guiCodes_OnShow( Ihandle *ih )
 {
   uchar i = 0;
 
-  while ( i < tmpCodes.codes->c )
+  while ( i < tmpCodes.codes->size.count )
   {
     i = guiCodes_BuildTree( guiCodes->treeCodes, i, -1 );
   }

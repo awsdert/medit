@@ -44,7 +44,7 @@ extern void guiOrg_OnDefPath ( char *path );
 void guiPfm_OnDefPath ( char *path )
 {
   guiOrg_OnDefPath ( path );
-  mkdir ( path );
+  ipMkDir ( path );
   appendstr ( path, DIR_SEP, PATH_MAX );
   appendstr ( path, appSession.pfm, PATH_MAX );
 }
@@ -68,12 +68,12 @@ void guiPfm_OnSave ( char *path )
 void guiPfm_OnApply ( void )
 {
   srcPfm = tmpPfm;
-  strncpyi ( appSession.pfm, tmpPfm.file, NAME_MAX );
+  copystri ( appSession.pfm, tmpPfm.file, NAME_MAX );
 }
 void guiPfm_OnReset ( void )
 {
   tmpPfm = srcPfm;
-  strncpyi ( appSession.pfm, srcPfm.file, NAME_MAX );
+  copystri ( appSession.pfm, srcPfm.file, NAME_MAX );
 }
 int   guiPfm_OnShow ( Ihandle *ih )
 {

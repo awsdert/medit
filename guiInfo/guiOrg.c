@@ -25,7 +25,7 @@ void  guiOrg_OnInit ( void )
 }
 void guiOrg_OnDefPath ( char *path )
 {
-  mkdir ( path );
+  ipMkDir ( path );
   appendstr ( path, DIR_SEP, PATH_MAX );
   appendstr ( path, appSession.org, PATH_MAX );
 }
@@ -48,12 +48,12 @@ void  guiOrg_OnSave ( char *path )
 void  guiOrg_OnApply ( void )
 {
   srcOrg = tmpOrg;
-  strncpyi ( appSession.org, tmpOrg.file, NAME_MAX );
+  copystri ( appSession.org, tmpOrg.file, NAME_MAX );
 }
 void  guiOrg_OnReset ( void )
 {
   tmpOrg = srcOrg;
-  strncpyi ( appSession.org, srcOrg.file, NAME_MAX );
+  copystri ( appSession.org, srcOrg.file, NAME_MAX );
 }
 int   guiOrg_OnShow ( Ihandle *ih )
 {

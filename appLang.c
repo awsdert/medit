@@ -78,11 +78,11 @@ void appLoadLang ( char *name )
 {
   FILE *file;
   char fname[ PATH_MAX ] = {0};
-  int  r = ( name && *name ) ? istrcmp( name, "en" ) : 0;
+  size_t r = istrcmp( name, "en" ).i;
 
-  if ( r != 0 )
+  if ( r )
   {
-    strncpyi( fname, "lang", PATH_MAX );
+    copystri( fname, "lang", PATH_MAX );
     appendstr ( fname, DIR_SEP, PATH_MAX );
     appendstr ( fname, name, PATH_MAX );
     appendstr ( fname, ".applang", PATH_MAX );

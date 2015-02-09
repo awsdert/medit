@@ -210,7 +210,7 @@ void guiLoad ( uchar useDlg )
     return;
   }
 
-  strncpyi ( path, ipGetUsrDir(), PATH_MAX );
+  copystri ( path, ipGetUsrDir(), PATH_MAX );
   appendstr ( path, DIR_SEP ".medit" DIR_SEP "data", PATH_MAX );
   appMethods.OnDefPath ( path );
 
@@ -251,15 +251,15 @@ void guiSave( void )
     return;
   }
 
-  strncpyi ( path, ipGetUsrDir(), PATH_MAX );
+  copystri ( path, ipGetUsrDir(), PATH_MAX );
   appendstr ( path, DIR_SEP ".medit" DIR_SEP "data", PATH_MAX );
-  strncpyi ( opath, path, PATH_MAX );
+  copystri ( opath, path, PATH_MAX );
   appMethods.OnDefPath ( opath );
   appMethods.OnApply();
   appMethods.OnDefPath ( path );
 
   // Rename Directory
-  if ( _access( opath, 0 ) == 0 && istrcmp( opath, path ) != 0 )
+  if ( _access( opath, 0 ) == 0 && istrcmp( opath, path ).i )
   {
     rename( opath, path );
   }
@@ -280,7 +280,7 @@ void guiSave( void )
 
   // Rename File
   if ( i < guiMenu_Hacks && _access( opath, 0 ) == 0
-       && istrcmp( opath, path ) != 0 )
+       && istrcmp( opath, path ).i )
   {
     rename( opath, path );
   }

@@ -26,7 +26,7 @@ int main( int argc, char *argv[] )
   int    ret = 0;
   FILE *file = NULL;
   char path[ PATH_MAX] = {0};
-  char const *szTok = NULL;
+  STR_POS tok = {0,NULL};
 
   /* Initialise IUP */
   if ( IupOpen( &argc, &argv ) == IUP_ERROR )
@@ -37,12 +37,11 @@ int main( int argc, char *argv[] )
 
   _appInitCwd( argv, "medit" );
   // Capture default font
-  szTok = IupGetAttribute( NULL, "DEFAULTFONT" );
-  strncpyi( path, szTok, PATH_MAX );
-  szTok = strntok( appGui.font,    20, path, ", ",  NULL );
-  szTok = strntok( appGui.fontSize, 5, path, ", ", szTok );
+  tok.p = IupGetAttribute( NULL, "DEFAULTFONT" );
+  tok = searchstr( appGui.font,    20, tok, ", " );
+  tok = searchstr( appGui.fontSize, 5, tok, ", " );
   // Prep directories in case they don't exist
-  strncpyi( path, ipGetUsrDir(), PATH_MAX );
+  copystri( path, ipGetUsrDir(), PATH_MAX );
   appendstr( path, DIR_SEP ".medit", PATH_MAX );
 
   if ( _access( path, 0 ) != 0 )
@@ -58,7 +57,7 @@ int main( int argc, char *argv[] )
   }
 
   // Just force a NULL character
-  strncpyi( path, ipGetUsrDir(), PATH_MAX );
+  copystri( path, ipGetUsrDir(), PATH_MAX );
   appendstr( path, DIR_SEP ".medit" DIR_SEP "default.m-session", PATH_MAX );
 
   if ( _access( path, 0 ) == 0 && (file = fopen( path, "rb" )) )
@@ -93,7 +92,7 @@ initLang:
   ( void )guiMenu_OnValueChanged( guiMenu );
   IupSetInt ( guiData, IUP_VALUE, 0 );
   ret = IupMainLoop();
-  strncpyi( path, ipGetUsrDir(), PATH_MAX );
+  copystri( path, ipGetUsrDir(), PATH_MAX );
   appendstr( path, DIR_SEP ".medit" DIR_SEP "default.m-session", PATH_MAX );
   if ( file = fopen( path, "wb") )
   {

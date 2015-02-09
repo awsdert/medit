@@ -20,8 +20,8 @@ quit:
     return;
   }
 
-  strncpyi( appSession.lib, name, NAME_MAX );
-  strncpyi( path, ipGetUsrDir(), PATH_MAX );
+  copystri( appSession.lib, name, NAME_MAX );
+  copystri( path, ipGetUsrDir(), PATH_MAX );
   appendstr( path, DIR_SEP ".medit" DIR_SEP "data", PATH_MAX );
   guiPfm_OnDefPath( path );
   appendstr( path, DIR_SEP, PATH_MAX );

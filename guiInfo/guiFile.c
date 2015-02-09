@@ -43,6 +43,6 @@ int guiFile_OnValueChanged( Ihandle *ih )
 {
   srcFile = IupGetAttribute( ih, "MEDIT_SRC_FILE" );
   tmpFile = IupGetAttribute( ih, "MEDIT_TMP_FILE" );
-  strncpyi( tmpFile, IupGetAttribute( ih, IUP_VALUE ), NAME_MAX );
+  copystri( tmpFile, IupGetAttribute( ih, IUP_VALUE ), NAME_MAX );
   return IUP_DEFAULT;
 }
